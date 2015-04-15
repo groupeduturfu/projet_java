@@ -12,4 +12,6 @@ package projet;
  */
 public class FloAudrey {
      // COUCOU
+    private int x;
+    private int y;
 }
