@@ -18,6 +18,7 @@ public class Projet {
         // TODO code application logic here
         System.out.println("yo");
         System.out.println("yi");
+        System.out.println("ya");
         
     }
     
