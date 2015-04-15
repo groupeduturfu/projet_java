@@ -10,5 +10,5 @@ package projet;
  * @author Antoine
  */
 public class Antoine {
-    
+   private int age;
 }
