@@ -22,6 +22,7 @@ public class Historique {
    private int code_service;
    private int no_docteur;
 
+    // CONSTRUCTEUR
    public Historique (int numMalade, int dateA, int dateS, String descri, int codeServ, int numDocteur )
    {
        no_malade = numMalade;

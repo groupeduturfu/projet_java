@@ -24,6 +24,7 @@ public class Employe {
     protected long salaire_employe;
     protected boolean type_employe; // indique si l'employé est un infirmier ou un docteur
     
+    // CONSRUCTEUR
     public Employe(int num, String nom, String prenom, String adresse, long tel, long sal, boolean type)
     {
         no_employe = num;
