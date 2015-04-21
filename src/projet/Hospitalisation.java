@@ -7,7 +7,10 @@
 package projet;
 
 /**
- *
+ * Cette classe est visible à l'instant t, 
+ * lorsque le patient est en train de subir une hospitalisation.
+ * Elle disparait à partir du moment où le patient sort de lhôpital.
+ * 
  * @author maurinco
  */
 public class Hospitalisation {

@@ -7,9 +7,11 @@
 package projet;
 
 /**
- *
+ * Découlant de la classe Employé, cette classe définit les particularités 
+ * d'un infirmier, différentes donc d'un docteur. 
+ * 
  * @author maurinco
  */
-public class Infirmier extends Employe { // Découle de la classe Employé
+public class Infirmier extends Employe { 
     
 }

@@ -7,9 +7,14 @@
 package projet;
 
 /**
- *
+ * Cette classe nous permet de 
+ * voir toutes les hospitalisations passés d'un patient,
+ * et d'ainsi assurer les meilleurs soins connaissant ses antécédants médicaux.
+ * 
  * @author maurinco
  */
-public class Historique {
+public class Historique { 
+    
+    
     
 }

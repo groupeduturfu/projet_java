@@ -7,7 +7,10 @@
 package projet;
 
 /**
- *
+ * Cette classe répertorie toutes les informations nécéssaires d'un employé. 
+ * Il existe 2 types d'employés, qui vont d'ailleurs hériter de cette classe : 
+ * Docteur et Infirmier.
+ * 
  * @author maurinco
  */
 public class Employe {
