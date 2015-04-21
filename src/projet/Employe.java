@@ -22,5 +22,50 @@ public class Employe {
     protected String adresse_employe;
     protected long tel_employe;
     protected long salaire_employe;
-    protected boolean type; // indique si l'employé est un infirmier ou un docteur
+    protected boolean type_employe; // indique si l'employé est un infirmier ou un docteur
+    
+    public Employe(int num, String nom, String prenom, String adresse, long tel, long sal, boolean type)
+    {
+        no_employe = num;
+        nom_employe = nom;
+        prenom_employe = prenom;
+        
+    }
+    
+    /// TOUS LES GETTERS
+    public int getNoEmploye() 
+    {
+        return no_employe;
+    }
+    
+    public String getNomEmploye()
+    {
+        return nom_employe;
+    }
+    
+    public String getPrenomEmploye()
+    {
+        return prenom_employe;
+    }
+    
+    public String getAdresseEmployee()
+    {
+        return adresse_employe;
+    }   
+    
+    public long getNumEmploye()
+    {
+        return tel_employe;
+    }
+    
+    public long salaireEmploye()
+    {
+        return salaire_employe;
+    }
+    
+    public boolean getTpeEmploye()
+    {
+        return type_employe;
+    }
+            
 }
