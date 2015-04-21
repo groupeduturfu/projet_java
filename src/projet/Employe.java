@@ -12,4 +12,11 @@ package projet;
  */
 public class Employe {
     
+    // attributs de cete classe
+    private String nom;
+    private String prenom;
+    private String adresse;
+    private long tel;
+    private long salaire;
+    private boolean type; // indique si l'employé est un infirmier ou un docteur
 }

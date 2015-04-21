@@ -10,6 +10,6 @@ package projet;
  *
  * @author maurinco
  */
-public class Infirmier extends Employe {
+public class Infirmier extends Employe { // Découle de la classe Employé
     
 }
