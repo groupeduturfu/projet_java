@@ -16,10 +16,10 @@ package projet;
 public class Employe {
     
     // attributs de cete classe
-    private String nom_employe;
-    private String prenom_employe;
-    private String adresse_employe;
-    private long tel_employe;
-    private long salaire_employe;
-    private boolean type; // indique si l'employé est un infirmier ou un docteur
+    protected String nom_employe;
+    protected String prenom_employe;
+    protected String adresse_employe;
+    protected long tel_employe;
+    protected long salaire_employe;
+    protected boolean type; // indique si l'employé est un infirmier ou un docteur
 }

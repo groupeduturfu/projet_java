@@ -12,4 +12,8 @@ package projet;
  */
 public class Service {
     
+    private String nom;
+    private String batiment;
+    private String directeur;
+    
 }
