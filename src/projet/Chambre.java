@@ -15,5 +15,6 @@ public class Chambre {
     
     private int nb_lits;
     private int code_service; // indique dans quel service est cette chambre
+    private int no_surveillant;
     
 }
