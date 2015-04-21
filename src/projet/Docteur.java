@@ -18,8 +18,10 @@ public class Docteur extends Employe {
     private String specialite;
     
     // constructeur qui hérite de celui d'employé
-    public Docteur(int num, String nom, String prenom, String adresse, long tel, long sal, boolean type) {
+    public Docteur(int num, String nom, String prenom, String adresse, long tel, long sal, boolean type, int numDoc, String spec) {
         super(num, nom, prenom, adresse, tel, sal, type);
+        no_docteur = numDoc;
+        specialite = spec;
     }
     
     public int getNoDocteur()
