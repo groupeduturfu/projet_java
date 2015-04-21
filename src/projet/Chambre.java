@@ -11,6 +11,9 @@ package projet;
  * @author maurinco
  */
 public class Chambre {
+    private int no_chambre; // identifie la chambre 
+    
     private int nb_lits;
+    private int code_service; // indique dans quel service est cette chambre
     
 }

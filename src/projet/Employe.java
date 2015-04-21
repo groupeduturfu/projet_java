@@ -14,6 +14,7 @@ package projet;
  * @author maurinco
  */
 public class Employe {
+    protected int no_employe; // identifie l'employé
     
     // attributs de cete classe
     protected String nom_employe;

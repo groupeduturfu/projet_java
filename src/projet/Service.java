@@ -11,9 +11,10 @@ package projet;
  * @author maurinco
  */
 public class Service {
+    private int code_service; // identifie le service
     
     private String nom;
     private String batiment;
-    private String directeur;
+    private String directeur; // identifie le docteur qui dirige ce service
     
 }

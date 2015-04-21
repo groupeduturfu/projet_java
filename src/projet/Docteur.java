@@ -13,6 +13,8 @@ package projet;
  * @author maurinco
  */
 public class Docteur extends Employe { 
+    private int no_docteur; // identifie le docteur
+    
     private String specialite;
     
 }
