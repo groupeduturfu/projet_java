@@ -22,4 +22,44 @@ public class Historique {
    private int code_service;
    private int no_docteur;
 
+   public Historique (int numMalade, int dateA, int dateS, String descri, int codeServ, int numDocteur )
+   {
+       no_malade = numMalade;
+       date_arrivee = dateA;
+       date_sortie = dateS;
+       description = descri;
+       code_service = codeServ;
+       no_docteur = numDocteur;
+   }
+   
+   public int getNoMalade()
+   {
+       return no_malade;
+   }
+   
+   public int getDateArrivee()
+   {
+       return date_arrivee;
+   }
+   
+   public int getDateSortie()
+   {
+      return date_sortie; 
+   }
+   
+   public String getDescription()
+   {
+       return description;
+   }
+   
+   public int getCodeService()
+   {
+       return code_service;
+   }
+   
+   public int getNoDocteur()
+   {
+       return no_docteur;
+   }
+          
 }
