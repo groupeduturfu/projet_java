@@ -13,5 +13,8 @@ package projet;
  * @author maurinco
  */
 public class Infirmier extends Employe { 
-    
+    private boolean rotation; // prendra soit la valeur JOUR soit la valeur NUIT
+    private int no_infirmier;
+    private int no_chambre; // numéro de la chambre qu'il surveille
+    private int code_service; 
 }
