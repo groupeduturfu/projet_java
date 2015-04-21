@@ -7,9 +7,14 @@
 package projet;
 
 /**
- *
+ * 
  * @author maurinco
  */
 public class Malade {
+    private String nom_malade;
+    private String prenom_malade;
+    private String adresse_malade;
+    private long tel_malade;
+    private String mutuelle;
     
 }
