@@ -29,7 +29,10 @@ public class Employe {
         no_employe = num;
         nom_employe = nom;
         prenom_employe = prenom;
-        
+        adresse_employe = adresse;
+        tel_employe = tel;
+        salaire_employe = sal;
+        type_employe = type; 
     }
     
     /// TOUS LES GETTERS
