@@ -10,7 +10,6 @@ package projet;
  *
  * @author maurinco
  */
-public class ret {
-    
+public class Malade {
     
 }

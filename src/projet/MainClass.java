@@ -3,13 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+
 package projet;
 
 /**
  *
- * @author Antoine
+ * @author maurinco
  */
-public class Antoine {
-   private int age;
-   private String s;
+public class MainClass {
+    
 }
