@@ -14,7 +14,12 @@ package projet;
  * @author maurinco
  */
 public class Historique { 
-    
-    
-    
+   private int no_malade;
+   private int date_arrivee; 
+   
+   private int date_sortie;
+   private String description;
+   private int code_service;
+   private int no_docteur;
+
 }

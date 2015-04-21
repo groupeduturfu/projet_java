@@ -14,5 +14,10 @@ package projet;
  * @author maurinco
  */
 public class Hospitalisation {
+    private int no_malade; // identifie le patient dont l'hospitalisation est question
+    
+    private int no_chambre;
+    private int no_lit; 
+    private long date_arrivee;
     
 }
