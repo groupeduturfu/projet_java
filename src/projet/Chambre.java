@@ -7,9 +7,10 @@
 package projet;
 
 /**
- *
+ * Cette classe détermine les informatiosn de chaque chambre d'un service.
  * @author maurinco
  */
 public class Chambre {
+    private int nb_lits;
     
 }
