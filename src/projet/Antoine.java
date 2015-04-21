@@ -11,4 +11,5 @@ package projet;
  */
 public class Antoine {
    private int age;
+   private String s;
 }
