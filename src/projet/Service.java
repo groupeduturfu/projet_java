@@ -15,6 +15,6 @@ public class Service {
     
     private String nom;
     private String batiment;
-    private String directeur; // identifie le docteur qui dirige ce service
+    private String no_directeur; // identifie le docteur qui dirige ce service
     
 }

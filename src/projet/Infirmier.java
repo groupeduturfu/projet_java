@@ -17,5 +17,30 @@ public class Infirmier extends Employe {
     
     private boolean rotation; // prendra soit la valeur JOUR soit la valeur NUIT
     private int no_chambre; // numéro de la chambre qu'il surveille
-    private int code_service; // numéro du service dans lequel l'infirmier travaille 
+    private int code_service; // numéro du service dans lequel l'infirmier travaille
+    
+    // constructeur qui hérite de celui d'employé
+    public Infirmier(int num, String nom, String prenom, String adresse, long tel, long sal, boolean type) {
+        super(num, nom, prenom, adresse, tel, sal, type);
+    }
+    
+    public int getNoInfirmier()
+    {
+        return no_infirmier;
+    }
+    
+    public boolean getRotation()
+    {
+        return rotation;
+    }
+    
+    public int getNoChambre()
+    {
+        return no_chambre;
+    }
+    
+    public int getCodeService()
+    {
+        return code_service;
+    }
 }

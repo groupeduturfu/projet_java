@@ -17,4 +17,18 @@ public class Docteur extends Employe {
     
     private String specialite;
     
+    // constructeur qui hérite de celui d'employé
+    public Docteur(int num, String nom, String prenom, String adresse, long tel, long sal, boolean type) {
+        super(num, nom, prenom, adresse, tel, sal, type);
+    }
+    
+    public int getNoDocteur()
+    {
+        return no_docteur;
+    }
+    
+    public String getSpecialite()
+    {
+        return specialite;
+    }
 }
