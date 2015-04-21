@@ -7,6 +7,7 @@
 package projet;
 
 /**
+ * Cette classe regroupe toutes les informations liés au patient.
  * 
  * @author maurinco
  */

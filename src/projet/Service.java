@@ -7,7 +7,7 @@
 package projet;
 
 /**
- *
+ * Cette classe définit un service selon son nom, son batiment et son directeur.
  * @author maurinco
  */
 public class Service {
