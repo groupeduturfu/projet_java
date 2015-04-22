@@ -5,10 +5,16 @@
  */
 package Interface;
 
+import java.awt.Container;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+
 /**
  *
  * @author mathieuchebassier
  */
-public class Vue {
+public class Vue extends JFrame {
+    private JButton valider;
+    private Container fenetre;
     
 }
