@@ -15,12 +15,10 @@ import javax.swing.JFrame;
  * @author mathieuchebassier
  */
 public class Vue extends JFrame {
-    private Container fenetre;
     
     public Vue()
     {
-        JButton valider = new JButton("Test");
-        fenetre.add(valider);
+        
         
     }
 }
