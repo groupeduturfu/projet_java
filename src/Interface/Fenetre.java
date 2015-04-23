@@ -6,8 +6,11 @@
 package Interface;
 
 import java.awt.GridLayout;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 /**
  *
@@ -20,20 +23,28 @@ public class Fenetre extends JFrame{
         JFrame fenetre = new JFrame();
         JButton rechercher = new JButton("Rechercher");
         JButton ajouter = new JButton("Ajouter");
+        JPanel p1, p2;
         
         // On remplit
         fenetre.setTitle("Gestion Hopital");
-        fenetre.setLayout(new GridLayout(2,2));
+        fenetre.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Quand on clique sur la croix, ça quitte proprement
+        fenetre.setLayout(new GridLayout(3,2)); // La fenêtre est répartie en grille : 3 lignes, 2 colonnes
         
+        p1 = new JPanel();
+        p1.add(new JLabel("Veuillez choisir ce que vous voulez faire"));
         
-        fenetre.add(ajouter);
-        fenetre.add(rechercher);
+        p2 = new JPanel();
+        p2.setLayout(new GridLayout(1,2));
+        p2.add(ajouter);
+        p2.add(rechercher);
         
         // On gère les événements
-        ajouter.
+        
         
         // On affiche
-        fenetre.setSize(400,400);
+        fenetre.add(p1);
+        fenetre.add(p2);
+        fenetre.setSize(400,200);
         fenetre.setVisible(true);      
     }
 }
