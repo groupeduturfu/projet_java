@@ -5,7 +5,8 @@
  */
 package Main;
 
-import Interface.Vue;
+import Interface.Fenetre;
+import Interface.Panneau;
 
 /**
  *
@@ -18,7 +19,7 @@ public class MainTest {
      */
     public static void main(String[] args) {
         // TODO code application logic here
-        Vue v = new Vue();
+        Fenetre f = new Fenetre();
     }
     
 }
