@@ -6,6 +6,7 @@
 package Interface;
 
 import java.awt.GridLayout;
+import java.awt.event.MouseListener;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -39,7 +40,6 @@ public class Fenetre extends JFrame{
         p2.add(rechercher);
         
         // On gère les événements
-        
         
         // On affiche
         fenetre.add(p1);

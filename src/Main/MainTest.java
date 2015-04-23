@@ -6,7 +6,6 @@
 package Main;
 
 import Interface.Fenetre;
-import Interface.Panneau;
 
 /**
  *
