@@ -18,7 +18,20 @@ public class Vue extends JFrame {
     
     public Vue()
     {
+        // Fenêtre d'accueil
         
         
+    }
+    
+    public void accueil()
+    {
+        // Déclaration variables
+        JFrame fenetre = new JFrame();
+        
+        fenetre.setTitle("Accueil");
+        
+        
+        
+        fenetre.setVisible(true);      
     }
 }
