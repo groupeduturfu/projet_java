@@ -5,6 +5,7 @@
  */
 package Interface;
 
+import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.MouseListener;
@@ -26,16 +27,16 @@ public class Fenetre extends JFrame{
     public Fenetre()
     {
         // Déclaration variables
-        JFrame fenetre = new JFrame();
+    //    JFrame fenetre = new JFrame();
         JButton rechercher = new JButton("Rechercher");
         JButton ajouter = new JButton("Ajouter");
         JPanel p1, p2;
         JLabel texte = new JLabel("Veuillez choisir ce que vous voulez faire");
         
         // On remplit
-        fenetre.setTitle("Gestion Hopital");
-        fenetre.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Quand on clique sur la croix, ça quitte proprement
-        fenetre.setLayout(new GridLayout(2,2)); // La fenêtre est répartie en grille : 2 lignes, 2 colonnes
+        this.setTitle("Gestion Hopital");
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Quand on clique sur la croix, ça quitte proprement
+        this.setLayout(new GridLayout(2,2)); // La fenêtre est répartie en grille : 2 lignes, 2 colonnes
 
         
         p1 = new JPanel(); 
@@ -50,26 +51,12 @@ public class Fenetre extends JFrame{
         
         // On gère les événements
         
-        // On met l'image en fond
-        try {
-            File f = new File("fond.jpg");
-            ImageIcon ii = new ImageIcon(ImageIO.read(f));
-            JLabel label = new JLabel(ii);
-
-            
-            // ON PEUT MODIFIER L'IMAGE POUR QU'ELLE SOIT A LA TAILLE DE LA FENETRE À LA FIN
-            // sachant qu'on fixe la taille de la fenêtre en dur
-            
-            fenetre.setContentPane(label);
-    	} catch (IOException e) {
-    		e.printStackTrace();
-    	}
-        
         // On affiche le reste
-        fenetre.add(p1);
-        fenetre.add(p2);
-        fenetre.setSize(400,200);
+        this.setContentPane(new ImagePanel(new ImageIcon("fond.jpg").getImage())); // Met l'image en background
+        this.add(p1);
+        this.add(p2);
+        this.setSize(600,600);
         
-        fenetre.setVisible(true);      
+        this.setVisible(true);    
     }
 }
