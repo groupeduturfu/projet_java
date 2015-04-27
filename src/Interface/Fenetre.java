@@ -29,21 +29,38 @@ import javax.swing.JPanel;
  * @author mathieuchebassier
  */
 public class Fenetre extends JFrame{
+    final JButton rechercher, ajouter, admin, consulter, emp_presents, lit_libre, stats;
+    final int taille_boutonX=30;
+    final int taille_boutonY=400;
     public Fenetre()
     {
-        // Déclaration variables
-    //    JFrame fenetre = new JFrame();
-        JButton rechercher = new JButton("Rechercher");
-        JButton ajouter = new JButton("Ajouter");
-        JButton maj = new JButton("Mettre à jour");
+    
+
+ // Déclaration variables
+        rechercher = new JButton("Rechercher un patient");
+        ajouter = new JButton("Ajouter un patient");
+        admin = new JButton("Admin");
+        consulter = new JButton("Consulter les archives (Patients partis");
+        emp_presents = new JButton("Employés présents");
+        lit_libre = new JButton("Rechercher un lit libre");
+        stats = new JButton("Données statistiques");
         JPanel p1, p2;
         JLabel texte = new JLabel("Veuillez choisir ce que vous voulez faire");
         
+        // Mise en page 
+        
+        // Taille des boutons
+        rechercher.setSize(taille_boutonX, taille_boutonY);
+        ajouter.setSize(taille_boutonX, taille_boutonY);
+        consulter.setSize(taille_boutonX, taille_boutonY);
+        emp_presents.setSize(taille_boutonX, taille_boutonY);
+        lit_libre.setSize(taille_boutonX, taille_boutonY);
+        stats.setSize(taille_boutonX, taille_boutonY);
         
         // On remplit
         this.setTitle("Gestion Hopital");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Quand on clique sur la croix, ça quitte proprement
-        this.setLayout(new GridLayout(2,2)); // La fenêtre est répartie en grille : 2 lignes, 2 colonnes
+        this.setLayout(new GridLayout(1,1)); // La fenêtre est répartie en grille : 8 lignes, 2 colonnes
 
         
         p1 = new JPanel(); 
@@ -53,37 +70,99 @@ public class Fenetre extends JFrame{
         
         
         p2 = new JPanel();
-        p2.setLayout(new GridLayout(1,3));
+        p2.setLayout(new GridLayout(7,1));
         p2.add(ajouter);
         p2.add(rechercher);
-        p2.add(maj);
+        p2.add(consulter);
+        p2.add(emp_presents);
+        p2.add(lit_libre);
+        p2.add(stats);
         p2.setOpaque(false);
         
         // On gère les événements
+        if (rechercher.getModel().isPressed()) System.out.println("Recherche...");
         ajouter.addActionListener(new ActionListener()
         {
           public void actionPerformed(ActionEvent e)
-          {
-            if(ajouter.getModel().isPressed()) System.out.println("Suce ma bite");
+          { 
+            System.out.println("Ajouter");
           }
         });
         
         // On affiche le reste
-        this.setContentPane(new ImagePanel(new ImageIcon("<default package>/" + "fond66.jpg").getImage())); // Met l'image en background
+        this.setContentPane(new ImagePanel(new ImageIcon("fond66.jpg").getImage())); // Met l'image en background
         this.add(p1);
         this.add(p2);
         this.setSize(600,600);
         
-        this.setVisible(true);    
+        this.setVisible(true);   
     }
-   /*
-    public void actionPerformed(ActionEvent e) {
-        if (btnAdd.isEnabled()) {
-            System.out.println("Add Button is pressed");
-        }
-        if (!btnAdd.isEnabled()) {
-            System.out.println("Add Button is not pressed");
-        }
+    
+    
+
+   
+    public void fenetre_accueil(JFrame f)
+    {
+        // Déclaration variables
+        JButton rechercher = new JButton("Rechercher un patient");
+        JButton ajouter = new JButton("Ajouter un patient");
+        JButton admin = new JButton("Admin");
+        JButton consulter = new JButton("Consulter les archives (Patients partis");
+        JButton emp_presents = new JButton("Employés présents");
+        JButton lit_libre = new JButton("Rechercher un lit libre");
+        JButton stats = new JButton("Données statistiques");
+        JPanel p1, p2;
+        JLabel texte = new JLabel("Veuillez choisir ce que vous voulez faire");
+        
+        // Mise en page 
+        
+        // Taille des boutons
+        rechercher.setSize(taille_boutonX, taille_boutonY);
+        ajouter.setSize(taille_boutonX, taille_boutonY);
+        consulter.setSize(taille_boutonX, taille_boutonY);
+        emp_presents.setSize(taille_boutonX, taille_boutonY);
+        lit_libre.setSize(taille_boutonX, taille_boutonY);
+        stats.setSize(taille_boutonX, taille_boutonY);
+        
+        // On remplit
+        this.setTitle("Gestion Hopital");
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Quand on clique sur la croix, ça quitte proprement
+        this.setLayout(new GridLayout(1,1)); // La fenêtre est répartie en grille : 8 lignes, 2 colonnes
+
+        
+        p1 = new JPanel(); 
+        texte.setVerticalAlignment(JLabel.CENTER); // On aligne le texte au centre de p1, mais ca ne marche pas
+        p1.add(texte);
+        p1.setOpaque(false);
+        
+        
+        p2 = new JPanel();
+        p2.setLayout(new GridLayout(7,1));
+        p2.add(ajouter);
+        p2.add(rechercher);
+        p2.add(consulter);
+        p2.add(emp_presents);
+        p2.add(lit_libre);
+        p2.add(stats);
+        p2.setOpaque(false);
+        
+        // On gère les événements
+        if (rechercher.getModel().isPressed()) System.out.println("Recherche...");
+        ajouter.addActionListener(new ActionListener()
+        {
+          public void actionPerformed(ActionEvent e)
+          { 
+            System.out.println("Ajouter");
+          }
+        });
+        
+        // On affiche le reste
+        f.setContentPane(new ImagePanel(new ImageIcon("fond66.jpg").getImage())); // Met l'image en background
+        f.add(p1);
+        f.add(p2);
+        f.setSize(600,600);
+        
+        f.setVisible(true);  
     }
-    */
 }
+
