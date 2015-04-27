@@ -69,7 +69,7 @@ public class Fenetre extends JFrame{
         });
         
         // On affiche le reste
-        this.setContentPane(new ImagePanel(new ImageIcon("fond66.jpg").getImage())); // Met l'image en background
+        this.setContentPane(new ImagePanel(new ImageIcon("<default package>/" + "fond66.jpg").getImage())); // Met l'image en background
         this.add(p1);
         this.add(p2);
         this.setSize(600,600);
