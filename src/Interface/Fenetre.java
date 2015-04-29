@@ -28,6 +28,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import static javax.swing.SwingConstants.CENTER;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -117,7 +118,7 @@ public class Fenetre extends JFrame{
         {
           public void actionPerformed(ActionEvent e)
           { 
-            System.out.println("Ajouter");
+                fenetre_ajouter_patient();
           }
         });
         
@@ -333,6 +334,148 @@ public class Fenetre extends JFrame{
         
         this.setVisible(true); 
         
+    }
+    
+    public void fenetre_ajouter_patient()
+    {
+        JTextField jtf_no_id, jtf_nom, jtf_prenom, jtf_no_chambre, jtf_no_lit, jtf_adresse, jtf_tel, jtf_mutuelle;
+        JLabel jl_no_id, jl_nom, jl_prenom, jl_no_chambre, jl_no_lit, jl_adresse, jl_tel, jl_mutuelle, texte;
+        JButton valider = new JButton("Valider");
+        JButton retour = new JButton("Retour");
+        JPanel p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11;
+        
+        
+        // On initialise les JLabel
+        texte = new JLabel("Merci de remplir toutes les informations suivantes");
+        jl_no_id = new JLabel("N° identification");
+        jl_nom = new JLabel("Nom");
+        jl_prenom = new JLabel("Prénom");
+        jl_no_chambre = new JLabel("N° chambre");
+        jl_no_lit = new JLabel("N° lit");
+        jl_adresse = new JLabel("Adresse");
+        jl_tel = new JLabel("N° telephone");
+        jl_mutuelle = new JLabel("Mutuelle");
+        
+        // On iitialise les JTF
+        jtf_no_id = new JTextField();
+        jtf_nom = new JTextField();
+        jtf_prenom = new JTextField();
+        jtf_no_chambre = new JTextField();
+        jtf_no_lit = new JTextField();
+        jtf_adresse = new JTextField();
+        jtf_tel = new JTextField();
+        jtf_mutuelle = new JTextField();
+        
+        jtf_no_id.setColumns(10);
+        jtf_nom.setColumns(10);
+        jtf_prenom.setColumns(10);
+        jtf_no_chambre.setColumns(10);
+        jtf_no_lit.setColumns(10);
+        jtf_adresse.setColumns(10);
+        jtf_tel.setColumns(10);
+        jtf_mutuelle.setColumns(10);
+        
+        // On change le bouton de forme
+        valider.setPreferredSize(new Dimension(200,30));
+        valider.setOpaque(false);
+        retour.setPreferredSize(new Dimension(200,30));
+        retour.setOpaque(false);
+        
+        // On initialise les JPanel
+        p1 = new JPanel();
+        p1.add(texte);
+        p1.setOpaque(false);
+        p1.setPreferredSize(new Dimension(600, 100));
+        
+        p3 = new JPanel();
+        p3.add(jl_nom);
+        p3.add(jtf_nom);
+        p3.setOpaque(false);
+        p3.setPreferredSize(new Dimension(600, 30));
+        
+        p4 = new JPanel();
+        p4.add(jl_prenom);
+        p4.add(jtf_prenom);
+        p4.setOpaque(false);
+        p4.setPreferredSize(new Dimension(600, 30));
+        
+        p5 = new JPanel();
+        p5.add(jl_no_chambre);
+        p5.add(jtf_no_chambre);
+        p5.setOpaque(false);
+        p5.setPreferredSize(new Dimension(600, 30));
+        
+        p6 = new JPanel();
+        p6.add(jl_no_lit);
+        p6.add(jtf_no_lit);
+        p6.setOpaque(false);
+        p6.setPreferredSize(new Dimension(600, 30));
+        
+        p8 = new JPanel();
+        p8.add(jl_adresse);
+        p8.add(jtf_adresse);
+        p8.setOpaque(false);
+        p8.setPreferredSize(new Dimension(600, 30));
+        
+        p9 = new JPanel();
+        p9.add(jl_tel);
+        p9.add(jtf_tel);
+        p9.setOpaque(false);
+        p9.setPreferredSize(new Dimension(600, 30));
+        
+        p10 = new JPanel();
+        p10.add(jl_mutuelle);
+        p10.add(jtf_mutuelle);
+        p10.setOpaque(false);
+        p10.setPreferredSize(new Dimension(600, 30));
+        
+        p11 = new JPanel();
+        p11.add(retour);
+        p11.add(valider);
+        p11.setOpaque(false);
+        p11.setPreferredSize(new Dimension(600, 30));
+        
+        // On gère l'évennement du bouton
+        valider.addActionListener(new ActionListener()
+        {
+          public void actionPerformed(ActionEvent e)
+          { 
+            if(jtf_nom.getText().equals("") || jtf_prenom.getText().equals("") || jtf_no_chambre.getText().equals("") || jtf_no_lit.getText().equals("") || jtf_adresse.getText().equals("") || jtf_tel.getText().equals("") || jtf_mutuelle.getText().equals("")) 
+            {
+                JOptionPane.showMessageDialog(null, "Il y a au moins un champs vide", "Erreur", JOptionPane.ERROR_MESSAGE);
+            }
+            else
+            {
+                System.out.println("Validé avec toutes les infos");
+                // C'est ici qu'il faut récupérer les informations et ajouter un patient dans la BDD
+                // Attention, il faut que le numero id du patient soit implémenté tout seul ainsi que la date d'arrivée
+            }
+          }
+        });
+        
+        retour.addActionListener(new ActionListener()
+        {
+          public void actionPerformed(ActionEvent e)
+          { 
+            fenetre_accueil();
+          }
+        });
+        
+        // On ajoute tous les JPannel à la fenêtre
+        this.setContentPane(new ImagePanel(new ImageIcon("fond66.jpg").getImage())); // Met l'image en background
+        this.add(p1);
+        this.add(p3);
+        this.add(p4);
+        this.add(p5);
+        this.add(p6);
+        this.add(p8);
+        this.add(p9);
+        this.add(p10);
+        this.add(p11);
+        
+        this.setSize(600,600);
+        
+        this.setVisible(true); 
     }
 }
 
