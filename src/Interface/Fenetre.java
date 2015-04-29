@@ -29,6 +29,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import static javax.swing.SwingConstants.CENTER;
 import javax.swing.JOptionPane;
+import javax.swing.JPasswordField;
 
 /**
  *
@@ -137,7 +138,8 @@ public class Fenetre extends JFrame{
         {
           public void actionPerformed(ActionEvent e)
           { 
-            System.out.println("Admin...");
+            if(mdp()) fenetre_admin(); // On accede a la partie admin, le mdp est bon
+            else JOptionPane.showMessageDialog(null, "Le mot de passe est faux, l'accès est refusé", "Erreur", JOptionPane.ERROR_MESSAGE); // Le mdp est faux, on accede pas à la partie admin
           }
         });
         
@@ -476,6 +478,140 @@ public class Fenetre extends JFrame{
         this.setSize(600,600);
         
         this.setVisible(true); 
+    }
+    
+    public boolean mdp()
+    {
+        JPanel p = new JPanel();
+        JLabel l = new JLabel("Entrer le mot de passe pour acceder à la partie admin :");
+        JPasswordField mdp = new JPasswordField(10);
+        String mdp_tape = "";
+                 
+        p.add(l);
+        p.add(mdp);
+        String[] options = new String[]{"OK", "Cancel"};
+        int option = JOptionPane.showOptionDialog(null, p, "The title",
+                                 JOptionPane.NO_OPTION, JOptionPane.PLAIN_MESSAGE,
+                                 null, options, options[1]);
+        if(option == 0) // pressing OK button
+        {
+            mdp_tape  = mdp.getText();
+        }
+        if(mdp_tape.equals("hopital")) return true;
+        else return false;
+    }
+    
+    public void fenetre_admin()
+    {
+        JButton employe, ajouter, service, chambre, retour;
+        JPanel p1, p2, p3, p4, p5, p6;
+        JLabel texte = new JLabel("Veuillez choisir ce que vous voulez faire");
+        
+        // Déclaration variables
+        employe = new JButton("Rechercher un employé");
+        ajouter = new JButton("Ajouter un employé");
+        service = new JButton("Rechercher un service");
+        chambre = new JButton("Rechercher une chambre");
+        
+        retour = new JButton("Retour");
+        retour.setPreferredSize(new Dimension(200,30));
+        retour.setOpaque(false);
+        
+        // Taille des boutons
+        employe.setPreferredSize(new Dimension(400,30));
+        ajouter.setPreferredSize(new Dimension(400,30));
+        service.setPreferredSize(new Dimension(400,30));
+        chambre.setPreferredSize(new Dimension(400,30));
+
+        
+        p1 = new JPanel(); 
+        p1.setOpaque(false);
+        p1.setPreferredSize(new Dimension(600, 100));
+        p1.setLayout(new FlowLayout());
+        texte.setVerticalAlignment(CENTER);
+        texte.setVerticalAlignment(JLabel.CENTER); // On aligne le texte au centre de p1, mais ca ne marche pas
+        p1.add(texte);
+        
+        
+        // On crée les JPanel contenanant les boutons
+        p2 = new JPanel();
+        p2.add(ajouter);
+        p2.setOpaque(false);
+        
+        p3 = new JPanel();
+        p3.add(employe);
+        p3.setOpaque(false);
+        
+        p4 = new JPanel();
+        p4.add(service);
+        p4.setOpaque(false);
+        
+        p5 = new JPanel();
+        p5.add(chambre);
+        p5.setOpaque(false);
+        
+        p6 = new JPanel();
+        p6.add(retour);
+        p6.setOpaque(false);
+        
+        // On gère les événements
+        // AJOUTER un emp
+        ajouter.addActionListener(new ActionListener()
+        {
+          public void actionPerformed(ActionEvent e)
+          { 
+                
+          }
+        });
+        
+        // recherche un employé
+        employe.addActionListener(new ActionListener()
+        {
+          public void actionPerformed(ActionEvent e)
+          { 
+            
+                
+          }
+        });
+        
+        //recherche chambre
+        chambre.addActionListener(new ActionListener()
+        {
+          public void actionPerformed(ActionEvent e)
+          { 
+            
+          }
+        });
+        
+        //recherche service
+        service.addActionListener(new ActionListener()
+        {
+          public void actionPerformed(ActionEvent e)
+          { 
+            
+          }
+        });
+        
+        //retour
+        retour.addActionListener(new ActionListener()
+        {
+          public void actionPerformed(ActionEvent e)
+          { 
+            fenetre_accueil();
+          }
+        });
+        
+        // On affiche le reste
+        this.setContentPane(new ImagePanel(new ImageIcon("fond66.jpg").getImage())); // Met l'image en background
+        this.add(p1);
+        this.add(p2);
+        this.add(p3);
+        this.add(p4);
+        this.add(p5);
+        this.add(p6);
+        this.setSize(600,600);
+        
+        this.setVisible(true);
     }
 }
 
