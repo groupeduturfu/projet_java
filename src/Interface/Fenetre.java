@@ -213,6 +213,7 @@ public class Fenetre extends JFrame{
         
         this.setVisible(true);  
     }
+
     
     public void fenetre_rechercher_patient()
     {
@@ -333,27 +334,93 @@ public class Fenetre extends JFrame{
         {
           public void actionPerformed(ActionEvent e)
           { 
-            System.out.println("Il valide avec :");
-            System.out.println("N° id : "+jtf_no_id.getText());
-            System.out.println("Nom : "+jtf_nom.getText()); // ETC
+              
+            int id_recu;  
+            String nom_recu;
+            String prenom_recu;
+            int no_chambre_recu;
+            int no_lit_recu;
+            String adresse_recu;
+            String tel_recu;
+            String mutuelle_recu;
+            String date_arrivee_recu;
             
-            // ESSAI SEULEMENT : afficher en console tous les prenoms de la table malade si clique sur "Valider"
+            // si l'utilisateur n'a pas rempli certains champs, on initialise ces champs avec les valeurs 0 et null
+            // no identification
+            if(jtf_no_id.getText().equals(""))
+                id_recu = 0;
+            else id_recu = Integer.parseInt(jtf_no_id.getText().trim());
+            // nom
+            if(jtf_nom.getText().equals(""))
+                nom_recu = "%";
+            else nom_recu= jtf_nom.getText();
+            // prenom
+            if(jtf_prenom.getText().equals(""))
+                prenom_recu = "%";
+            else prenom_recu= jtf_prenom.getText();
+            // no chambre
+            if(jtf_no_chambre.getText().equals(""))
+                no_chambre_recu = 0;
+            else no_chambre_recu = Integer.parseInt(jtf_no_chambre.getText().trim());            
+            // no lit
+            if(jtf_no_lit.getText().equals(""))
+                no_lit_recu = 0;
+            else no_lit_recu = Integer.parseInt(jtf_no_lit.getText().trim());
+            // date arrivée
+            if(jtf_datea.getText().equals(""))
+                date_arrivee_recu = "%";
+            else date_arrivee_recu= jtf_datea.getText();
+            //adresse
+            if(jtf_adresse.getText().equals(""))
+                adresse_recu = "%";
+            else adresse_recu= jtf_adresse.getText();
+            //tel
+            if(jtf_tel.getText().equals(""))
+                tel_recu = "%";
+            else tel_recu= jtf_tel.getText();
+            //mlutuelle
+            if(jtf_mutuelle.getText().equals(""))
+                mutuelle_recu = "%";
+            else mutuelle_recu= jtf_mutuelle.getText();
+            
+            
+            
+            System.out.println("Il valide avec :");
+            System.out.println("N° id : "+id_recu);
+            System.out.println("Nom : "+nom_recu); // ETC
+
+            // utilisée pour l'option 1) quand on ne veut voir que les patients actuellement à l'hopital
+            String requete_malade;
+            // va etre utilisée pour l'option 2) quand on veut voir tous les patients, meme ceux qui sont uniquement dans les archives
+            String requete_hopsitalisation;
+
+            ArrayList<String> liste;
+
+            
+            requete_malade = maconnexion.Malade_CrerRequete(1, id_recu, nom_recu, prenom_recu, no_chambre_recu, no_lit_recu, adresse_recu, tel_recu, mutuelle_recu, date_arrivee_recu);
+            //requete_hopsitalisation = maconnexion.Hoptitalisation_CrerRequete(1, id_recu, nom_recu, prenom_recu, no_chambre_recu, no_lit_recu, adresse_recu, tel_recu, mutuelle_recu, date_arrivee_recu);
             try 
             {
-                // Liste qui récupérera les tuples de réponse à notre requête
-                ArrayList<String> liste;
-                String requete = ("SELECT prenom FROM malade;");
-                liste = maconnexion.RemplirChampsRequete(requete);
-                
-                // Loop through elements.
-                for (int i = 0; i < liste.size(); i++) 
-                {   
-                    // Dans l'exemple on récupère une liste de prenom donc que des string => facilite pour le 1er essai 
+                // on envoit la requete à la base de données via RemplirChampsRequete qui est dans la classe Connexion
+                liste = maconnexion.RemplirChampsRequete(requete_malade);
+            
+                int taille = liste.size();
+                // On affiche le résultat de la requete
+                for (int i = 0; i < liste.size(); i++)
+                {
+                    // Connnexion renvoit un tableau de String, avec dans chaque string tous les attirbuts désirés par la requete séparés par des virgules
                     String value = liste.get(i);
-                    System.out.println("Element: " + value);
+                    System.out.println("" + value);
+                }
+                
+                // si la recherche n'aboutit à aucun malade, on affiche un message d'erreur
+                if (taille ==0)
+                {
+                    JOptionPane.showMessageDialog(null, "Aucun patient ne correspond à votre recherche.", "Erreur", JOptionPane.ERROR_MESSAGE);
                 }
                 
             }
+            
             catch (SQLException ex)
             {
                 System.out.println("Echec SQL");

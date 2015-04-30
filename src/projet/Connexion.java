@@ -4,6 +4,8 @@
  * and open the template in the editor.
  */
 package projet;
+import Interface.Fenetre;
+
 
 /*
  * 
@@ -102,6 +104,87 @@ public class Connexion
 	int count = Liste_requetes_selection.size();
 	System.out.println("Count: " + count);        
     }
+    
+    
+    
+    public String Malade_CrerRequete(int no_requete, int id, String nom, 
+            String prenom, int chambre, int lit, String adresse, String tel, String mutuelle, String date_arrivee)
+    //public String Malade_CrerRequete(int no_requete, int id, String nom )
+    {
+        String requete = "pas passé dans le switch";
+
+        
+        switch (no_requete)
+        {   
+            // RECHERCHER UN PATIENT
+            // astuce : quand l'utilisateur ne remplit pas le champs, s'il s'agit d'un champs String on l'intialise avec un %, si c'est un int on ne peut rien faire, d'où les nombreux esle if 
+            case 1 :
+                    
+                    // si l'utilisateur connait dejà le numéro du malade recherché, on affiche toutes les infos du malade d'apres ce numéro
+                    // si d'autres infos étaient renseignées, seul le no d'identification est pris en compte
+                    if (id != 0)
+                    {
+                        //requete = "SELECT * FROM malade m WHERE no_malade = " + id + ";";
+                        requete = "SELECT m.no_malade, m.nom, m.prenom, m.adresse, m.tel, m.mutuelle, h.no_chambre, h.no_lit, h.date_arrivee "
+                                + "FROM malade m, hospitalisation h WHERE (m.no_malade = " + id + " AND m.no_malade = h.no_malade);";
+                    }
+                            
+                    // si l'utilisateur ne connait ni le numéro du malade, ni sa chambre, ni son lit
+                    //on affiche le numéro et les infos des malades correspond aux infos renseignées (que des string)
+                    else if ((id == 0) && (chambre ==0) && (lit ==0))
+                    {
+                        requete = "SELECT m.no_malade, m.nom, m.prenom, m.adresse, m.tel, m.mutuelle, h.no_chambre, h.no_lit, h.date_arrivee FROM malade m, hospitalisation h "
+                                + "WHERE (m.no_malade = h.no_malade AND m.nom LIKE '" + nom +
+                            "' AND m.prenom LIKE '" + prenom + "' AND m.adresse LIKE '" + adresse + "' AND m.tel LIKE '" + tel + 
+                            "' AND m.mutuelle LIKE '" + mutuelle + "');";
+                    }
+                    
+                    // si l'utilisateur ne connait ni le numéro du malade, ni sa chambre, mais connait son lit
+                    // on ajoute le numero du lit dans la recherche
+                    else if ((id == 0) && (chambre ==0) && (lit !=0))
+                    {
+                          requete = "SELECT m.no_malade, m.nom, m.prenom, m.adresse, m.tel, m.mutuelle, h.no_chambre, h.no_lit, h.date_arrivee FROM malade m, hospitalisation h "
+                                  + "WHERE (m.no_malade = h.no_malade AND m.nom LIKE '" + nom +
+                            "' AND m.prenom LIKE '" + prenom + "' AND m.adresse LIKE '" + adresse + "' AND m.tel LIKE '" + tel + 
+                            "' AND m.mutuelle LIKE '" + mutuelle + "' AND h.date_arrivee LIKE '" + date_arrivee + "' AND h.no_lit = " + lit + ");";  
+                    }
+                        
+                     // si l'utilisateur ne connait ni le numéro du malade, ni son lit, mais connait sa chambre
+                    // on ajoute le numero du lit dans la recherche
+                    else if ((id == 0) && (chambre !=0) && (lit ==0))
+                    {
+                          requete = "SELECT m.no_malade, m.nom, m.prenom, m.adresse, m.tel, m.mutuelle, h.no_chambre, h.no_lit, h.date_arrivee FROM malade m, hospitalisation h "
+                                  + "WHERE (m.no_malade = h.no_malade AND m.nom LIKE '" + nom +
+                            "' AND m.prenom LIKE '" + prenom + "' AND m.adresse LIKE '" + adresse + "' AND m.tel LIKE '" + tel + 
+                            "' AND m.mutuelle LIKE '" + mutuelle + "' AND h.date_arrivee LIKE '" + date_arrivee + "' AND h.no_chambre = " + chambre + ");";  
+                    }
+                       
+                     // si l'utilisateur ne connait pas le numéro du malade mais connait sa chambre et son lit
+                    // on ajoute le numero du lit dans la recherche
+                    else if ((id == 0) && (chambre !=0) && (lit !=0))
+                    {
+                          requete = "SELECT m.no_malade, m.nom, m.prenom, m.adresse, m.tel, m.mutuelle, h.no_chambre, h.no_lit, h.date_arrivee FROM malade m, hospitalisation h WHERE (m.nom LIKE '" + nom +
+                            "' AND m.prenom LIKE '" + prenom + "' AND m.adresse LIKE '" + adresse + "' AND m.tel LIKE '" + tel + 
+                            "' AND m.mutuelle LIKE '" + mutuelle + "' AND h.date_arrivee LIKE '" + date_arrivee + "' AND h.no_chambre = " + chambre + " AND h.no_lit = " + lit + ");";  
+                    }
+                    
+                    
+                    System.out.println("requete envoyee : " + requete);
+                   
+                                        
+        }
+        
+        return requete;
+        
+    }
+    
+    /*public String Hopsitalisation_CrerRequete( int id, String nom, 
+            String prenom, int chambre, int lit, String adresse, String tel, String mutuelle, String date_arrivee)
+    {
+        
+    }
+    */
+   
     
     /**
      * Methode qui retourne l'ArrayList réponse à la requête en parametre 
