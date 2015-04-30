@@ -17,6 +17,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.IOException;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import javax.imageio.ImageIO;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
@@ -30,6 +32,7 @@ import javax.swing.SwingConstants;
 import static javax.swing.SwingConstants.CENTER;
 import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
+import projet.Connexion;
 
 /**
  *
@@ -37,14 +40,40 @@ import javax.swing.JPasswordField;
  */
 public class Fenetre extends JFrame{
    // final JButton rechercher, ajouter, admin, consulter, emp_presents, lit_libre, stats;
+
+    // Attribut privés : objet de Connexion
+    private Connexion maconnexion;
+    
+    
     public Fenetre()
     {
+        try 
+        {
+            try 
+            {
+                // tentative de connexion si les 4 attributs sont remplis
+                 maconnexion = new Connexion();
+            } 
+            catch (ClassNotFoundException cnfe) 
+            {
+                System.out.println("Connexion echouee : probleme de classe");
+                cnfe.printStackTrace();
+            }
+        } 
+        catch (SQLException e) 
+        {
+            System.out.println("Connexion echouee : probleme SQL");
+            e.printStackTrace();
+        }
+        
+        
         this.setTitle("Gestion Hopital");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Quand on clique sur la croix, ça quitte proprement
         this.setLayout(new FlowLayout()); // La fenêtre est répartie en grille : 8 lignes, 2 colonnes
-
+        
         fenetre_accueil();
         //fenetre_rechercher_patient();
+        
     }
     
     
@@ -307,6 +336,30 @@ public class Fenetre extends JFrame{
             System.out.println("Il valide avec :");
             System.out.println("N° id : "+jtf_no_id.getText());
             System.out.println("Nom : "+jtf_nom.getText()); // ETC
+            
+            // ESSAI SEULEMENT : afficher en console tous les prenoms de la table malade si clique sur "Valider"
+            try 
+            {
+                // Liste qui récupérera les tuples de réponse à notre requête
+                ArrayList<String> liste;
+                String requete = ("SELECT prenom FROM malade;");
+                liste = maconnexion.RemplirChampsRequete(requete);
+                
+                // Loop through elements.
+                for (int i = 0; i < liste.size(); i++) 
+                {   
+                    // Dans l'exemple on récupère une liste de prenom donc que des string => facilite pour le 1er essai 
+                    String value = liste.get(i);
+                    System.out.println("Element: " + value);
+                }
+                
+            }
+            catch (SQLException ex)
+            {
+                System.out.println("Echec SQL");
+                ex.printStackTrace();
+            }
+                       
           }
         });
         
