@@ -105,20 +105,59 @@ public class Connexion
 	System.out.println("Count: " + count);        
     }
     
-    
-    
-    public String Malade_CrerRequete(int no_requete, int id, String nom, 
-            String prenom, int chambre, int lit, String adresse, String tel, String mutuelle, String date_arrivee)
-    //public String Malade_CrerRequete(int no_requete, int id, String nom )
+
+
+    public String CrerRequete_Recherche_Historique(int id, String nom, 
+            String prenom, String adresse, String tel, String date_arrivee, String date_sortie, int no_docteur, String code_service)
     {
-        String requete = "pas passé dans le switch";
+        String requete = "initialisee";
+        // astuce : quand l'utilisateur ne remplit pas le champs, s'il s'agit d'un champs String on l'intialise avec un %, si c'est un int on ne peut rien faire, d'où les nombreux esle if 
+
+        // si l'utilisateur connait dejà le numéro du malade recherché, on affiche toutes les infos du malade d'apres ce numéro
+        // si d'autres infos étaient renseignées, seul le no d'identification est pris en compte
+        if (id != 0)
+        {
+            requete = "SELECT m.no_malade, m.nom, m.prenom, m.adresse, m.tel, h.date_arrivee, h.date_sortie, h.no_docteur, "
+                       + "h.code_service "
+                       + "FROM malade m, historique h WHERE (m.no_malade = h.no_malade AND m.no_malade = " + id + ");";
+        }
+        
+        // si l'utilisateur ne connait ni le numéro du malade, ni le numéro de son docteur
+        //on affiche le numéro et les infos des malades correspond aux infos renseignées (que des string)
+        else if ((id == 0) && (no_docteur ==0))
+        {
+            requete = "SELECT m.no_malade, m.nom, m.prenom, m.adresse, m.tel, h.date_arrivee, h.date_sortie, h.no_docteur, "
+                      + "h.code_service "
+                       + "FROM malade m, historique h WHERE (m.no_malade = h.no_malade AND m.nom LIKE '" + nom +
+                            "' AND m.prenom LIKE '" + prenom + "' AND m.adresse LIKE '" + adresse + "' AND m.tel LIKE '" + tel + 
+                            "' AND h.date_arrivee LIKE '" + date_arrivee + "' AND h.date_sortie LIKE '" + date_sortie + "'"
+                    + " AND h.code_service LIKE '" + code_service + "');";
+        }
+        
+        // si l'utilisateur ne connait pas le numéro du malade, mais connait celui de son docteur
+        //on affiche le numéro et les infos des malades correspond aux infos renseignées (que des string)
+        else if ((id == 0) && (no_docteur !=0))
+        {
+            requete = "SELECT m.no_malade, m.nom, m.prenom, m.adresse, m.tel, h.date_arrivee, h.date_sortie, h.no_docteur, "
+                      + "h.code_service "
+                       + "FROM malade m, historique h WHERE (m.no_malade = h.no_malade AND m.nom LIKE '" + nom +
+                            "' AND m.prenom LIKE '" + prenom + "' AND m.adresse LIKE '" + adresse + "' AND m.tel LIKE '" + tel + 
+                            "' AND h.date_arrivee LIKE '" + date_arrivee + "' AND h.date_sortie LIKE '" + date_sortie + "'"
+                    + " AND h.no_docteur = " + no_docteur + " AND h.code_service LIKE '" + code_service + "');";
+        }
+        
+        return requete;
+    }
+    
+    
+    public String CrerRequete_Recherche_Hospitalisation(int id, String nom, 
+            String prenom, int chambre, int lit, String adresse, String tel, String mutuelle, String date_arrivee)
+    {
+        String requete = "initialisee";
 
         
-        switch (no_requete)
-        {   
             // RECHERCHER UN PATIENT
             // astuce : quand l'utilisateur ne remplit pas le champs, s'il s'agit d'un champs String on l'intialise avec un %, si c'est un int on ne peut rien faire, d'où les nombreux esle if 
-            case 1 :
                     
                     // si l'utilisateur connait dejà le numéro du malade recherché, on affiche toutes les infos du malade d'apres ce numéro
                     // si d'autres infos étaient renseignées, seul le no d'identification est pris en compte
@@ -171,9 +210,7 @@ public class Connexion
                     
                     System.out.println("requete envoyee : " + requete);
                    
-                                        
-        }
-        
+                                               
         return requete;
         
     }
