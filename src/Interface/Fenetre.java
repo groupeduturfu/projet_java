@@ -850,14 +850,56 @@ public class Fenetre extends JFrame{
                 // Attention, il faut que le numero id du patient soit implémenté tout seul ainsi que la date d'arrivée
                                
                 // chaine de caractère dans laquelle on écrit la requete correspondant aux infos du formulaire rempli 
-                String requete;
-            
+                String requete_malade;
+                String requete_hopsitalisation;
+                String requete_id_recup;
+                
+                int id_recup;
+                
                 ArrayList<String> liste;
 
                         
                 // écriture de la requete exacte en fonction de la maniere dont a été rempli le formulaire
-                maconnexion.CreerRequete_CreerPatient(nom_recu, prenom_recu, no_chambre_recu, no_lit_recu, adresse_recu, tel_recu, mutuelle_recu);
+                requete_malade = maconnexion.CreerRequete_malade(nom_recu, prenom_recu, adresse_recu, tel_recu, mutuelle_recu);
+                try 
+                {
+                    // on enregistre les infos dans la table malade
+                    maconnexion.executeUpdate(requete_malade);
+                }
+                catch (SQLException ex)
+                {
+                    System.out.println("Echec SQL");
+                    ex.printStackTrace();
+                }
                 
+                // écriture de la requete exacte en fonction de la maniere dont a été rempli le formulaire
+                requete_id_recup = maconnexion.CreerRequete_recup_id(nom_recu, prenom_recu, tel_recu);
+                try 
+                {
+                    // on recupere le numero du malade qui vient d'etre inscrit
+                    liste = maconnexion.RemplirChampsRequete(requete_id_recup);
+                }
+                catch (SQLException ex)
+                {
+                    System.out.println("Echec SQL");
+                    ex.printStackTrace();
+                }
+                id_recup = Integer.parseInt(requete_id_recup.trim());
+
+                // 
+                requete_hopsitalisation = maconnexion.CreerRequete_hospitalisation(id_recup, no_chambre_recu, no_lit_recu);
+                try 
+                {
+                    // on enregistre les infos dans la table hospitalisation
+                    maconnexion.executeUpdate(requete_hopsitalisation);
+                }
+                catch (SQLException ex)
+                {
+                    System.out.println("Echec SQL");
+                    ex.printStackTrace();
+                }
+                
+                /*
                 try 
                 {
                     // on envoit les requetes pour les tables malades et hopsitalisation requete à la base de données via executeUpdate qui est dans la classe Connexion
@@ -873,7 +915,7 @@ public class Fenetre extends JFrame{
                     System.out.println("Echec SQL");
                     ex.printStackTrace();
                 }
-                
+                */
                 
                 
             }

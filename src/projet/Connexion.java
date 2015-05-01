@@ -208,6 +208,35 @@ public class Connexion
         Liste_requetes_creer_malade.add(requete);
     }  
     
+    
+    public String CreerRequete_malade(String nom, String prenom, String adresse, String tel, String mutuelle)
+    {
+        String requete = "initialisee";
+        requete = "INSERT INTO malade (nom, prenom, adresse, tel, mutuelle) values ('" + nom + "', '" + prenom + "', '" + adresse + "', '" + tel + "', '" + mutuelle + "');";
+        System.out.println(requete);
+        
+        return requete;
+    }
+    
+    public String CreerRequete_recup_id(String nom, String prenom, String tel)
+    {
+        String requete = "initialisee";
+        requete = "SELECT no_malade FROM malade WHERE (nom LIKE '" + nom + "' AND prenom LIKE '" + prenom + "' AND tel LIKE '" + tel + "');";
+    
+        return requete;
+    }
+    
+    public String CreerRequete_hospitalisation(int id, int chambre, int lit)
+    {
+        String requete = "initialisee";
+        requete = "INSERT INTO hospitalisation values (" + id + ", " + chambre + ", " + lit + ");";
+        System.out.println(requete);
+        
+        return requete;
+    
+    }
+    
+    
     public void CreerRequete_CreerPatient(String nom, String prenom, int chambre, int lit, String adresse, String tel, String mutuelle)
     {
         // on cree les deux Strings
