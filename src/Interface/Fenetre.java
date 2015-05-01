@@ -846,7 +846,6 @@ public class Fenetre extends JFrame{
             }
             else
             {
-                System.out.println("Validé avec toutes les infos");
                 // C'est ici qu'il faut récupérer les informations et ajouter un patient dans la BDD
                 // Attention, il faut que le numero id du patient soit implémenté tout seul ainsi que la date d'arrivée
                                
@@ -857,13 +856,13 @@ public class Fenetre extends JFrame{
 
                         
                 // écriture de la requete exacte en fonction de la maniere dont a été rempli le formulaire
-                requete = maconnexion.CreerRequete_CreerPatient(nom_recu, prenom_recu, no_chambre_recu, no_lit_recu, adresse_recu, tel_recu, mutuelle_recu);
-                System.out.println(requete);
+                maconnexion.CreerRequete_CreerPatient(nom_recu, prenom_recu, no_chambre_recu, no_lit_recu, adresse_recu, tel_recu, mutuelle_recu);
                 
                 try 
                 {
-                    // on envoit la requete à la base de données via executeUpdate qui est dans la classe Connexion
-                    maconnexion.executeUpdate(requete);
+                    // on envoit les requetes pour les tables malades et hopsitalisation requete à la base de données via executeUpdate qui est dans la classe Connexion
+                    maconnexion.executeUpdate(maconnexion.Liste_requetes_creer_malade.get(0));
+                    maconnexion.executeUpdate(maconnexion.Liste_requetes_creer_malade.get(1));
                     
                     // on affiche à l'utilisateur que le nouveau patient a bien été inscrit
                     JOptionPane.showMessageDialog(null, "Le patient a été enregistré.", "Info", JOptionPane.ERROR_MESSAGE);

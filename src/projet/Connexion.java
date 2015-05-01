@@ -33,7 +33,7 @@ public class Connexion
     /**
      * ArrayList public pour les requêtes de sélection
      */
-    ArrayList<String> Liste_requetes_selection = new ArrayList<String>();
+    public ArrayList<String> Liste_requetes_creer_malade = new ArrayList<String>();
     
 
     public Connexion() throws SQLException, ClassNotFoundException 
@@ -83,27 +83,10 @@ public class Connexion
     {
         Liste_requetes_selection.add(requete);
     }*/
-        
-        
-    /**
-    * UTILE si besoin de faire plusieurs requêtes en même temps
-    * Méthode privée qui crée un liste à n lignes : n string contenant les requete */
-    private void Remplir_Requetes_Selection() 
-    {
-        Liste_requetes_selection.add("SELECT prenom FROM malade;");
-        Liste_requetes_selection.add("SELECT nom FROM malade;");
 
-    }    
+
     
-    /**
-    * ESSAI
-    */
-    private void Afficher_Requetes_Selection()
-    {
-        // On récupère la taille de la liste de requêtes 
-	int count = Liste_requetes_selection.size();
-	System.out.println("Count: " + count);        
-    }
+
     
 
     public String CreerRequete_Recherche_Historique(int id, String nom, 
@@ -220,16 +203,29 @@ public class Connexion
         
     }
     
-
-    
-    public String CreerRequete_CreerPatient(String nom, String prenom, int chambre, int lit, String adresse, String tel, String mutuelle)
+    private void ajouterRequete_creer(String requete)
     {
+        Liste_requetes_creer_malade.add(requete);
+    }  
+    
+    public void CreerRequete_CreerPatient(String nom, String prenom, int chambre, int lit, String adresse, String tel, String mutuelle)
+    {
+        // on cree les deux Strings
+        String requete_malade = "initialisee";
+        requete_malade = "INSERT INTO malade (nom, prenom, adresse, tel, mutuelle) values ('" + nom + "', '" + prenom + "', '" + adresse + "', '" + tel + "', '" + mutuelle + "');";
+        System.out.println(requete_malade);
         
-        String requete = "initialisee";
+        String requete_hopsitalisation = "initialisee";
+        //requete_hopsitalisation = "INSERT INTO hospitalisation values (SELECT no_malade FROM malade WHERE (nom LIKE '" + nom + "' AND prenom LIKE '" + prenom + "' AND tel LIKE '" + tel + "')," + chambre + "," + lit + ");";
+        
+        requete_hopsitalisation = "INSERT INTO hospitalisation values (13," + chambre + "," + lit + ");";
 
-        requete = "INSERT INTO malade (nom, prenom, adresse, tel, mutuelle) values ('" + nom + "', '" + prenom + "', '" + adresse + "', '" + tel + "', '" + mutuelle + "');";
-               
-        return requete;
+        System.out.println(requete_hopsitalisation);
+
+        // on les ajoute dans la liste
+        ajouterRequete_creer(requete_malade);
+        ajouterRequete_creer(requete_hopsitalisation);
+        
     }
    
     public void executeUpdate(String requete) throws SQLException
