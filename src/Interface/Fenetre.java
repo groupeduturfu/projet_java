@@ -369,11 +369,7 @@ public class Fenetre extends JFrame{
             else mutuelle_recu= jtf_mutuelle.getText();
             
             
-            // utilisée pour l'option 1) quand on ne veut voir que les patients actuellement à l'hopital
             String requete_malade;
-            // va etre utilisée pour l'option 2) quand on veut voir tous les patients, meme ceux qui sont uniquement dans les archives
-            String requete_archives;
-
             ArrayList<String> liste;
 
             // RECHERCHE D UN PATIENT HOSPITALISE MAINTENANT
@@ -405,62 +401,7 @@ public class Fenetre extends JFrame{
                 System.out.println("Echec SQL");
                 ex.printStackTrace();
             }
-            
-            
-            
-            
-            // RECHERCHE D UN PATIENT DANS LES ARCHIVES
-            
-            // Pour la rechercher dans les archives
-            String date_sortie_recu; 
-            int no_docteur_recu; 
-            String code_service_recu;
-            
-            // date de sortie
-            if(jtf_date_sortie.getText().equals(""))
-                date_sortie_recu = "%";
-            else date_sortie_recu= jtf_date_sortie.getText();
-            // no docteur
-            if(jtf_no_docteur.getText().equals(""))
-                no_docteur_recu = 0;
-            else no_docteur_recu = Integer.parseInt(jtf_no_docteur.getText().trim());
-            // code de service
-            if(jtf_code_service.getText().equals(""))
-                code_service_recu = "%";
-            else code_service_recu= jtf_code_service.getText();
-            
-            // écriture de la requete exacte en fonction de la maniere dont a été rempli le formulaire
-            requete_archives = maconnexion.CrerRequete_Recherche_Historique(id_recu, nom_recu, prenom_recu, adresse_recu, 
-                    tel_recu, date_arrivee_recu, date_sortie_recu, no_docteur_recu, code_service_recu);
-            try 
-            {
-                // on envoit la requete à la base de données via RemplirChampsRequete qui est dans la classe Connexion
-                liste = maconnexion.RemplirChampsRequete(requete_archives);
-            
-                int taille = liste.size();
-                // On affiche le résultat de la requete
-                for (int i = 0; i < liste.size(); i++)
-                {
-                    // Connnexion renvoit un tableau de String, avec dans chaque string tous les attributs désirés par la requete, séparés par des virgules
-                    String value = liste.get(i);
-                    System.out.println("" + value);
-                }
-                
-                // si la recherche n'aboutit à aucun malade, on affiche un message d'erreur
-                if (taille ==0)
-                {
-                    JOptionPane.showMessageDialog(null, "Aucun patient ne correspond à votre recherche.", "Erreur", JOptionPane.ERROR_MESSAGE);
-                }
-            }
-            catch (SQLException ex)
-            {
-                System.out.println("Echec SQL");
-                ex.printStackTrace();
-            }
-            
-            
-            
-            
+
           }
         });
         
@@ -496,26 +437,19 @@ public class Fenetre extends JFrame{
     {
         int dialogButton = JOptionPane.YES_NO_OPTION;
         int dialogResult = JOptionPane.showConfirmDialog(this, "Le patient est-il actuellement dans l'hôpital ?", "Title on Box", dialogButton);
+        // Oui le patient est toujours dans l'hopital : recherche dans la table hospitalisation
         if(dialogResult == 0) {
           fenetre_rechercher_patient(); 
-        } else {
+        } 
+        // non le patient n'est plus dnas l'hopital : recherche dans les archives (table historique)
+        else {
             fenetre_rechercher_archives();
         }
     }
     
     public void fenetre_rechercher_archives()
     {
-        /*
-        no malade
-nom
-prenom
-adresse
-tel
-date_arrivee
-date_sortie
-no_docteur
-code_service
-        */
+
         
         JTextField jtf_no_id, jtf_nom, jtf_prenom, jtf_nom_service, jtf_nom_docteur, jtf_datea, jtf_dated, jtf_adresse, jtf_tel, jtf_mutuelle;
         JLabel jl_no_id, jl_nom, jl_prenom, jl_nom_service, jl_nom_docteur, jl_datea, jl_dated, jl_adresse, jl_tel, jl_mutuelle, texte;
@@ -530,7 +464,7 @@ code_service
         jl_nom = new JLabel("Nom");
         jl_prenom = new JLabel("Prénom");
         jl_nom_service = new JLabel("Nom service");
-        jl_nom_docteur = new JLabel("N° lit");
+        jl_nom_docteur = new JLabel("Nom du docteur");
         jl_datea = new JLabel("Date d'arrivée");
         jl_dated = new JLabel("Date de sortie");
         jl_adresse = new JLabel("Adresse");
@@ -647,13 +581,15 @@ code_service
             int id_recu;  
             String nom_recu;
             String prenom_recu;
-            String nom_service_recu;
-            String nom_docteur_recu;
             String adresse_recu;
             String tel_recu;
-            String mutuelle_recu;
             String date_arrivee_recu;
-            String date_depart_recu;
+            String date_sortie_recu;
+            String nom_docteur_recu;
+            String code_service_recu;
+            String mutuelle_recu;
+            
+           
             
             // si l'utilisateur n'a pas rempli certains champs, on initialise ces champs avec les valeurs 0 et null
             // no identification
@@ -668,22 +604,22 @@ code_service
             if(jtf_prenom.getText().equals(""))
                 prenom_recu = "%";
             else prenom_recu= jtf_prenom.getText();
-            // no chambre
+            // code service
             if(jtf_nom_service.getText().equals(""))
-                nom_service_recu = "%";
-            else nom_service_recu= jtf_nom_service.getText();           
-            // no lit
+                code_service_recu = "%";
+            else code_service_recu= jtf_nom_service.getText();           
+            // nom du docteur
             if(jtf_nom_docteur.getText().equals(""))
                 nom_docteur_recu = "%";
             else nom_docteur_recu = jtf_nom_docteur.getText();
-            // date arrivée
+            // date d'arrivée
             if(jtf_datea.getText().equals(""))
                 date_arrivee_recu = "%";
             else date_arrivee_recu= jtf_datea.getText();
-            // date depart
+            // date de sortie
             if(jtf_dated.getText().equals(""))
-                date_depart_recu = "%";
-            else date_depart_recu= jtf_dated.getText();
+                date_sortie_recu = "%";
+            else date_sortie_recu= jtf_dated.getText();
             //adresse
             if(jtf_adresse.getText().equals(""))
                 adresse_recu = "%";
@@ -692,33 +628,31 @@ code_service
             if(jtf_tel.getText().equals(""))
                 tel_recu = "%";
             else tel_recu= jtf_tel.getText();
-            //mlutuelle
+            //mutuelle
             if(jtf_mutuelle.getText().equals(""))
                 mutuelle_recu = "%";
             else mutuelle_recu= jtf_mutuelle.getText();
             
-
-            // utilisée pour l'option 1) quand on ne veut voir que les patients actuellement à l'hopital
-            String requete_malade;
+            // RECHERCHE D UN PATIENT DANS LES ARCHIVES
+            
             // va etre utilisée pour l'option 2) quand on veut voir tous les patients, meme ceux qui sont uniquement dans les archives
-            String requete_hopsitalisation;
-
+            String requete_archives;
             ArrayList<String> liste;
-               
-            // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-            // audrey tu dois gérer ça stp
-      /*      requete_malade = maconnexion.Malade_CrerRequete(1, id_recu, nom_recu, prenom_recu, nom_service_recu, nom_docteur_recu, adresse_recu, tel_recu, mutuelle_recu, date_arrivee_recu);
-            //requete_hopsitalisation = maconnexion.Hoptitalisation_CrerRequete(1, id_recu, nom_recu, prenom_recu, nom_service_recu, nom_docteur_recu, adresse_recu, tel_recu, mutuelle_recu, date_arrivee_recu);
+
+                        
+            // écriture de la requete exacte en fonction de la maniere dont a été rempli le formulaire
+            requete_archives = maconnexion.CrerRequete_Recherche_Historique(id_recu, nom_recu, prenom_recu, adresse_recu, 
+                    tel_recu, mutuelle_recu, date_arrivee_recu, date_sortie_recu, nom_docteur_recu, code_service_recu);
             try 
             {
                 // on envoit la requete à la base de données via RemplirChampsRequete qui est dans la classe Connexion
-                liste = maconnexion.RemplirChampsRequete(requete_malade);
+                liste = maconnexion.RemplirChampsRequete(requete_archives);
             
                 int taille = liste.size();
                 // On affiche le résultat de la requete
                 for (int i = 0; i < liste.size(); i++)
                 {
-                    // Connnexion renvoit un tableau de String, avec dans chaque string tous les attirbuts désirés par la requete séparés par des virgules
+                    // Connnexion renvoit un tableau de String, avec dans chaque string tous les attributs désirés par la requete, séparés par des virgules
                     String value = liste.get(i);
                     System.out.println("" + value);
                 }
@@ -728,16 +662,12 @@ code_service
                 {
                     JOptionPane.showMessageDialog(null, "Aucun patient ne correspond à votre recherche.", "Erreur", JOptionPane.ERROR_MESSAGE);
                 }
-                
             }
-            
             catch (SQLException ex)
             {
                 System.out.println("Echec SQL");
                 ex.printStackTrace();
             }
-              
-              */
                        
           }
         });

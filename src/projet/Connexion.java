@@ -106,9 +106,8 @@ public class Connexion
     }
     
 
-
     public String CrerRequete_Recherche_Historique(int id, String nom, 
-            String prenom, String adresse, String tel, String date_arrivee, String date_sortie, int no_docteur, String code_service)
+            String prenom, String adresse, String tel, String mutuelle, String date_arrivee, String date_sortie, String nom_docteur, String code_service)
     {
         String requete = "initialisee";
         // astuce : quand l'utilisateur ne remplit pas le champs, s'il s'agit d'un champs String on l'intialise avec un %, si c'est un int on ne peut rien faire, d'où les nombreux esle if 
@@ -117,34 +116,35 @@ public class Connexion
         // si d'autres infos étaient renseignées, seul le no d'identification est pris en compte
         if (id != 0)
         {
-            requete = "SELECT m.no_malade, m.nom, m.prenom, m.adresse, m.tel, h.date_arrivee, h.date_sortie, h.no_docteur, "
+            requete = "SELECT m.no_malade, m.nom, m.prenom, m.adresse, m.tel, m.mutuelle, h.date_arrivee, h.date_sortie, e.nom, h.description, "
                        + "h.code_service "
-                       + "FROM malade m, historique h WHERE (m.no_malade = h.no_malade AND m.no_malade = " + id + ");";
+                       + "FROM malade m, historique h, employe e "
+                       + "WHERE (m.no_malade = h.no_malade AND h.no_docteur = e.no_employe AND m.no_malade = " + id + ");";
         }
         
-        // si l'utilisateur ne connait ni le numéro du malade, ni le numéro de son docteur
+        // si l'utilisateur ne connait pas le numéro du malade
         //on affiche le numéro et les infos des malades correspond aux infos renseignées (que des string)
-        else if ((id == 0) && (no_docteur ==0))
+        else 
         {
-            requete = "SELECT m.no_malade, m.nom, m.prenom, m.adresse, m.tel, h.date_arrivee, h.date_sortie, h.no_docteur, "
+            /*
+            requete = "SELECT m.no_malade, m.nom, m.prenom, m.adresse, m.tel, m.mutuelle, h.date_arrivee, h.date_sortie, e.nom, h.description, "
                       + "h.code_service "
-                       + "FROM malade m, historique h WHERE (m.no_malade = h.no_malade AND m.nom LIKE '" + nom +
+                      + "FROM malade m, historique h, employe e, docteur d"
+                      + "WHERE ( m.nom LIKE '" + nom +
                             "' AND m.prenom LIKE '" + prenom + "' AND m.adresse LIKE '" + adresse + "' AND m.tel LIKE '" + tel + 
                             "' AND h.date_arrivee LIKE '" + date_arrivee + "' AND h.date_sortie LIKE '" + date_sortie + "'"
-                    + " AND h.code_service LIKE '" + code_service + "');";
+                    + " AND h.code_service LIKE '" + code_service + "' AND m.mutuelle LIKE '" + mutuelle + 
+                    "' AND e.no_emloye LIKE '" + nom_docteur + "' AND m.no_malade=h.no_malade AND h.no_docteur = d.no_docteur AND d.no_docteur=e.no_employe);";
+  */
+            requete = "SELECT m.no_malade, m.nom, m.prenom, m.adresse, m.tel, m.mutuelle, h.date_arrivee, h.date_sortie, e.nom, h.description, "
+                       + "h.code_service "
+                       + "FROM malade m, historique h, employe e "
+                       + "WHERE (m.no_malade = h.no_malade AND h.no_docteur = e.no_employe AND m.nom LIKE '" + nom + "'AND m.prenom LIKE '" + prenom + 
+                    "' AND m.adresse LIKE '" + adresse + "' AND m.tel LIKE '" + tel + "' AND h.date_arrivee LIKE '" + date_arrivee + "' AND h.date_sortie LIKE '" 
+                    + date_sortie + "' AND h.code_service LIKE '" + code_service + "' AND m.mutuelle LIKE '" + mutuelle + "' AND e.nom LIKE '" + nom_docteur + "');";
+  
         }
-        
-        // si l'utilisateur ne connait pas le numéro du malade, mais connait celui de son docteur
-        //on affiche le numéro et les infos des malades correspond aux infos renseignées (que des string)
-        else if ((id == 0) && (no_docteur !=0))
-        {
-            requete = "SELECT m.no_malade, m.nom, m.prenom, m.adresse, m.tel, h.date_arrivee, h.date_sortie, h.no_docteur, "
-                      + "h.code_service "
-                       + "FROM malade m, historique h WHERE (m.no_malade = h.no_malade AND m.nom LIKE '" + nom +
-                            "' AND m.prenom LIKE '" + prenom + "' AND m.adresse LIKE '" + adresse + "' AND m.tel LIKE '" + tel + 
-                            "' AND h.date_arrivee LIKE '" + date_arrivee + "' AND h.date_sortie LIKE '" + date_sortie + "'"
-                    + " AND h.no_docteur = " + no_docteur + " AND h.code_service LIKE '" + code_service + "');";
-        }
+ 
         
         return requete;
     }
@@ -172,7 +172,8 @@ public class Connexion
                     //on affiche le numéro et les infos des malades correspond aux infos renseignées (que des string)
                     else if ((id == 0) && (chambre ==0) && (lit ==0))
                     {
-                        requete = "SELECT m.no_malade, m.nom, m.prenom, m.adresse, m.tel, m.mutuelle, h.no_chambre, h.no_lit, h.date_arrivee FROM malade m, hospitalisation h "
+                        requete = "SELECT m.no_malade, m.nom, m.prenom, m.adresse, m.tel, m.mutuelle, h.no_chambre, h.no_lit, h.date_arrivee "
+                                + "FROM malade m, hospitalisation h "
                                 + "WHERE (m.no_malade = h.no_malade AND m.nom LIKE '" + nom +
                             "' AND m.prenom LIKE '" + prenom + "' AND m.adresse LIKE '" + adresse + "' AND m.tel LIKE '" + tel + 
                             "' AND m.mutuelle LIKE '" + mutuelle + "');";
@@ -182,7 +183,8 @@ public class Connexion
                     // on ajoute le numero du lit dans la recherche
                     else if ((id == 0) && (chambre ==0) && (lit !=0))
                     {
-                          requete = "SELECT m.no_malade, m.nom, m.prenom, m.adresse, m.tel, m.mutuelle, h.no_chambre, h.no_lit, h.date_arrivee FROM malade m, hospitalisation h "
+                          requete = "SELECT m.no_malade, m.nom, m.prenom, m.adresse, m.tel, m.mutuelle, h.no_chambre, h.no_lit, h.date_arrivee "
+                                  + "FROM malade m, hospitalisation h "
                                   + "WHERE (m.no_malade = h.no_malade AND m.nom LIKE '" + nom +
                             "' AND m.prenom LIKE '" + prenom + "' AND m.adresse LIKE '" + adresse + "' AND m.tel LIKE '" + tel + 
                             "' AND m.mutuelle LIKE '" + mutuelle + "' AND h.date_arrivee LIKE '" + date_arrivee + "' AND h.no_lit = " + lit + ");";  
@@ -192,7 +194,8 @@ public class Connexion
                     // on ajoute le numero du lit dans la recherche
                     else if ((id == 0) && (chambre !=0) && (lit ==0))
                     {
-                          requete = "SELECT m.no_malade, m.nom, m.prenom, m.adresse, m.tel, m.mutuelle, h.no_chambre, h.no_lit, h.date_arrivee FROM malade m, hospitalisation h "
+                          requete = "SELECT m.no_malade, m.nom, m.prenom, m.adresse, m.tel, m.mutuelle, h.no_chambre, h.no_lit, h.date_arrivee "
+                                  + "FROM malade m, hospitalisation h "
                                   + "WHERE (m.no_malade = h.no_malade AND m.nom LIKE '" + nom +
                             "' AND m.prenom LIKE '" + prenom + "' AND m.adresse LIKE '" + adresse + "' AND m.tel LIKE '" + tel + 
                             "' AND m.mutuelle LIKE '" + mutuelle + "' AND h.date_arrivee LIKE '" + date_arrivee + "' AND h.no_chambre = " + chambre + ");";  
@@ -202,7 +205,8 @@ public class Connexion
                     // on ajoute le numero du lit dans la recherche
                     else if ((id == 0) && (chambre !=0) && (lit !=0))
                     {
-                          requete = "SELECT m.no_malade, m.nom, m.prenom, m.adresse, m.tel, m.mutuelle, h.no_chambre, h.no_lit, h.date_arrivee FROM malade m, hospitalisation h WHERE (m.nom LIKE '" + nom +
+                          requete = "SELECT m.no_malade, m.nom, m.prenom, m.adresse, m.tel, m.mutuelle, h.no_chambre, h.no_lit, h.date_arrivee "
+                                  + "FROM malade m, hospitalisation h WHERE (m.nom LIKE '" + nom +
                             "' AND m.prenom LIKE '" + prenom + "' AND m.adresse LIKE '" + adresse + "' AND m.tel LIKE '" + tel + 
                             "' AND m.mutuelle LIKE '" + mutuelle + "' AND h.date_arrivee LIKE '" + date_arrivee + "' AND h.no_chambre = " + chambre + " AND h.no_lit = " + lit + ");";  
                     }
