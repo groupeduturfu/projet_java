@@ -686,7 +686,7 @@ code_service
               
               */
             
-            fenetre_reponse_patient(liste);
+           // fenetre_reponse_patient(liste);
                        
           }
         });
