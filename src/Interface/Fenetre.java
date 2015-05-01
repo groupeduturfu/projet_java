@@ -863,8 +863,12 @@ public class Fenetre extends JFrame{
                 
                 try 
                 {
-                    // on envoit la requete à la base de données via RemplirChampsRequete qui est dans la classe Connexion
-                maconnexion.executeUpdate(requete);
+                    // on envoit la requete à la base de données via executeUpdate qui est dans la classe Connexion
+                    maconnexion.executeUpdate(requete);
+                    
+                    // on affiche à l'utilisateur que le nouveau patient a bien été inscrit
+                    JOptionPane.showMessageDialog(null, "Le patient a été enregistré.", "Info", JOptionPane.ERROR_MESSAGE);
+
                 }
                 catch (SQLException ex)
                 {
