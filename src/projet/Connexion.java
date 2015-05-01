@@ -106,7 +106,7 @@ public class Connexion
     }
     
 
-    public String CrerRequete_Recherche_Historique(int id, String nom, 
+    public String CreerRequete_Recherche_Historique(int id, String nom, 
             String prenom, String adresse, String tel, String mutuelle, String date_arrivee, String date_sortie, String nom_docteur, String code_service)
     {
         String requete = "initialisee";
@@ -145,12 +145,13 @@ public class Connexion
   
         }
  
-        
+        System.out.println("requete envoyee : " + requete);
+
         return requete;
     }
     
     
-    public String CrerRequete_Recherche_Hospitalisation(int id, String nom, 
+    public String CreerRequete_Recherche_Hospitalisation(int id, String nom, 
             String prenom, int chambre, int lit, String adresse, String tel, String mutuelle, String date_arrivee)
     {
         String requete = "initialisee";
@@ -219,13 +220,22 @@ public class Connexion
         
     }
     
-    /*public String Hopsitalisation_CrerRequete( int id, String nom, 
-            String prenom, int chambre, int lit, String adresse, String tel, String mutuelle, String date_arrivee)
+
+    
+    public String CreerRequete_CreerPatient(String nom, String prenom, int chambre, int lit, String adresse, String tel, String mutuelle)
     {
         
+        String requete = "initialisee";
+
+        requete = "INSERT INTO malade (nom, prenom, adresse, tel, mutuelle) values ('" + nom + "', '" + prenom + "', '" + adresse + "', '" + tel + "', '" + mutuelle + "');";
+               
+        return requete;
     }
-    */
    
+    public void executeUpdate(String requete) throws SQLException
+    {
+         stmt.executeUpdate(requete);
+    }
     
     /**
      * Methode qui retourne l'ArrayList réponse à la requête en parametre 

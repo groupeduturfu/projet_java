@@ -5,6 +5,12 @@
  */
 package Interface;
 
+import java.awt.event.*;
+import java.awt.*;
+import java.util.*;
+import javax.swing.*;
+import java.sql.*;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -177,7 +183,7 @@ public class Fenetre extends JFrame{
         });
         
         // Stats
-        ajouter.addActionListener(new ActionListener()
+        stats.addActionListener(new ActionListener()
         {
           public void actionPerformed(ActionEvent e)
           { 
@@ -199,7 +205,7 @@ public class Fenetre extends JFrame{
         this.setVisible(true);  
     }
 
-    
+    // RECHERCHE D UN PATIENT HOSPITALISE (table hopsitalisation)
     public void fenetre_rechercher_patient()
     {
         JTextField jtf_no_id, jtf_nom, jtf_prenom, jtf_no_chambre, jtf_no_lit, jtf_datea, jtf_adresse, jtf_tel, jtf_mutuelle;
@@ -369,16 +375,13 @@ public class Fenetre extends JFrame{
                 mutuelle_recu = "%";
             else mutuelle_recu= jtf_mutuelle.getText();
 
-            // utilisée pour l'option 1) quand on ne veut voir que les patients actuellement à l'hopital
+            // chaine de caractère dans laquelle on écrit la requete correspondant aux infos du formulaire rempli 
             String requete_malade;
-            // va etre utilisée pour l'option 2) quand on veut voir tous les patients, meme ceux qui sont uniquement dans les archives
-            String requete_hopsitalisation;
 
             ArrayList<String> liste =null;
 
-            // RECHERCHE D UN PATIENT HOSPITALISE MAINTENANT
             // écriture de la requete exacte en fonction de la maniere dont a été rempli le formulaire
-            requete_malade = maconnexion.CrerRequete_Recherche_Hospitalisation(id_recu, nom_recu, prenom_recu, no_chambre_recu, no_lit_recu, adresse_recu, tel_recu, mutuelle_recu, date_arrivee_recu);
+            requete_malade = maconnexion.CreerRequete_Recherche_Hospitalisation(id_recu, nom_recu, prenom_recu, no_chambre_recu, no_lit_recu, adresse_recu, tel_recu, mutuelle_recu, date_arrivee_recu);
             try 
             {
                 // on envoit la requete à la base de données via RemplirChampsRequete qui est dans la classe Connexion
@@ -639,15 +642,16 @@ public class Fenetre extends JFrame{
                 mutuelle_recu = "%";
             else mutuelle_recu= jtf_mutuelle.getText();
             
-            // RECHERCHE D UN PATIENT DANS LES ARCHIVES
             
-            // va etre utilisée pour l'option 2) quand on veut voir tous les patients, meme ceux qui sont uniquement dans les archives
+            
+            // chaine de caractère dans laquelle on écrit la requete correspondant aux infos du formulaire rempli 
             String requete_archives;
+            
             ArrayList<String> liste;
 
                         
             // écriture de la requete exacte en fonction de la maniere dont a été rempli le formulaire
-            requete_archives = maconnexion.CrerRequete_Recherche_Historique(id_recu, nom_recu, prenom_recu, adresse_recu, 
+            requete_archives = maconnexion.CreerRequete_Recherche_Historique(id_recu, nom_recu, prenom_recu, adresse_recu, 
                     tel_recu, mutuelle_recu, date_arrivee_recu, date_sortie_recu, nom_docteur_recu, code_service_recu);
             try 
             {
@@ -675,7 +679,7 @@ public class Fenetre extends JFrame{
                 ex.printStackTrace();
             }
               
-              */
+              
             
            // fenetre_reponse_patient(liste);
                        
@@ -713,7 +717,7 @@ public class Fenetre extends JFrame{
     
     public void fenetre_ajouter_patient()
     {
-        JTextField jtf_no_id, jtf_nom, jtf_prenom, jtf_no_chambre, jtf_no_lit, jtf_adresse, jtf_tel, jtf_mutuelle;
+        JTextField jtf_nom, jtf_prenom, jtf_no_chambre, jtf_no_lit, jtf_adresse, jtf_tel, jtf_mutuelle;
         JLabel jl_no_id, jl_nom, jl_prenom, jl_no_chambre, jl_no_lit, jl_adresse, jl_tel, jl_mutuelle, texte;
         JButton valider = new JButton("Valider");
         JButton retour = new JButton("Retour");
@@ -722,7 +726,7 @@ public class Fenetre extends JFrame{
         
         // On initialise les JLabel
         texte = new JLabel("Merci de remplir toutes les informations suivantes");
-        jl_no_id = new JLabel("N° identification");
+        //jl_no_id = new JLabel("N° identification");
         jl_nom = new JLabel("Nom");
         jl_prenom = new JLabel("Prénom");
         jl_no_chambre = new JLabel("N° chambre");
@@ -732,7 +736,7 @@ public class Fenetre extends JFrame{
         jl_mutuelle = new JLabel("Mutuelle");
         
         // On iitialise les JTF
-        jtf_no_id = new JTextField();
+        //jtf_no_id = new JTextField();
         jtf_nom = new JTextField();
         jtf_prenom = new JTextField();
         jtf_no_chambre = new JTextField();
@@ -741,7 +745,7 @@ public class Fenetre extends JFrame{
         jtf_tel = new JTextField();
         jtf_mutuelle = new JTextField();
         
-        jtf_no_id.setColumns(10);
+        //jtf_no_id.setColumns(10);
         jtf_nom.setColumns(10);
         jtf_prenom.setColumns(10);
         jtf_no_chambre.setColumns(10);
@@ -815,6 +819,28 @@ public class Fenetre extends JFrame{
         {
           public void actionPerformed(ActionEvent e)
           { 
+              
+            int id_recu;  
+            String nom_recu;
+            String prenom_recu;
+            int no_chambre_recu;
+            int no_lit_recu;
+            String adresse_recu;
+            String tel_recu;
+            String mutuelle_recu;
+            
+              
+            nom_recu= jtf_nom.getText();
+            prenom_recu= jtf_prenom.getText();
+            no_chambre_recu = Integer.parseInt(jtf_no_chambre.getText().trim());
+            no_lit_recu = Integer.parseInt(jtf_no_lit.getText().trim());
+            adresse_recu= jtf_adresse.getText();
+            tel_recu= jtf_tel.getText();
+            mutuelle_recu = jtf_mutuelle.getText();
+            
+            
+            
+              
             if(jtf_nom.getText().equals("") || jtf_prenom.getText().equals("") || jtf_no_chambre.getText().equals("") || jtf_no_lit.getText().equals("") || jtf_adresse.getText().equals("") || jtf_tel.getText().equals("") || jtf_mutuelle.getText().equals("")) 
             {
                 JOptionPane.showMessageDialog(null, "Il y a au moins un champs vide", "Erreur", JOptionPane.ERROR_MESSAGE);
@@ -824,8 +850,32 @@ public class Fenetre extends JFrame{
                 System.out.println("Validé avec toutes les infos");
                 // C'est ici qu'il faut récupérer les informations et ajouter un patient dans la BDD
                 // Attention, il faut que le numero id du patient soit implémenté tout seul ainsi que la date d'arrivée
+                               
+                // chaine de caractère dans laquelle on écrit la requete correspondant aux infos du formulaire rempli 
+                String requete;
+            
+                ArrayList<String> liste;
+
+                        
+                // écriture de la requete exacte en fonction de la maniere dont a été rempli le formulaire
+                requete = maconnexion.CreerRequete_CreerPatient(nom_recu, prenom_recu, no_chambre_recu, no_lit_recu, adresse_recu, tel_recu, mutuelle_recu);
+                System.out.println(requete);
+                
+                try 
+                {
+                    // on envoit la requete à la base de données via RemplirChampsRequete qui est dans la classe Connexion
+                maconnexion.executeUpdate(requete);
+                }
+                catch (SQLException ex)
+                {
+                    System.out.println("Echec SQL");
+                    ex.printStackTrace();
+                }
+                
+                
+                
             }
-          }
+           }
         });
         
         retour.addActionListener(new ActionListener()
@@ -1016,7 +1066,7 @@ SELECT m.no_malade, m.nom, m.prenom, m.adresse, m.tel, m.mutuelle, h.no_chambre,
         jl_tel = new JLabel("N° telephone");
         jl_mutuelle = new JLabel("Mutuelle");
         
-        // On iitialise les JTF
+        // On initialise les JTF
         jtf_no_id = new JTextField();
         jtf_nom = new JTextField();
         jtf_prenom = new JTextField();
@@ -1341,7 +1391,6 @@ SELECT m.no_malade, m.nom, m.prenom, m.adresse, m.tel, m.mutuelle, h.no_chambre,
         this.setVisible(true);
         */
     }
-    
-    
+       
 }
 
