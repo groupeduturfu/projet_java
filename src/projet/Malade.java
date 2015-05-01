@@ -12,8 +12,7 @@ package projet;
  * @author maurinco
  */
 public class Malade {
-    protected int no_malade; // identifie le malade
-    
+    private int no_malade; // identifie le malade
     private String nom_malade;
     private String prenom_malade;
     private String adresse_malade;

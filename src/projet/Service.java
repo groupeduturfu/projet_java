@@ -15,9 +15,9 @@ public class Service {
     
     private String nom;
     private String batiment;
-    private String no_directeur; // identifie le docteur qui dirige ce service
+    private int no_directeur; // identifie le docteur qui dirige ce service
     
-    public Service(int codeS, String name, String bati, String directeur)
+    public Service(int codeS, String name, String bati, int directeur)
     {
         code_service = codeS;
         nom = name;
@@ -40,7 +40,7 @@ public class Service {
         return batiment;
     }
 
-    public String getNo_directeur() 
+    public int getNo_directeur() 
     {
         return no_directeur;
     }
