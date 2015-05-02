@@ -239,10 +239,12 @@ public class Connexion
             case 1 :
                     requete = "SELECT no_malade FROM malade ORDER BY no_malade DESC LIMIT 1 OFFSET 0;";
                     System.out.println(requete);
+                break ;
                 
             case 2 :
                     requete = "SELECT no_employe FROM employe ORDER BY no_employe DESC LIMIT 1 OFFSET 0;";
                     System.out.println(requete);
+                break;
         }
         
 

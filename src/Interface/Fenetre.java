@@ -813,6 +813,9 @@ public class Fenetre extends JFrame{
         p11.setOpaque(false);
         p11.setPreferredSize(new Dimension(600, 30));
         
+        
+        
+        
         // On gère l'évennement du bouton
         valider.addActionListener(new ActionListener()
         {
@@ -881,7 +884,7 @@ public class Fenetre extends JFrame{
                     id_string_recup = maconnexion.RecupererId(requete_id_recup);                    
                     // RecupererId renvoie une chaine de caractere, on le transforme en int
                     id_recup = Integer.parseInt(id_string_recup.trim());
-                    System.out.println("ide recupéré : "+ id_recup);
+                    System.out.println("id malade recupéré : "+ id_recup);
 
                 }
                 catch (SQLException ex)
@@ -940,17 +943,28 @@ public class Fenetre extends JFrame{
     
     public void fenetre_ajouter_employe()
     {
-        JTextField jtf_nom, jtf_prenom, jtf_adresse, jtf_tel, jtf_salaire, jtf_fonction ;
-        JLabel texte, jl_nom, jl_prenom, jl_adresse, jl_tel, jl_salaire, jl_fonction;
+        JTextField jtf_nom, jtf_prenom, jtf_adresse, jtf_tel, jtf_salaire, jtf_fonction, jtf_code_service ;
+        JLabel texte, jl_nom, jl_prenom, jl_adresse, jl_tel, jl_salaire, jl_fonction, jl_specialite, jl_rotation, jl_code_service;
         JButton valider = new JButton("Valider");
         JButton retour = new JButton("Retour");
-        JPanel p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12;
+        JPanel p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13, p14, p15;
         
         // liste déroulante pour Infirmier / Docteur
         JComboBox Jcombo_fonction;
         String[] fonction_string = {"Docteur", "Infirmier"};	
         Jcombo_fonction = new JComboBox(fonction_string);
-
+        
+        // Liste deroulante si docteur pour la specialite
+        JComboBox Jcombo_specialite;
+        String[] specialite_string = {"Anesthesiste","Cardiologue","Generaliste","Orthopediste","Pneumologue","Radiologue","Traumatologue"};	
+        Jcombo_specialite = new JComboBox(specialite_string);
+        
+        
+        // Liste deroulante si infirmier pour la rotation
+        JComboBox Jcombo_rotation;
+        String[] rotation_string = {"JOUR","NUIT"};	
+        Jcombo_rotation = new JComboBox(rotation_string);
+        
         
         // On initialise les JLabel
         texte = new JLabel("Merci de remplir toutes les informations suivantes");
@@ -960,6 +974,9 @@ public class Fenetre extends JFrame{
         jl_tel = new JLabel("N° telephone");
         jl_salaire = new JLabel("Salaire");
         jl_fonction = new JLabel("Fonction");
+        jl_specialite = new JLabel("Specialite");
+        jl_rotation = new JLabel("Rotation");
+        jl_code_service = new JLabel("Code service");
 
         
         // On iitialise les JTF
@@ -970,6 +987,7 @@ public class Fenetre extends JFrame{
         jtf_tel = new JTextField();
         jtf_salaire = new JTextField();
         jtf_fonction = new JTextField();
+        jtf_code_service = new JTextField();
 
         
         //jtf_no_id.setColumns(10);
@@ -1024,12 +1042,34 @@ public class Fenetre extends JFrame{
         p7.setPreferredSize(new Dimension(600, 30));
         
 
-        //liste déroulante Infirmier
+        //liste déroulante Infirmier / Docteur
         p12 = new JPanel ();
         p12.add(jl_fonction);
         p12.add(Jcombo_fonction);
         p12.setOpaque(false);
         p12.setPreferredSize(new Dimension(600, 30));
+        
+        
+        //liste déroulante specialite docteur
+        p13 = new JPanel ();
+        p13.add(jl_specialite);
+        p13.add(Jcombo_specialite);
+        p13.setOpaque(false);
+        p13.setPreferredSize(new Dimension(600, 30));
+        
+        //liste déroulante rotation infirmier
+        p14 = new JPanel ();
+        p14.add(jl_rotation);
+        p14.add(Jcombo_rotation);
+        p14.setOpaque(false);
+        p14.setPreferredSize(new Dimension(600, 30));
+        
+        // textfield code service infirmier
+        p15 = new JPanel();
+        p15.add(jl_code_service);
+        p15.add(jtf_code_service);
+        p15.setOpaque(false);
+        p15.setPreferredSize(new Dimension(600, 30));
         
         p11 = new JPanel();
         p11.add(retour);
@@ -1052,6 +1092,7 @@ public class Fenetre extends JFrame{
             String tel_recu;
             int salaire_recu;
             String fonction_recu;
+
               
             nom_recu= jtf_nom.getText();
             prenom_recu= jtf_prenom.getText();
@@ -1059,6 +1100,7 @@ public class Fenetre extends JFrame{
             tel_recu= jtf_tel.getText();
             salaire_recu = Integer.parseInt(jtf_salaire.getText().trim());
             
+            // enregistre la valeur de la liste deroulante infirmier/docteur
             fonction_recu = Jcombo_fonction.getSelectedItem().toString();
             
               
@@ -1166,15 +1208,13 @@ public class Fenetre extends JFrame{
                     }
                 }
                 
-                
-                   
             }
-           }
+          }
         });
+
         
         
-        
-        
+       
         
         retour.addActionListener(new ActionListener()
         {
@@ -1182,6 +1222,23 @@ public class Fenetre extends JFrame{
           { 
             fenetre_accueil();
           }
+        });
+        
+        Jcombo_fonction.addItemListener(new ItemListener() 
+        {
+            public void itemStateChanged(ItemEvent e) {
+                if (e.getStateChange() == 1) 
+                {
+                    if(e.getItem().toString() == "Docteur")
+                    {
+                        // afficher la liste deroulante choix de la specialite p13
+                    }                  
+                    else if(e.getItem().toString() == "Infirmier")
+                    {
+                        // afficher la liste deroulante choix de la rotation p14 et le choix du code service p15
+                    } 
+                }
+            }
         });
         
         // On ajoute tous les JPannel à la fenêtre
@@ -1192,15 +1249,46 @@ public class Fenetre extends JFrame{
         this.add(p5);
         this.add(p6);
         this.add(p7);
-        this.add(p12);
+        
+            
+        //liste deroulante infirmier / docteur
+        this.add(p12); 
+        // vu que par defaut : docteur
+        this.add(p13);
+        
+        
 
-        //this.add(p8);
         this.add(p11);
         
         this.setSize(600,600);
         
         this.setVisible(true); 
     }
+    
+    /*
+                  Jcombo_fonction.addItemListener(new ItemListener()
+                {
+                    public void itemStateChanged(ItemEvent e)
+                    {
+                        String fonction_recu = e.getItem().toString();
+                        System.out.printf("fonction :" + fonction_recu);
+
+                    }
+                });
+    
+    
+
+    public void itemStateChanged(ItemEvent evt) 
+        {
+        // clic sur une requete de selection
+        if (evt.getSource() == Jcombo_fonction) 
+        {
+
+                // recuperer la liste des lignes de la requete selectionnee
+                String fonction = Jcombo_fonction.getSelectedItem();
+          }
+        }
+    */ 
     
     
     public boolean mdp()
@@ -1336,6 +1424,7 @@ public class Fenetre extends JFrame{
         
         this.setVisible(true);
     }
+  
     
     public void fenetre_reponse_patient(ArrayList<String> tab)
     {
