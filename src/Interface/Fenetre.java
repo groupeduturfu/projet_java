@@ -997,6 +997,7 @@ public class Fenetre extends JFrame{
         jtf_tel.setColumns(10);
         jtf_salaire.setColumns(10);
         jtf_fonction.setColumns(10);
+        jtf_code_service.setColumns(10);
 
         // On change le bouton de forme
         valider.setPreferredSize(new Dimension(200,30));
@@ -1092,6 +1093,9 @@ public class Fenetre extends JFrame{
             String tel_recu;
             int salaire_recu;
             String fonction_recu;
+            String specialite_recu;
+            String rotation_recu;
+            String code_service_recu;
 
               
             nom_recu= jtf_nom.getText();
@@ -1102,8 +1106,8 @@ public class Fenetre extends JFrame{
             
             // enregistre la valeur de la liste deroulante infirmier/docteur
             fonction_recu = Jcombo_fonction.getSelectedItem().toString();
-            
-              
+
+ 
             if(jtf_nom.getText().equals("") || jtf_prenom.getText().equals("") || jtf_adresse.getText().equals("") || jtf_tel.getText().equals("") || jtf_salaire.getText().equals("")) 
             {
                 JOptionPane.showMessageDialog(null, "Il y a au moins un champs vide", "Erreur", JOptionPane.ERROR_MESSAGE);
@@ -1170,14 +1174,16 @@ public class Fenetre extends JFrame{
                 if (fonction_recu == "Docteur")
                 {
                     System.out.println("rentre dans docteur");
+                    // enregistre la valeur de la liste specialite
+                    specialite_recu = Jcombo_specialite.getSelectedItem().toString();
                     
                     // on crée un nouveau tuple dans la table docteur avec comme no_docteur celui créé à l'instant
-                    requete_docteur = maconnexion.CreerRequete_docteur_infirmier(1, id_recup);
+                    requete_docteur = maconnexion.CreerRequete_docteur_infirmier(1, id_recup, specialite_recu, " ", " ");
                     try 
                     {
                        // on enregistre les infos dans la table hospitalisation
                        maconnexion.executeUpdate(requete_docteur);
-                       // on affiche à l'utilisateur que le nouveau patient a bien été inscrit
+                       // on affiche à l'utilisateur que le nouveau docteur a bien été inscrit
                        JOptionPane.showMessageDialog(null, "Le docteur a été enregistré.", "Info", JOptionPane.ERROR_MESSAGE);
                      }
                      catch (SQLException ex)
@@ -1190,15 +1196,19 @@ public class Fenetre extends JFrame{
                 else if (fonction_recu == "Infirmier")
                 {
                     System.out.println("rentre dans infirmier");
+                    // enregistre la valeur de la liste rotation
+                    rotation_recu = Jcombo_rotation.getSelectedItem().toString();
+                    // enregistre le code service recu
+                    code_service_recu= jtf_code_service.getText();
 
                     
                     // on crée un nouveau tuple dans la table docteur avec comme no_docteur celui créé à l'instant
-                    requete_infirmier = maconnexion.CreerRequete_docteur_infirmier(2, id_recup);
+                    requete_infirmier = maconnexion.CreerRequete_docteur_infirmier(2, id_recup, " ", code_service_recu, rotation_recu);
                     try 
                     {
                        // on enregistre les infos dans la table hospitalisation
                        maconnexion.executeUpdate(requete_infirmier);
-                       // on affiche à l'utilisateur que le nouveau patient a bien été inscrit
+                       // on affiche à l'utilisateur que le nouvel infirmier a bien été inscrit
                        JOptionPane.showMessageDialog(null, "L'infirmier a été enregistré.", "Info", JOptionPane.ERROR_MESSAGE);
                      }
                      catch (SQLException ex)
@@ -1231,11 +1241,17 @@ public class Fenetre extends JFrame{
                 {
                     if(e.getItem().toString() == "Docteur")
                     {
-                        // afficher la liste deroulante choix de la specialite p13
+                         p13.setVisible(true);
+                         p14.setVisible(false);
+                         p15.setVisible(false);
+
                     }                  
                     else if(e.getItem().toString() == "Infirmier")
                     {
-                        // afficher la liste deroulante choix de la rotation p14 et le choix du code service p15
+                         p14.setVisible(true);
+                         p15.setVisible(true);
+                         p13.setVisible(false);
+                         
                     } 
                 }
             }
@@ -1255,8 +1271,10 @@ public class Fenetre extends JFrame{
         this.add(p12); 
         // vu que par defaut : docteur
         this.add(p13);
-        
-        
+        this.add(p14);
+        this.add(p15);
+        p14.setVisible(false);
+        p15.setVisible(false);
 
         this.add(p11);
         
@@ -1265,31 +1283,7 @@ public class Fenetre extends JFrame{
         this.setVisible(true); 
     }
     
-    /*
-                  Jcombo_fonction.addItemListener(new ItemListener()
-                {
-                    public void itemStateChanged(ItemEvent e)
-                    {
-                        String fonction_recu = e.getItem().toString();
-                        System.out.printf("fonction :" + fonction_recu);
-
-                    }
-                });
-    
-    
-
-    public void itemStateChanged(ItemEvent evt) 
-        {
-        // clic sur une requete de selection
-        if (evt.getSource() == Jcombo_fonction) 
-        {
-
-                // recuperer la liste des lignes de la requete selectionnee
-                String fonction = Jcombo_fonction.getSelectedItem();
-          }
-        }
-    */ 
-    
+   
     
     public boolean mdp()
     {

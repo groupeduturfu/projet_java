@@ -251,7 +251,7 @@ public class Connexion
         return requete;
     }
     
-    public String CreerRequete_docteur_infirmier(int no_fonction, int id)
+    public String CreerRequete_docteur_infirmier(int no_fonction, int id, String specialite, String code_service, String rotation)
     {
         // requete qui enregistre le docteur ou l'infimier dans la table correspondante
         String requete = "initialisee";
@@ -261,13 +261,13 @@ public class Connexion
         {
             // si docteur
             case 1 :
-                    requete = "INSERT INTO docteur (no_docteur) values (" + id + ");";
+                    requete = "INSERT INTO docteur values (" + id + ", '" + specialite + "');";
                     System.out.println(requete);
                 break ;
                 
             // si infirmier
             case 2 : 
-                    requete = "INSERT INTO infirmier (no_infirmier) values (" + id + ");";
+                    requete = "INSERT INTO infirmier values (" + id + ", '" + code_service + "', '" + rotation + "');";
                     System.out.println(requete);
                 break ;
         }
