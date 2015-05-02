@@ -878,9 +878,8 @@ public class Fenetre extends JFrame{
                 try 
                 {
                     // on recupere le numero du malade qui vient d'etre inscrit
-                    id_string_recup = maconnexion.RecupererId(requete_id_recup);
-                    //liste = maconnexion.RemplirChampsRequete(requete_id_recup);
-                    
+                    id_string_recup = maconnexion.RecupererId(requete_id_recup);                    
+                    // RecupererId renvoie une chaine de caractere, on le transforme en int
                     id_recup = Integer.parseInt(id_string_recup.trim());
                     System.out.println("ide recupéré : "+ id_recup);
 
