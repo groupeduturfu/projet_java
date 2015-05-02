@@ -643,7 +643,7 @@ public class Fenetre extends JFrame{
             
             // va etre utilisée pour l'option 2) quand on veut voir tous les patients, meme ceux qui sont uniquement dans les archives
             String requete_archives;
-            ArrayList<String> liste;
+            ArrayList<String> liste = null;
 
                         
             // écriture de la requete exacte en fonction de la maniere dont a été rempli le formulaire
@@ -675,9 +675,9 @@ public class Fenetre extends JFrame{
                 ex.printStackTrace();
             }
               
-              */
+              
             
-           // fenetre_reponse_patient(liste);
+            fenetre_reponse_archives(liste);
                        
           }
         });
@@ -987,15 +987,9 @@ public class Fenetre extends JFrame{
         this.setVisible(true);
     }
     
-    public void fenetre_reponse_patient(ArrayList tab)
+    public void fenetre_reponse_patient(ArrayList<String> tab)
     {
-        /*
-        pour les patients encore à l'hopital 
-
-SELECT m.no_malade, m.nom, m.prenom, m.adresse, m.tel, m.mutuelle, h.no_chambre, h.no_lit, h.date_arrivee "
-                                  + "FROM malade m, hospitalisation h WHERE …..
-        */
-
+      
         
         JComboBox combo = new JComboBox();
         JButton voir = new JButton("Voir");
@@ -1128,7 +1122,26 @@ SELECT m.no_malade, m.nom, m.prenom, m.adresse, m.tel, m.mutuelle, h.no_chambre,
         {
           public void actionPerformed(ActionEvent e)
           { 
-           // fenetre_accueil();
+                 // Ici il faut remplir les champs pour voir les données de chaque patient
+
+                  // On REMPLIT les JTF --> Ca ne marche pas encore
+                 jtf_no_id.setText(tab.get(1));
+                 jtf_nom.setText(tab.get(2));
+                 jtf_prenom.setText(tab.get(3));
+                 jtf_no_chambre.setText(tab.get(7));
+                 jtf_no_lit.setText(tab.get(8));
+                 jtf_datea.setText(tab.get(9));
+                 jtf_adresse.setText(tab.get(4));
+                 jtf_tel.setText(tab.get(5));
+                 jtf_mutuelle.setText(tab.get(6));
+                 
+        /*
+        pour les patients encore à l'hopital 
+
+        SELECT m.no_malade, m.nom, m.prenom, m.adresse, m.tel, m.mutuelle, h.no_chambre, h.no_lit, h.date_arrivee "
+        "FROM malade m, hospitalisation h WHERE …..
+        */
+
           }
         });
         
@@ -1136,10 +1149,12 @@ SELECT m.no_malade, m.nom, m.prenom, m.adresse, m.tel, m.mutuelle, h.no_chambre,
         {
           public void actionPerformed(ActionEvent e)
           { 
-            //fenetre_rechercher_patient();
+          //  fenetre_afficher_patient(tab, );
           }
         });
         
+        
+        this.setContentPane(new ImagePanel(new ImageIcon("fond66.jpg").getImage())); // Met l'image en background
         this.add(ptexte);
         this.add(phaut);
         this.add(p2);
@@ -1152,6 +1167,9 @@ SELECT m.no_malade, m.nom, m.prenom, m.adresse, m.tel, m.mutuelle, h.no_chambre,
         this.add(p9);
         this.add(p10);
         this.add(pbouton);
+        this.setSize(600,600);
+        
+        this.setVisible(true); 
     }
     
     public void fenetre_reponse_archives(ArrayList tab)
