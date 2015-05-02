@@ -219,10 +219,10 @@ public class Connexion
         return requete;
     }
     
-    public String CreerRequete_malade(String nom, String prenom, String adresse, String tel, String mutuelle)
+    public String CreerRequete_malade(String nom, String prenom, String adresse, String tel, String mutuelle, String date_naissance)
     {
         String requete = "initialisee";
-        requete = "INSERT INTO malade (nom, prenom, adresse, tel, mutuelle) values ('" + nom + "', '" + prenom + "', '" + adresse + "', '" + tel + "', '" + mutuelle + "');";
+        requete = "INSERT INTO malade (nom, prenom, adresse, tel, mutuelle, date_naissance) values ('" + nom + "', '" + prenom + "', '" + adresse + "', '" + tel + "', '" + mutuelle + "', '" + date_naissance + "');";
         System.out.println(requete);
         
         return requete;
@@ -240,7 +240,7 @@ public class Connexion
                     requete = "SELECT no_malade FROM malade ORDER BY no_malade DESC LIMIT 1 OFFSET 0;";
                     System.out.println(requete);
                 break ;
-                
+            // récupérer le no emloye du medecin/infirmier créé
             case 2 :
                     requete = "SELECT no_employe FROM employe ORDER BY no_employe DESC LIMIT 1 OFFSET 0;";
                     System.out.println(requete);
@@ -250,6 +250,18 @@ public class Connexion
 
         return requete;
     }
+    
+    public String CreerRequete_recup_id_docteur(String nom_docteur)
+    {
+        // requete à renvoyer
+        String requete = "initialisee";
+        requete = "SELECT e.no_employe FROM employe e, docteur d WHERE (e.no_employe = d.no_docteur AND e.nom LIKE '" + nom_docteur + "');";
+    
+        System.out.println(requete);
+        
+        return requete;
+    }
+    
     
     public String CreerRequete_docteur_infirmier(int no_fonction, int id, String specialite, String code_service, String rotation)
     {
@@ -276,10 +288,10 @@ public class Connexion
         return requete;
     }
     
-    public String CreerRequete_hospitalisation(int id, int chambre, int lit)
+    public String CreerRequete_hospitalisation(int id, int chambre, int lit, int no_docteur)
     {
         String requete = "initialisee";
-        requete = "INSERT INTO hospitalisation (no_malade, no_chambre, no_lit) values (" + id + ", " + chambre + ", " + lit + ");";
+        requete = "INSERT INTO hospitalisation (no_malade, no_chambre, no_lit, no_docteur) values (" + id + ", " + chambre + ", " + lit + ", " + no_docteur + ");";
         System.out.println(requete);
         
         return requete;

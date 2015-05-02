@@ -716,11 +716,11 @@ public class Fenetre extends JFrame{
     
     public void fenetre_ajouter_patient()
     {
-        JTextField jtf_nom, jtf_prenom, jtf_no_chambre, jtf_no_lit, jtf_adresse, jtf_tel, jtf_mutuelle;
-        JLabel jl_no_id, jl_nom, jl_prenom, jl_no_chambre, jl_no_lit, jl_adresse, jl_tel, jl_mutuelle, texte;
+        JTextField jtf_nom, jtf_prenom, jtf_no_chambre, jtf_no_lit, jtf_adresse, jtf_tel, jtf_mutuelle, jtf_docteur, jtf_description, jtf_date_naissance;
+        JLabel jl_no_id, jl_nom, jl_prenom, jl_no_chambre, jl_no_lit, jl_adresse, jl_tel, jl_mutuelle, jl_docteur, jl_description, jl_date_naissance, texte;
         JButton valider = new JButton("Valider");
         JButton retour = new JButton("Retour");
-        JPanel p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11;
+        JPanel p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13, p14;
         
         
         // On initialise les JLabel
@@ -733,6 +733,10 @@ public class Fenetre extends JFrame{
         jl_adresse = new JLabel("Adresse");
         jl_tel = new JLabel("N° telephone");
         jl_mutuelle = new JLabel("Mutuelle");
+        jl_docteur = new JLabel("Nom du docteur");
+        jl_description = new JLabel("Description");
+        jl_date_naissance = new JLabel("Date de naissance");
+
         
         // On iitialise les JTF
         //jtf_no_id = new JTextField();
@@ -743,15 +747,21 @@ public class Fenetre extends JFrame{
         jtf_adresse = new JTextField();
         jtf_tel = new JTextField();
         jtf_mutuelle = new JTextField();
+        jtf_docteur = new JTextField();
+        jtf_description = new JTextField();
+        jtf_date_naissance = new JTextField();
         
         //jtf_no_id.setColumns(10);
-        jtf_nom.setColumns(10);
-        jtf_prenom.setColumns(10);
-        jtf_no_chambre.setColumns(10);
-        jtf_no_lit.setColumns(10);
-        jtf_adresse.setColumns(10);
-        jtf_tel.setColumns(10);
-        jtf_mutuelle.setColumns(10);
+        jtf_nom.setColumns(15);
+        jtf_prenom.setColumns(15);
+        jtf_no_chambre.setColumns(15);
+        jtf_no_lit.setColumns(15);
+        jtf_adresse.setColumns(15);
+        jtf_tel.setColumns(15);
+        jtf_mutuelle.setColumns(15);
+        jtf_docteur.setColumns(15);
+        jtf_description.setColumns(15);
+        jtf_date_naissance.setColumns(15);
         
         // On change le bouton de forme
         valider.setPreferredSize(new Dimension(200,30));
@@ -813,6 +823,23 @@ public class Fenetre extends JFrame{
         p11.setOpaque(false);
         p11.setPreferredSize(new Dimension(600, 30));
         
+        p12 = new JPanel();
+        p12.add(jl_docteur);
+        p12.add(jtf_docteur);
+        p12.setOpaque(false);
+        p12.setPreferredSize(new Dimension(600, 30));
+        
+        p13 = new JPanel();
+        p13.add(jl_description);
+        p13.add(jtf_description);
+        p13.setOpaque(false);
+        p13.setPreferredSize(new Dimension(600, 30));
+        
+        p14 = new JPanel();
+        p14.add(jl_date_naissance);
+        p14.add(jtf_date_naissance);
+        p14.setOpaque(false);
+        p14.setPreferredSize(new Dimension(600, 30));
         
         
         
@@ -830,7 +857,8 @@ public class Fenetre extends JFrame{
             String adresse_recu;
             String tel_recu;
             String mutuelle_recu;
-            
+            String nom_docteur_recu;
+            String date_naissance_recu;
               
             nom_recu= jtf_nom.getText();
             prenom_recu= jtf_prenom.getText();
@@ -839,7 +867,8 @@ public class Fenetre extends JFrame{
             adresse_recu= jtf_adresse.getText();
             tel_recu= jtf_tel.getText();
             mutuelle_recu = jtf_mutuelle.getText();
-            
+            nom_docteur_recu = jtf_docteur.getText();
+            date_naissance_recu = jtf_date_naissance.getText();
             
             
               
@@ -856,15 +885,20 @@ public class Fenetre extends JFrame{
                 String requete_malade;
                 String requete_hopsitalisation;
                 String requete_id_recup;
+                String requete_docteur;
                 
-                String id_string_recup;
-                int id_recup = 100;
+                // vont récupérer le numéro du malade et le numéro 
+                String id_string_malade_recup;
+                String id_string_docteur_recup;
+                int id_malade_recup = 100;
+                int id_docteur_recup = 100;
+                
                 
                 ArrayList<String> liste;
 
                         
-                // écriture de la requete exacte en fonction de la maniere dont a été rempli le formulaire
-                requete_malade = maconnexion.CreerRequete_malade(nom_recu, prenom_recu, adresse_recu, tel_recu, mutuelle_recu);
+                // écriture de la requete : écrier infos dans la table malade
+                requete_malade = maconnexion.CreerRequete_malade(nom_recu, prenom_recu, adresse_recu, tel_recu, mutuelle_recu, date_naissance_recu);
                 try 
                 {
                     // on enregistre les infos dans la table malade
@@ -876,15 +910,15 @@ public class Fenetre extends JFrame{
                     ex.printStackTrace();
                 }
                 
-                // écriture de la requete exacte en fonction de la maniere dont a été rempli le formulaire
+                // écriture de la requete : récupération du numéro malade attribué au patient
                 requete_id_recup = maconnexion.CreerRequete_recup_id(1, nom_recu, prenom_recu, tel_recu);
                 try 
                 {
                     // on recupere le numero du malade qui vient d'etre inscrit
-                    id_string_recup = maconnexion.RecupererId(requete_id_recup);                    
+                    id_string_malade_recup = maconnexion.RecupererId(requete_id_recup);                    
                     // RecupererId renvoie une chaine de caractere, on le transforme en int
-                    id_recup = Integer.parseInt(id_string_recup.trim());
-                    System.out.println("id malade recupéré : "+ id_recup);
+                    id_malade_recup = Integer.parseInt(id_string_malade_recup.trim());
+                    System.out.println("id malade recupéré : "+ id_malade_recup);
 
                 }
                 catch (SQLException ex)
@@ -894,22 +928,38 @@ public class Fenetre extends JFrame{
                 }
                 
 
-                // on crée un nouveau tuple dans la table hospitalisation avec comme no_malade celui créé à l'instant
-                requete_hopsitalisation = maconnexion.CreerRequete_hospitalisation(id_recup, no_chambre_recu, no_lit_recu);
+                // on récupère le numéro de docteur correspondant au nom inscrit dans le formulaire 
+                requete_docteur = maconnexion.CreerRequete_recup_id_docteur(nom_docteur_recu);
                 try 
                 {
-                    // on enregistre les infos dans la table hospitalisation
-                    maconnexion.executeUpdate(requete_hopsitalisation);
-                    // on affiche à l'utilisateur que le nouveau patient a bien été inscrit
-                    JOptionPane.showMessageDialog(null, "Le patient a été enregistré.", "Info", JOptionPane.ERROR_MESSAGE);
-
+                    // on recupere le numero du medecin qui soigne le patient
+                    id_string_docteur_recup = maconnexion.RecupererId(requete_docteur);                    
+                    // RecupererId renvoie une chaine de caractere, on le transforme en int
+                    id_docteur_recup = Integer.parseInt(id_string_docteur_recup.trim());
                 }
                 catch (SQLException ex)
                 {
                     System.out.println("Echec SQL");
                     ex.printStackTrace();
                 }
-
+                
+                
+                // on crée un nouveau tuple dans la table hospitalisation avec comme no_malade celui créé à l'instant
+                requete_hopsitalisation = maconnexion.CreerRequete_hospitalisation(id_malade_recup, no_chambre_recu, no_lit_recu, id_docteur_recup);
+                try 
+                {
+                    // on enregistre les infos dans la table hospitalisation
+                    maconnexion.executeUpdate(requete_hopsitalisation);
+                    // on affiche à l'utilisateur que le nouveau patient a bien été inscrit
+                    JOptionPane.showMessageDialog(null, "Le patient a été enregistré.", "Info", JOptionPane.ERROR_MESSAGE);
+                }
+                catch (SQLException ex)
+                {
+                    System.out.println("Echec SQL");
+                    ex.printStackTrace();
+                }
+                
+                
             }
            }
         });
@@ -927,11 +977,14 @@ public class Fenetre extends JFrame{
         this.add(p1);
         this.add(p3);
         this.add(p4);
+        this.add(p14);
         this.add(p5);
         this.add(p6);
         this.add(p8);
         this.add(p9);
         this.add(p10);
+        this.add(p12);
+        //this.add(p13);
         this.add(p11);
         
         this.setSize(600,600);
