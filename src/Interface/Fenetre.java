@@ -854,7 +854,8 @@ public class Fenetre extends JFrame{
                 String requete_hopsitalisation;
                 String requete_id_recup;
                 
-                int id_recup;
+                String id_string_recup;
+                int id_recup = 100;
                 
                 ArrayList<String> liste;
 
@@ -877,21 +878,12 @@ public class Fenetre extends JFrame{
                 try 
                 {
                     // on recupere le numero du malade qui vient d'etre inscrit
-                    liste = maconnexion.RemplirChampsRequete(requete_id_recup);
-                }
-                catch (SQLException ex)
-                {
-                    System.out.println("Echec SQL");
-                    ex.printStackTrace();
-                }
-                id_recup = Integer.parseInt(requete_id_recup.trim());
+                    id_string_recup = maconnexion.RecupererId(requete_id_recup);
+                    //liste = maconnexion.RemplirChampsRequete(requete_id_recup);
+                    
+                    id_recup = Integer.parseInt(id_string_recup.trim());
+                    System.out.println("ide recupéré : "+ id_recup);
 
-                // 
-                requete_hopsitalisation = maconnexion.CreerRequete_hospitalisation(id_recup, no_chambre_recu, no_lit_recu);
-                try 
-                {
-                    // on enregistre les infos dans la table hospitalisation
-                    maconnexion.executeUpdate(requete_hopsitalisation);
                 }
                 catch (SQLException ex)
                 {
@@ -899,13 +891,13 @@ public class Fenetre extends JFrame{
                     ex.printStackTrace();
                 }
                 
-                /*
+
+                // on crée un nouveau tuple dans la table hospitalisation avec comme no_malade celui créé à l'instant
+                requete_hopsitalisation = maconnexion.CreerRequete_hospitalisation(id_recup, no_chambre_recu, no_lit_recu);
                 try 
                 {
-                    // on envoit les requetes pour les tables malades et hopsitalisation requete à la base de données via executeUpdate qui est dans la classe Connexion
-                    maconnexion.executeUpdate(maconnexion.Liste_requetes_creer_malade.get(0));
-                    maconnexion.executeUpdate(maconnexion.Liste_requetes_creer_malade.get(1));
-                    
+                    // on enregistre les infos dans la table hospitalisation
+                    maconnexion.executeUpdate(requete_hopsitalisation);
                     // on affiche à l'utilisateur que le nouveau patient a bien été inscrit
                     JOptionPane.showMessageDialog(null, "Le patient a été enregistré.", "Info", JOptionPane.ERROR_MESSAGE);
 
@@ -915,9 +907,7 @@ public class Fenetre extends JFrame{
                     System.out.println("Echec SQL");
                     ex.printStackTrace();
                 }
-                */
-                
-                
+
             }
            }
         });

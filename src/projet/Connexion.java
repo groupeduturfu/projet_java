@@ -221,15 +221,16 @@ public class Connexion
     public String CreerRequete_recup_id(String nom, String prenom, String tel)
     {
         String requete = "initialisee";
-        requete = "SELECT no_malade FROM malade WHERE (nom LIKE '" + nom + "' AND prenom LIKE '" + prenom + "' AND tel LIKE '" + tel + "');";
-    
+        requete = "SELECT no_malade FROM malade ORDER BY no_malade DESC LIMIT 1 OFFSET 0;";
+        System.out.println(requete);
+
         return requete;
     }
     
     public String CreerRequete_hospitalisation(int id, int chambre, int lit)
     {
         String requete = "initialisee";
-        requete = "INSERT INTO hospitalisation values (" + id + ", " + chambre + ", " + lit + ");";
+        requete = "INSERT INTO hospitalisation (no_malade, no_chambre, no_lit) values (" + id + ", " + chambre + ", " + lit + ");";
         System.out.println(requete);
         
         return requete;
@@ -247,7 +248,7 @@ public class Connexion
         String requete_hopsitalisation = "initialisee";
         //requete_hopsitalisation = "INSERT INTO hospitalisation values (SELECT no_malade FROM malade WHERE (nom LIKE '" + nom + "' AND prenom LIKE '" + prenom + "' AND tel LIKE '" + tel + "')," + chambre + "," + lit + ");";
         
-        requete_hopsitalisation = "INSERT INTO hospitalisation values (13," + chambre + "," + lit + ");";
+        requete_hopsitalisation = "INSERT INTO hospitalisation (no_malade, no_chambre, no_lit) values (13," + chambre + "," + lit + ");";
 
         System.out.println(requete_hopsitalisation);
 
@@ -261,6 +262,27 @@ public class Connexion
     {
          stmt.executeUpdate(requete);
     }
+    
+    public String RecupererId(String requete) throws SQLException 
+    {
+        
+        String id="101";
+        
+        // récupération de l'ordre de la requete
+        rset = stmt.executeQuery(requete);
+
+        // récupération du résultat de l'ordre
+        rsetMeta = rset.getMetaData();
+        
+        while (rset.next()) 
+        {
+            id = rset.getString(1);
+        }
+                
+        return id;
+    }
+    
+    
     
     /**
      * Methode qui retourne l'ArrayList réponse à la requête en parametre 
