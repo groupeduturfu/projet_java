@@ -936,6 +936,217 @@ public class Fenetre extends JFrame{
         this.setVisible(true); 
     }
     
+    
+    
+    public void fenetre_ajouter_employe()
+    {
+        JTextField jtf_nom, jtf_prenom, jtf_adresse, jtf_tel, jtf_salaire, jtf_fonction ;
+        JLabel texte, jl_nom, jl_prenom, jl_adresse, jl_tel, jl_salaire, jl_fonction;
+        JButton valider = new JButton("Valider");
+        JButton retour = new JButton("Retour");
+        JPanel p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11;
+        
+        
+        // On initialise les JLabel
+        texte = new JLabel("Merci de remplir toutes les informations suivantes");
+        jl_nom = new JLabel("Nom");
+        jl_prenom = new JLabel("Prénom");
+        jl_adresse = new JLabel("Adresse");
+        jl_tel = new JLabel("N° telephone");
+        jl_salaire = new JLabel("Salaire");
+        jl_fonction = new JLabel("Fonction");
+
+        
+        // On iitialise les JTF
+        //jtf_no_id = new JTextField();
+        jtf_nom = new JTextField();
+        jtf_prenom = new JTextField();
+        jtf_adresse = new JTextField();
+        jtf_tel = new JTextField();
+        jtf_salaire = new JTextField();
+        jtf_fonction = new JTextField();
+
+        
+        //jtf_no_id.setColumns(10);
+        jtf_nom.setColumns(10);
+        jtf_prenom.setColumns(10);
+        jtf_adresse.setColumns(10);
+        jtf_tel.setColumns(10);
+        jtf_salaire.setColumns(10);
+        jtf_fonction.setColumns(10);
+
+        // On change le bouton de forme
+        valider.setPreferredSize(new Dimension(200,30));
+        valider.setOpaque(false);
+        retour.setPreferredSize(new Dimension(200,30));
+        retour.setOpaque(false);
+        
+        // On initialise les JPanel
+        p1 = new JPanel();
+        p1.add(texte);
+        p1.setOpaque(false);
+        p1.setPreferredSize(new Dimension(600, 100));
+        
+        p3 = new JPanel();
+        p3.add(jl_nom);
+        p3.add(jtf_nom);
+        p3.setOpaque(false);
+        p3.setPreferredSize(new Dimension(600, 30));
+        
+        p4 = new JPanel();
+        p4.add(jl_prenom);
+        p4.add(jtf_prenom);
+        p4.setOpaque(false);
+        p4.setPreferredSize(new Dimension(600, 30));
+        
+        
+        p5 = new JPanel();
+        p5.add(jl_adresse);
+        p5.add(jtf_adresse);
+        p5.setOpaque(false);
+        p5.setPreferredSize(new Dimension(600, 30));
+        
+        p6 = new JPanel();
+        p6.add(jl_tel);
+        p6.add(jtf_tel);
+        p6.setOpaque(false);
+        p6.setPreferredSize(new Dimension(600, 30));
+        
+        p7 = new JPanel();
+        p7.add(jl_salaire);
+        p7.add(jtf_salaire);
+        p7.setOpaque(false);
+        p7.setPreferredSize(new Dimension(600, 30));
+        
+        p8 = new JPanel();
+        p8.add(jl_fonction);
+        p8.add(jtf_fonction);
+        p8.setOpaque(false);
+        p8.setPreferredSize(new Dimension(600, 30));
+        
+        p11 = new JPanel();
+        p11.add(retour);
+        p11.add(valider);
+        p11.setOpaque(false);
+        p11.setPreferredSize(new Dimension(600, 30));
+        
+        // On gère l'évennement du bouton
+        valider.addActionListener(new ActionListener()
+        {
+          public void actionPerformed(ActionEvent e)
+          { 
+            String nom_recu;
+            String prenom_recu;
+            String adresse_recu;
+            String tel_recu;
+            String salaire_recu;
+            String fonction_recu;
+              
+            nom_recu= jtf_nom.getText();
+            prenom_recu= jtf_prenom.getText();
+            adresse_recu= jtf_adresse.getText();
+            tel_recu= jtf_tel.getText();
+            salaire_recu = jtf_salaire.getText();
+            fonction_recu = jtf_fonction.getText();
+            
+            
+              
+            if(jtf_nom.getText().equals("") || jtf_prenom.getText().equals("") || jtf_adresse.getText().equals("") || jtf_tel.getText().equals("") || jtf_fonction.getText().equals("") || jtf_salaire.getText().equals("")) 
+            {
+                JOptionPane.showMessageDialog(null, "Il y a au moins un champs vide", "Erreur", JOptionPane.ERROR_MESSAGE);
+            }
+            else
+            {
+                // C'est ici qu'il faut récupérer les informations et ajouter un patient dans la BDD
+                // Attention, il faut que le numero id du patient soit implémenté tout seul ainsi que la date d'arrivée
+                               
+                // chaine de caractère dans laquelle on écrit la requete correspondant aux infos du formulaire rempli 
+                /*String requete_malade;
+                String requete_hopsitalisation;
+                String requete_id_recup;
+                
+                String id_string_recup;
+                int id_recup = 100;
+                
+                ArrayList<String> liste;
+
+                        
+                // écriture de la requete exacte en fonction de la maniere dont a été rempli le formulaire
+                requete_malade = maconnexion.CreerRequete_malade(nom_recu, prenom_recu, adresse_recu, tel_recu, mutuelle_recu);
+                try 
+                {
+                    // on enregistre les infos dans la table malade
+                    maconnexion.executeUpdate(requete_malade);
+                }
+                catch (SQLException ex)
+                {
+                    System.out.println("Echec SQL");
+                    ex.printStackTrace();
+                }
+                
+                // écriture de la requete exacte en fonction de la maniere dont a été rempli le formulaire
+                requete_id_recup = maconnexion.CreerRequete_recup_id(nom_recu, prenom_recu, tel_recu);
+                try 
+                {
+                    // on recupere le numero du malade qui vient d'etre inscrit
+                    id_string_recup = maconnexion.RecupererId(requete_id_recup);                    
+                    // RecupererId renvoie une chaine de caractere, on le transforme en int
+                    id_recup = Integer.parseInt(id_string_recup.trim());
+                    System.out.println("ide recupéré : "+ id_recup);
+
+                }
+                catch (SQLException ex)
+                {
+                    System.out.println("Echec SQL");
+                    ex.printStackTrace();
+                }
+                
+
+                // on crée un nouveau tuple dans la table hospitalisation avec comme no_malade celui créé à l'instant
+                requete_hopsitalisation = maconnexion.CreerRequete_hospitalisation(id_recup, no_chambre_recu, no_lit_recu);
+                try 
+                {
+                    // on enregistre les infos dans la table hospitalisation
+                    maconnexion.executeUpdate(requete_hopsitalisation);
+                    // on affiche à l'utilisateur que le nouveau patient a bien été inscrit
+                    JOptionPane.showMessageDialog(null, "Le patient a été enregistré.", "Info", JOptionPane.ERROR_MESSAGE);
+
+                }
+                catch (SQLException ex)
+                {
+                    System.out.println("Echec SQL");
+                    ex.printStackTrace();
+                }
+                   */
+            }
+           }
+        });
+        
+        retour.addActionListener(new ActionListener()
+        {
+          public void actionPerformed(ActionEvent e)
+          { 
+            fenetre_accueil();
+          }
+        });
+        
+        // On ajoute tous les JPannel à la fenêtre
+        this.setContentPane(new ImagePanel(new ImageIcon("fond66.jpg").getImage())); // Met l'image en background
+        this.add(p1);
+        this.add(p3);
+        this.add(p4);
+        this.add(p5);
+        this.add(p6);
+        this.add(p7);
+        this.add(p8);
+        this.add(p11);
+        
+        this.setSize(600,600);
+        
+        this.setVisible(true); 
+    }
+    
+    
     public boolean mdp()
     {
         JPanel p = new JPanel();
@@ -1016,7 +1227,7 @@ public class Fenetre extends JFrame{
         {
           public void actionPerformed(ActionEvent e)
           { 
-                
+                fenetre_ajouter_employe();
           }
         });
         
