@@ -944,8 +944,13 @@ public class Fenetre extends JFrame{
         JLabel texte, jl_nom, jl_prenom, jl_adresse, jl_tel, jl_salaire, jl_fonction;
         JButton valider = new JButton("Valider");
         JButton retour = new JButton("Retour");
-        JPanel p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11;
+        JPanel p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12;
         
+        // liste déroulante pour Infirmier / Docteur
+        JComboBox Jcombo_fonction;
+        String[] fonction_string = {"Docteur", "Infirmier"};	
+        Jcombo_fonction = new JComboBox(fonction_string);
+
         
         // On initialise les JLabel
         texte = new JLabel("Merci de remplir toutes les informations suivantes");
@@ -1018,11 +1023,13 @@ public class Fenetre extends JFrame{
         p7.setOpaque(false);
         p7.setPreferredSize(new Dimension(600, 30));
         
-        p8 = new JPanel();
-        p8.add(jl_fonction);
-        p8.add(jtf_fonction);
-        p8.setOpaque(false);
-        p8.setPreferredSize(new Dimension(600, 30));
+
+        //liste déroulante Infirmier
+        p12 = new JPanel ();
+        p12.add(jl_fonction);
+        p12.add(Jcombo_fonction);
+        p12.setOpaque(false);
+        p12.setPreferredSize(new Dimension(600, 30));
         
         p11 = new JPanel();
         p11.add(retour);
@@ -1030,28 +1037,32 @@ public class Fenetre extends JFrame{
         p11.setOpaque(false);
         p11.setPreferredSize(new Dimension(600, 30));
         
+       
+        
+        
         // On gère l'évennement du bouton
         valider.addActionListener(new ActionListener()
         {
           public void actionPerformed(ActionEvent e)
           { 
+                          
             String nom_recu;
             String prenom_recu;
             String adresse_recu;
             String tel_recu;
             int salaire_recu;
-            String fonction_recu = "Docteur";
+            String fonction_recu;
               
             nom_recu= jtf_nom.getText();
             prenom_recu= jtf_prenom.getText();
             adresse_recu= jtf_adresse.getText();
             tel_recu= jtf_tel.getText();
             salaire_recu = Integer.parseInt(jtf_salaire.getText().trim());
-            fonction_recu = jtf_fonction.getText();
-
+            
+            fonction_recu = Jcombo_fonction.getSelectedItem().toString();
             
               
-            if(jtf_nom.getText().equals("") || jtf_prenom.getText().equals("") || jtf_adresse.getText().equals("") || jtf_tel.getText().equals("") || jtf_fonction.getText().equals("") || jtf_salaire.getText().equals("")) 
+            if(jtf_nom.getText().equals("") || jtf_prenom.getText().equals("") || jtf_adresse.getText().equals("") || jtf_tel.getText().equals("") || jtf_salaire.getText().equals("")) 
             {
                 JOptionPane.showMessageDialog(null, "Il y a au moins un champs vide", "Erreur", JOptionPane.ERROR_MESSAGE);
             }
@@ -1081,7 +1092,7 @@ public class Fenetre extends JFrame{
                 ArrayList<String> liste;
 
                         
-                // écriture de la requete exacte en fonction de la maniere dont a été rempli le formulaire
+                // enregistrement des premieres infos dans la table employe
                 requete_employe = maconnexion.CreerRequete_employe(nom_recu, prenom_recu, adresse_recu, tel_recu, salaire_recu, fonction_recu);
                 try 
                 {
@@ -1095,16 +1106,15 @@ public class Fenetre extends JFrame{
                 }
                 
                 
-                // écriture de la requete exacte en fonction de la maniere dont a été rempli le formulaire
+                // recuperation du numero employe de l'employé enregistré à l'instant pour ensuite l'enregistrer dans les tables infirmier / docteur
                 requete_id_recup = maconnexion.CreerRequete_recup_id(2, nom_recu, prenom_recu, tel_recu);
                 try 
                 {
-                    // on recupere le numero du malade qui vient d'etre inscrit
+                    // on recupere le numero de l'employe qui vient d'etre inscrit
                     id_string_recup = maconnexion.RecupererId(requete_id_recup);                    
                     // RecupererId renvoie une chaine de caractere, on le transforme en int
                     id_recup = Integer.parseInt(id_string_recup.trim());
                     System.out.println("id employe recupéré : "+ id_recup);
-
                 }
                 catch (SQLException ex)
                 {
@@ -1162,6 +1172,10 @@ public class Fenetre extends JFrame{
            }
         });
         
+        
+        
+        
+        
         retour.addActionListener(new ActionListener()
         {
           public void actionPerformed(ActionEvent e)
@@ -1178,7 +1192,9 @@ public class Fenetre extends JFrame{
         this.add(p5);
         this.add(p6);
         this.add(p7);
-        this.add(p8);
+        this.add(p12);
+
+        //this.add(p8);
         this.add(p11);
         
         this.setSize(600,600);

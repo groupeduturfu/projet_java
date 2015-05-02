@@ -254,16 +254,20 @@ public class Connexion
         // requete qui enregistre le docteur ou l'infimier dans la table correspondante
         String requete = "initialisee";
 
+        
         switch (no_fonction)
         {
             // si docteur
             case 1 :
                     requete = "INSERT INTO docteur (no_docteur) values (" + id + ");";
                     System.out.println(requete);
+                break ;
+                
             // si infirmier
             case 2 : 
                     requete = "INSERT INTO infirmier (no_infirmier) values (" + id + ");";
                     System.out.println(requete);
+                break ;
         }
 
         
