@@ -209,6 +209,16 @@ public class Connexion
     }  
     
     
+    
+    public String CreerRequete_employe(String nom, String prenom, String adresse, String tel, int salaire, String fonction)
+    {
+        String requete = "initialisee";
+        requete = "INSERT INTO employe (nom, prenom, adresse, tel, salaire, fonction) values ('" + nom + "', '" + prenom + "', '" + adresse + "', '" + tel + "', " + salaire + ", '" + fonction + "');";
+        System.out.println(requete);
+        
+        return requete;
+    }
+    
     public String CreerRequete_malade(String nom, String prenom, String adresse, String tel, String mutuelle)
     {
         String requete = "initialisee";
@@ -218,12 +228,45 @@ public class Connexion
         return requete;
     }
     
-    public String CreerRequete_recup_id(String nom, String prenom, String tel)
+    public String CreerRequete_recup_id(int no_requete, String nom, String prenom, String tel)
     {
+        // requete à renvoyer
         String requete = "initialisee";
-        requete = "SELECT no_malade FROM malade ORDER BY no_malade DESC LIMIT 1 OFFSET 0;";
-        System.out.println(requete);
+        
+        switch (no_requete)
+        {
+            // récupérer le numéro d'un patient créé
+            case 1 :
+                    requete = "SELECT no_malade FROM malade ORDER BY no_malade DESC LIMIT 1 OFFSET 0;";
+                    System.out.println(requete);
+                
+            case 2 :
+                    requete = "SELECT no_employe FROM employe ORDER BY no_employe DESC LIMIT 1 OFFSET 0;";
+                    System.out.println(requete);
+        }
+        
 
+        return requete;
+    }
+    
+    public String CreerRequete_docteur_infirmier(int no_fonction, int id)
+    {
+        // requete qui enregistre le docteur ou l'infimier dans la table correspondante
+        String requete = "initialisee";
+
+        switch (no_fonction)
+        {
+            // si docteur
+            case 1 :
+                    requete = "INSERT INTO docteur (no_docteur) values (" + id + ");";
+                    System.out.println(requete);
+            // si infirmier
+            case 2 : 
+                    requete = "INSERT INTO infirmier (no_infirmier) values (" + id + ");";
+                    System.out.println(requete);
+        }
+
+        
         return requete;
     }
     
@@ -234,10 +277,9 @@ public class Connexion
         System.out.println(requete);
         
         return requete;
-    
     }
     
-    
+    /*
     public void CreerRequete_CreerPatient(String nom, String prenom, int chambre, int lit, String adresse, String tel, String mutuelle)
     {
         // on cree les deux Strings
@@ -257,7 +299,8 @@ public class Connexion
         ajouterRequete_creer(requete_hopsitalisation);
         
     }
-   
+   */
+    
     public void executeUpdate(String requete) throws SQLException
     {
          stmt.executeUpdate(requete);

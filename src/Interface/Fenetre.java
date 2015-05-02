@@ -874,7 +874,7 @@ public class Fenetre extends JFrame{
                 }
                 
                 // écriture de la requete exacte en fonction de la maniere dont a été rempli le formulaire
-                requete_id_recup = maconnexion.CreerRequete_recup_id(nom_recu, prenom_recu, tel_recu);
+                requete_id_recup = maconnexion.CreerRequete_recup_id(1, nom_recu, prenom_recu, tel_recu);
                 try 
                 {
                     // on recupere le numero du malade qui vient d'etre inscrit
@@ -1039,16 +1039,16 @@ public class Fenetre extends JFrame{
             String prenom_recu;
             String adresse_recu;
             String tel_recu;
-            String salaire_recu;
-            String fonction_recu;
+            int salaire_recu;
+            String fonction_recu = "Docteur";
               
             nom_recu= jtf_nom.getText();
             prenom_recu= jtf_prenom.getText();
             adresse_recu= jtf_adresse.getText();
             tel_recu= jtf_tel.getText();
-            salaire_recu = jtf_salaire.getText();
+            salaire_recu = Integer.parseInt(jtf_salaire.getText().trim());
             fonction_recu = jtf_fonction.getText();
-            
+
             
               
             if(jtf_nom.getText().equals("") || jtf_prenom.getText().equals("") || jtf_adresse.getText().equals("") || jtf_tel.getText().equals("") || jtf_fonction.getText().equals("") || jtf_salaire.getText().equals("")) 
@@ -1061,10 +1061,20 @@ public class Fenetre extends JFrame{
                 // Attention, il faut que le numero id du patient soit implémenté tout seul ainsi que la date d'arrivée
                                
                 // chaine de caractère dans laquelle on écrit la requete correspondant aux infos du formulaire rempli 
-                /*String requete_malade;
-                String requete_hopsitalisation;
-                String requete_id_recup;
                 
+                String requete_employe;
+                String requete_docteur;
+                String requete_infirmier;
+                
+                // si docteur
+                String requete_appartient;
+                String requete_service;
+
+                // si infirmier
+                String requete_chambre;
+
+                // requete pour récupérer le no_employe créé
+                String requete_id_recup;
                 String id_string_recup;
                 int id_recup = 100;
                 
@@ -1072,11 +1082,11 @@ public class Fenetre extends JFrame{
 
                         
                 // écriture de la requete exacte en fonction de la maniere dont a été rempli le formulaire
-                requete_malade = maconnexion.CreerRequete_malade(nom_recu, prenom_recu, adresse_recu, tel_recu, mutuelle_recu);
+                requete_employe = maconnexion.CreerRequete_employe(nom_recu, prenom_recu, adresse_recu, tel_recu, salaire_recu, fonction_recu);
                 try 
                 {
                     // on enregistre les infos dans la table malade
-                    maconnexion.executeUpdate(requete_malade);
+                    maconnexion.executeUpdate(requete_employe);
                 }
                 catch (SQLException ex)
                 {
@@ -1084,15 +1094,16 @@ public class Fenetre extends JFrame{
                     ex.printStackTrace();
                 }
                 
+                
                 // écriture de la requete exacte en fonction de la maniere dont a été rempli le formulaire
-                requete_id_recup = maconnexion.CreerRequete_recup_id(nom_recu, prenom_recu, tel_recu);
+                requete_id_recup = maconnexion.CreerRequete_recup_id(2, nom_recu, prenom_recu, tel_recu);
                 try 
                 {
                     // on recupere le numero du malade qui vient d'etre inscrit
                     id_string_recup = maconnexion.RecupererId(requete_id_recup);                    
                     // RecupererId renvoie une chaine de caractere, on le transforme en int
                     id_recup = Integer.parseInt(id_string_recup.trim());
-                    System.out.println("ide recupéré : "+ id_recup);
+                    System.out.println("id employe recupéré : "+ id_recup);
 
                 }
                 catch (SQLException ex)
@@ -1101,23 +1112,52 @@ public class Fenetre extends JFrame{
                     ex.printStackTrace();
                 }
                 
+                System.out.println("fonction : "+ fonction_recu);
 
-                // on crée un nouveau tuple dans la table hospitalisation avec comme no_malade celui créé à l'instant
-                requete_hopsitalisation = maconnexion.CreerRequete_hospitalisation(id_recup, no_chambre_recu, no_lit_recu);
-                try 
+                
+                if (fonction_recu == "Docteur")
                 {
-                    // on enregistre les infos dans la table hospitalisation
-                    maconnexion.executeUpdate(requete_hopsitalisation);
-                    // on affiche à l'utilisateur que le nouveau patient a bien été inscrit
-                    JOptionPane.showMessageDialog(null, "Le patient a été enregistré.", "Info", JOptionPane.ERROR_MESSAGE);
+                    System.out.println("rentre dans docteur");
+                    
+                    // on crée un nouveau tuple dans la table docteur avec comme no_docteur celui créé à l'instant
+                    requete_docteur = maconnexion.CreerRequete_docteur_infirmier(1, id_recup);
+                    try 
+                    {
+                       // on enregistre les infos dans la table hospitalisation
+                       maconnexion.executeUpdate(requete_docteur);
+                       // on affiche à l'utilisateur que le nouveau patient a bien été inscrit
+                       JOptionPane.showMessageDialog(null, "Le docteur a été enregistré.", "Info", JOptionPane.ERROR_MESSAGE);
+                     }
+                     catch (SQLException ex)
+                    {
+                         System.out.println("Echec SQL");
+                        ex.printStackTrace();
+                    }
+                }
+                
+                else if (fonction_recu == "Infirmier")
+                {
+                    System.out.println("rentre dans infirmier");
 
+                    
+                    // on crée un nouveau tuple dans la table docteur avec comme no_docteur celui créé à l'instant
+                    requete_infirmier = maconnexion.CreerRequete_docteur_infirmier(2, id_recup);
+                    try 
+                    {
+                       // on enregistre les infos dans la table hospitalisation
+                       maconnexion.executeUpdate(requete_infirmier);
+                       // on affiche à l'utilisateur que le nouveau patient a bien été inscrit
+                       JOptionPane.showMessageDialog(null, "L'infirmier a été enregistré.", "Info", JOptionPane.ERROR_MESSAGE);
+                     }
+                     catch (SQLException ex)
+                    {
+                         System.out.println("Echec SQL");
+                        ex.printStackTrace();
+                    }
                 }
-                catch (SQLException ex)
-                {
-                    System.out.println("Echec SQL");
-                    ex.printStackTrace();
-                }
-                   */
+                
+                
+                   
             }
            }
         });
