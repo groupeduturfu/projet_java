@@ -996,11 +996,19 @@ public class Fenetre extends JFrame{
     
     public void fenetre_ajouter_employe()
     {
-        JTextField jtf_nom, jtf_prenom, jtf_adresse, jtf_tel, jtf_salaire, jtf_fonction, jtf_code_service ;
-        JLabel texte, jl_nom, jl_prenom, jl_adresse, jl_tel, jl_salaire, jl_fonction, jl_specialite, jl_rotation, jl_code_service;
+        JTextField jtf_nom, jtf_prenom, jtf_adresse, jtf_tel, jtf_salaire, jtf_fonction, jtf_date_naissance ;
+        JLabel texte, jl_nom, jl_prenom, jl_adresse, jl_tel, jl_salaire, jl_fonction, jl_specialite, jl_rotation, jl_code_service, jl_date_naissance, jl_services;
         JButton valider = new JButton("Valider");
         JButton retour = new JButton("Retour");
-        JPanel p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13, p14, p15;
+        JPanel p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13, p14, p15, p16, p17, p18, p19;
+        
+        // checkboxes des services si docteur
+        JCheckBox jch_ORL = new JCheckBox("ORL");
+        JCheckBox jch_REA = new JCheckBox("REA");
+        JCheckBox jch_CHG = new JCheckBox("CHG");
+        jch_ORL.setSelected(false);
+        jch_REA.setSelected(false);
+        jch_CHG.setSelected(false);
         
         // liste déroulante pour Infirmier / Docteur
         JComboBox Jcombo_fonction;
@@ -1018,6 +1026,10 @@ public class Fenetre extends JFrame{
         String[] rotation_string = {"JOUR","NUIT"};	
         Jcombo_rotation = new JComboBox(rotation_string);
         
+        // Liste deroulante si infirmier pour le service des infirmiers
+        JComboBox Jcombo_service;
+        String[] service_string = {"ORL","REA", "CHG"};	
+        Jcombo_service = new JComboBox(service_string);
         
         // On initialise les JLabel
         texte = new JLabel("Merci de remplir toutes les informations suivantes");
@@ -1030,7 +1042,9 @@ public class Fenetre extends JFrame{
         jl_specialite = new JLabel("Specialite");
         jl_rotation = new JLabel("Rotation");
         jl_code_service = new JLabel("Code service");
-
+        jl_date_naissance = new JLabel("Date de naissance");
+        jl_services = new JLabel("Services");
+        
         
         // On iitialise les JTF
         //jtf_no_id = new JTextField();
@@ -1040,7 +1054,7 @@ public class Fenetre extends JFrame{
         jtf_tel = new JTextField();
         jtf_salaire = new JTextField();
         jtf_fonction = new JTextField();
-        jtf_code_service = new JTextField();
+        jtf_date_naissance = new JTextField();
 
         
         //jtf_no_id.setColumns(10);
@@ -1050,7 +1064,7 @@ public class Fenetre extends JFrame{
         jtf_tel.setColumns(10);
         jtf_salaire.setColumns(10);
         jtf_fonction.setColumns(10);
-        jtf_code_service.setColumns(10);
+        jtf_date_naissance.setColumns(10);
 
         // On change le bouton de forme
         valider.setPreferredSize(new Dimension(200,30));
@@ -1121,9 +1135,31 @@ public class Fenetre extends JFrame{
         // textfield code service infirmier
         p15 = new JPanel();
         p15.add(jl_code_service);
-        p15.add(jtf_code_service);
+        p15.add(Jcombo_service);
         p15.setOpaque(false);
         p15.setPreferredSize(new Dimension(600, 30));
+        
+        p16 = new JPanel();
+        p16.add(jl_date_naissance);
+        p16.add(jtf_date_naissance);
+        p16.setOpaque(false);
+        p16.setPreferredSize(new Dimension(600, 30));
+        
+        p17 = new JPanel();
+        p17.add(jl_services);
+        p17.add(jch_ORL);
+        p17.setOpaque(false);
+        p17.setPreferredSize(new Dimension(600, 30));   
+        
+        p18 = new JPanel();
+        p18.add(jch_REA);
+        p18.setOpaque(false);
+        p18.setPreferredSize(new Dimension(600, 30));
+        
+        p19 = new JPanel();
+        p19.add(jch_CHG);
+        p19.setOpaque(false);
+        p19.setPreferredSize(new Dimension(600, 30));
         
         p11 = new JPanel();
         p11.add(retour);
@@ -1149,6 +1185,7 @@ public class Fenetre extends JFrame{
             String specialite_recu;
             String rotation_recu;
             String code_service_recu;
+            String d_naissance_recu;
 
               
             nom_recu= jtf_nom.getText();
@@ -1156,12 +1193,13 @@ public class Fenetre extends JFrame{
             adresse_recu= jtf_adresse.getText();
             tel_recu= jtf_tel.getText();
             salaire_recu = Integer.parseInt(jtf_salaire.getText().trim());
+            d_naissance_recu= jtf_date_naissance.getText();
             
             // enregistre la valeur de la liste deroulante infirmier/docteur
             fonction_recu = Jcombo_fonction.getSelectedItem().toString();
 
  
-            if(jtf_nom.getText().equals("") || jtf_prenom.getText().equals("") || jtf_adresse.getText().equals("") || jtf_tel.getText().equals("") || jtf_salaire.getText().equals("")) 
+            if(jtf_nom.getText().equals("") || jtf_prenom.getText().equals("") || jtf_adresse.getText().equals("") || jtf_tel.getText().equals("") || jtf_salaire.getText().equals("") || jtf_date_naissance.getText().equals("")) 
             {
                 JOptionPane.showMessageDialog(null, "Il y a au moins un champs vide", "Erreur", JOptionPane.ERROR_MESSAGE);
             }
@@ -1192,7 +1230,7 @@ public class Fenetre extends JFrame{
 
                         
                 // enregistrement des premieres infos dans la table employe
-                requete_employe = maconnexion.CreerRequete_employe(nom_recu, prenom_recu, adresse_recu, tel_recu, salaire_recu, fonction_recu);
+                requete_employe = maconnexion.CreerRequete_employe(nom_recu, prenom_recu, adresse_recu, tel_recu, salaire_recu, fonction_recu, d_naissance_recu);
                 try 
                 {
                     // on enregistre les infos dans la table malade
@@ -1226,10 +1264,9 @@ public class Fenetre extends JFrame{
                 
                 if (fonction_recu == "Docteur")
                 {
-                    System.out.println("rentre dans docteur");
+                    // ON REMPLIT LA TABLEA DOCTEUR
                     // enregistre la valeur de la liste specialite
                     specialite_recu = Jcombo_specialite.getSelectedItem().toString();
-                    
                     // on crée un nouveau tuple dans la table docteur avec comme no_docteur celui créé à l'instant
                     requete_docteur = maconnexion.CreerRequete_docteur_infirmier(1, id_recup, specialite_recu, " ", " ");
                     try 
@@ -1244,6 +1281,10 @@ public class Fenetre extends JFrame{
                          System.out.println("Echec SQL");
                         ex.printStackTrace();
                     }
+                    
+                    // ON REMPLIT LA TABLE APPARTIENT
+                    maconnexion.docteurs_requetes_services(jch_ORL, jch_REA, jch_CHG, id_recup);
+                    
                 }
                 
                 else if (fonction_recu == "Infirmier")
@@ -1252,7 +1293,7 @@ public class Fenetre extends JFrame{
                     // enregistre la valeur de la liste rotation
                     rotation_recu = Jcombo_rotation.getSelectedItem().toString();
                     // enregistre le code service recu
-                    code_service_recu= jtf_code_service.getText();
+                    code_service_recu= Jcombo_service.getSelectedItem().toString();
 
                     
                     // on crée un nouveau tuple dans la table docteur avec comme no_docteur celui créé à l'instant
@@ -1294,44 +1335,59 @@ public class Fenetre extends JFrame{
                 {
                     if(e.getItem().toString() == "Docteur")
                     {
-                         p13.setVisible(true);
-                         p14.setVisible(false);
-                         p15.setVisible(false);
+                         // VISIBLES
+                         p13.setVisible(true); // liste specialites
+                         p17.setVisible(true); // checkbox ORL
+                         p18.setVisible(true); // checkbox REA
+                         p19.setVisible(true); // checkbox CHG
+                         
+                         // INVISIBLES
+                         p14.setVisible(false); // liste rotation
+                         p15.setVisible(false); // liste code service 
 
                     }                  
                     else if(e.getItem().toString() == "Infirmier")
                     {
-                         p14.setVisible(true);
-                         p15.setVisible(true);
-                         p13.setVisible(false);
+                         // VISIBLES
+                         p14.setVisible(true); // liste rotation 
+                         p15.setVisible(true); // liste code service
                          
+                         // INVISIBLES
+                         p13.setVisible(false); // liste specialites
+                         p17.setVisible(false); // checkbox ORL
+                         p18.setVisible(false); // checkbox REA
+                         p19.setVisible(false); // checkbox CHG
+                                                  
                     } 
                 }
             }
         });
+
         
         // On ajoute tous les JPannel à la fenêtre
         this.setContentPane(new ImagePanel(new ImageIcon("fond66.jpg").getImage())); // Met l'image en background
         this.add(p1);
         this.add(p3);
         this.add(p4);
+        this.add(p16);
         this.add(p5);
         this.add(p6);
         this.add(p7);
         
-            
-        //liste deroulante infirmier / docteur
-        this.add(p12); 
-        // vu que par defaut : docteur
-        this.add(p13);
+        this.add(p12); // liste deroulante infirmier / docteur
+        this.add(p13); // liste 
         this.add(p14);
         this.add(p15);
+        this.add(p17); // ORL
+        this.add(p18); // REA
+        this.add(p19); // CHG
+        
         p14.setVisible(false);
         p15.setVisible(false);
 
         this.add(p11);
         
-        this.setSize(600,600);
+        this.setSize(700,700);
         
         this.setVisible(true); 
     }
