@@ -40,7 +40,7 @@ import static javax.swing.SwingConstants.CENTER;
 import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 import projet.Connexion;
-
+import projet.Malade;
 /**
  *
  * @author mathieuchebassier
@@ -378,28 +378,30 @@ public class Fenetre extends JFrame{
             // chaine de caractère dans laquelle on écrit la requete correspondant aux infos du formulaire rempli 
             String requete_malade;
 
-            ArrayList<String> liste =null;
+            ArrayList<ArrayList<String>> liste =null;
 
             // écriture de la requete exacte en fonction de la maniere dont a été rempli le formulaire
             requete_malade = maconnexion.CreerRequete_Recherche_Hospitalisation(id_recu, nom_recu, prenom_recu, no_chambre_recu, no_lit_recu, adresse_recu, tel_recu, mutuelle_recu, date_arrivee_recu);
             try 
             {
                 // on envoit la requete à la base de données via RemplirChampsRequete qui est dans la classe Connexion
-                liste = maconnexion.RemplirChampsRequete(requete_malade);
-            
-                int taille = liste.size();
+                
+                liste = maconnexion.RemplirChampsRequete_Malade(requete_malade);
+                int taille=liste.size();
                 // On affiche le résultat de la requete
                 for (int i = 0; i < liste.size(); i++)
                 {
+                    /*for(int j=0;j<liste)
                     // Connnexion renvoit un tableau de String, avec dans chaque string tous les attirbuts désirés par la requete séparés par des virgules
                     String value = liste.get(i);
                     System.out.println("" + value);
-                }
+                }*/
                 
                 // si la recherche n'aboutit à aucun malade, on affiche un message d'erreur
                 if (taille ==0)
                 {
                     JOptionPane.showMessageDialog(null, "Aucun patient ne correspond à votre recherche. Regardez dans les archives.", "Erreur", JOptionPane.ERROR_MESSAGE);
+                    fenetre_rechercher_patient();
                 }
                 
             }
@@ -424,7 +426,6 @@ public class Fenetre extends JFrame{
         
         // On ajoute tous les JPannel à la fenêtre
         this.setContentPane(new ImagePanel(new ImageIcon("fond66.jpg").getImage())); // Met l'image en background
-        this.add(p1);
         this.add(p2);
         this.add(p3);
         this.add(p4);
@@ -1529,19 +1530,19 @@ public class Fenetre extends JFrame{
     }
   
     
-    public void fenetre_reponse_patient(ArrayList<String> tab)
+    public void fenetre_reponse_patient(ArrayList<ArrayList<String>> tab)
     {
       
         
         JComboBox combo = new JComboBox();
         JButton voir = new JButton("Voir");
-        JButton valider = new JButton("Valider");
+        JButton retour = new JButton("Retour");
+        JButton modifier = new JButton("Modifier");
         JPanel pbouton, ptexte, phaut, p2, p3, p4, p5, p6, p7, p8, p9, p10;
         JTextField jtf_no_id, jtf_nom, jtf_prenom, jtf_no_chambre, jtf_no_lit, jtf_datea, jtf_adresse, jtf_tel, jtf_mutuelle;
         JLabel jl_no_id, jl_nom, jl_prenom, jl_no_chambre, jl_no_lit, jl_datea, jl_adresse, jl_tel, jl_mutuelle, texte;
         
         // On initialise les JLabel
-        texte = new JLabel("Veuillez selectionner le patient");
         jl_no_id = new JLabel("N° identification");
         jl_nom = new JLabel("Nom");
         jl_prenom = new JLabel("Prénom");
@@ -1574,24 +1575,24 @@ public class Fenetre extends JFrame{
         jtf_mutuelle.setColumns(10);
         
         // On initialise les objets
-        valider.setPreferredSize(new Dimension(400,30));
-        valider.setOpaque(false);
+        retour.setPreferredSize(new Dimension(400,30));
+        retour.setOpaque(false);
+        modifier.setPreferredSize(new Dimension(400,30));
+        retour.setOpaque(false);
         voir.setPreferredSize(new Dimension(200,30));
         voir.setOpaque(false);
         combo.setPreferredSize(new Dimension(200,30));
         combo.setOpaque(false);
         
-        // On initialise la liste avec les résultats correspondants à la recerhcer
+        
+
+        // On initialise la liste avec les résultats correspondants à la recherche
         for(int i=0; i<tab.size(); i++)
         {
-            combo.addItem(tab.get(i));   
+            combo.addItem(tab.get(i).toString());   
         }
         
         // On crée les panels
-        ptexte = new JPanel();
-        ptexte.add(texte);
-        ptexte.setOpaque(false);
-        ptexte.setPreferredSize(new Dimension(600, 30));
         
         phaut = new JPanel();
         phaut.add(combo);
@@ -1654,7 +1655,9 @@ public class Fenetre extends JFrame{
         p10.setPreferredSize(new Dimension(600, 30));
         
         pbouton = new JPanel();
-        pbouton.add(valider);
+        pbouton.add(retour);
+        pbouton = new JPanel();
+        pbouton.add(modifier);
         pbouton.setOpaque(false);
         pbouton.setPreferredSize(new Dimension(600, 30));
         
@@ -1665,17 +1668,17 @@ public class Fenetre extends JFrame{
           public void actionPerformed(ActionEvent e)
           { 
                  // Ici il faut remplir les champs pour voir les données de chaque patient
-
+                int combobox_choix=combo.hashCode();
                   // On REMPLIT les JTF --> Ca ne marche pas encore
-                 jtf_no_id.setText(tab.get(1));
-                 jtf_nom.setText(tab.get(2));
-                 jtf_prenom.setText(tab.get(3));
-                 jtf_no_chambre.setText(tab.get(7));
-                 jtf_no_lit.setText(tab.get(8));
-                 jtf_datea.setText(tab.get(9));
-                 jtf_adresse.setText(tab.get(4));
-                 jtf_tel.setText(tab.get(5));
-                 jtf_mutuelle.setText(tab.get(6));
+                 jtf_no_id.setText(tab.get(combobox_choix).get(1));
+                 jtf_nom.setText(tab.get(combobox_choix).get(2));
+                 jtf_prenom.setText(tab.get(combobox_choix).get(3));
+                 jtf_no_chambre.setText(tab.get(combobox_choix).get(7));
+                 jtf_no_lit.setText(tab.get(combobox_choix).get(8));
+                 jtf_datea.setText(tab.get(combobox_choix).get(9));
+                 jtf_adresse.setText(tab.get(combobox_choix).get(4));
+                 jtf_tel.setText(tab.get(combobox_choix).get(5));
+                 jtf_mutuelle.setText(tab.get(combobox_choix).get(6));
                  
         /*
         pour les patients encore à l'hopital 
@@ -1687,17 +1690,16 @@ public class Fenetre extends JFrame{
           }
         });
         
-        valider.addActionListener(new ActionListener()
+        retour.addActionListener(new ActionListener()
         {
           public void actionPerformed(ActionEvent e)
           { 
-          //  fenetre_afficher_patient(tab, );
+            fenetre_accueil();
           }
         });
         
         
         this.setContentPane(new ImagePanel(new ImageIcon("fond66.jpg").getImage())); // Met l'image en background
-        this.add(ptexte);
         this.add(phaut);
         this.add(p2);
         this.add(p3);
@@ -1900,7 +1902,5 @@ public class Fenetre extends JFrame{
         
         this.setVisible(true);
         */
-    }
-       
-}
+    }}
 

@@ -426,4 +426,36 @@ public class Connexion
         return liste;
     }
      
+    public ArrayList RemplirChampsRequete_Malade(String requete) throws SQLException 
+    {
+        // récupération de l'ordre de la requete
+        rset = stmt.executeQuery(requete);
+
+        // récupération du résultat de l'ordre
+        rsetMeta = rset.getMetaData();
+        // calcul du nombre de colonnes du resultat
+        int nbColonne = rsetMeta.getColumnCount();
+        // creation d'une ArrayList de String
+        ArrayList<ArrayList<String>> liste;
+        liste = new ArrayList<ArrayList<String>>();
+        ArrayList<String> ligne;
+        ligne = new ArrayList<String>();
+        int j=0;
+        String champs;
+        // tant qu'il reste une ligne 
+        while (rset.next()) {
+            System.out.println("" +j);
+            // Concatener les champs de la ligne separes par 
+            for (int i = 1; i < nbColonne; i++) {
+                            System.out.println("" +i);
+                            champs=rset.getString(i);
+                            ligne.add(champs);
+            }
+            liste.add( ligne);
+            j++;
+        }
+
+        // Retourner l'ArrayList
+        return liste;
+    }
 }
