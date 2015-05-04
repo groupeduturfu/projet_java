@@ -391,9 +391,9 @@ public class Fenetre extends JFrame{
                 // On affiche le résultat de la requete
                 for (int i = 0; i < liste.size(); i++)
                 {
-                    for(int j=0;j<liste)
+                
                     // Connnexion renvoit un tableau de String, avec dans chaque string tous les attirbuts désirés par la requete séparés par des virgules
-                    String value = liste.get(i);
+                    ArrayList<String> value = liste.get(i);
                     System.out.println("" + value);
                 }
                 
