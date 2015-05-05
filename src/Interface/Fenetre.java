@@ -1000,15 +1000,26 @@ public class Fenetre extends JFrame{
         JLabel texte, jl_nom, jl_prenom, jl_adresse, jl_tel, jl_salaire, jl_fonction, jl_specialite, jl_rotation, jl_code_service, jl_date_naissance, jl_services;
         JButton valider = new JButton("Valider");
         JButton retour = new JButton("Retour");
-        JPanel p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13, p14, p15, p16, p17, p18, p19;
+        JPanel p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13, p14, p15, p16, p17, p18, p19, p20;
         
         // checkboxes des services si docteur
         JCheckBox jch_ORL = new JCheckBox("ORL");
         JCheckBox jch_REA = new JCheckBox("REA");
         JCheckBox jch_CHG = new JCheckBox("CHG");
+        JCheckBox jch_dorl = new JCheckBox("Directeur");
+        JCheckBox jch_drea = new JCheckBox("Directeur");
+        JCheckBox jch_dchg = new JCheckBox("Directeur");        
         jch_ORL.setSelected(false);
         jch_REA.setSelected(false);
         jch_CHG.setSelected(false);
+        jch_dorl.setSelected(false);
+        jch_drea.setSelected(false);
+        jch_dchg.setSelected(false);
+        
+        // checkbox si infirmier = surveillant
+        JCheckBox jch_surveillant = new JCheckBox("Surveillant");
+        jch_surveillant.setSelected(false);
+
         
         // liste déroulante pour Infirmier / Docteur
         JComboBox Jcombo_fonction;
@@ -1043,7 +1054,6 @@ public class Fenetre extends JFrame{
         jl_rotation = new JLabel("Rotation");
         jl_code_service = new JLabel("Code service");
         jl_date_naissance = new JLabel("Date de naissance");
-        jl_services = new JLabel("Services");
         
         
         // On iitialise les JTF
@@ -1146,20 +1156,27 @@ public class Fenetre extends JFrame{
         p16.setPreferredSize(new Dimension(600, 30));
         
         p17 = new JPanel();
-        p17.add(jl_services);
         p17.add(jch_ORL);
+        p17.add(jch_dorl);
         p17.setOpaque(false);
         p17.setPreferredSize(new Dimension(600, 30));   
         
         p18 = new JPanel();
         p18.add(jch_REA);
+        p18.add(jch_drea);
         p18.setOpaque(false);
         p18.setPreferredSize(new Dimension(600, 30));
         
         p19 = new JPanel();
         p19.add(jch_CHG);
+        p19.add(jch_dchg);
         p19.setOpaque(false);
         p19.setPreferredSize(new Dimension(600, 30));
+        
+        p20 = new JPanel();
+        p20.add(jch_surveillant);
+        p20.setOpaque(false);
+        p20.setPreferredSize(new Dimension(600, 30));
         
         p11 = new JPanel();
         p11.add(retour);
@@ -1219,13 +1236,18 @@ public class Fenetre extends JFrame{
                 String requete_service;
 
                 // si infirmier
-                String requete_chambre;
+                String requete_ch_dispos;
+                String requete_surveillant;
 
                 // requete pour récupérer le no_employe créé
                 String requete_id_recup;
                 String id_string_recup;
                 int id_recup = 100;
                 
+                // no_infirmier
+                int surveillant;
+                
+                // recupere les chambres disponibles à la surveillance selon le service
                 ArrayList<String> liste;
 
                         
@@ -1289,14 +1311,13 @@ public class Fenetre extends JFrame{
                 
                 else if (fonction_recu == "Infirmier")
                 {
-                    System.out.println("rentre dans infirmier");
                     // enregistre la valeur de la liste rotation
                     rotation_recu = Jcombo_rotation.getSelectedItem().toString();
                     // enregistre le code service recu
                     code_service_recu= Jcombo_service.getSelectedItem().toString();
 
                     
-                    // on crée un nouveau tuple dans la table docteur avec comme no_docteur celui créé à l'instant
+                    // TABLE INFIRMIER : on crée un nouveau tuple dans la table infirmier avec comme no_infirmier celui créé à l'instant
                     requete_infirmier = maconnexion.CreerRequete_docteur_infirmier(2, id_recup, " ", code_service_recu, rotation_recu);
                     try 
                     {
@@ -1310,6 +1331,53 @@ public class Fenetre extends JFrame{
                          System.out.println("Echec SQL");
                         ex.printStackTrace();
                     }
+                    
+                    // TABLE CHAMBRE : 
+                    if (jch_surveillant.isSelected())
+                    {
+                        // on affiche dans une liste déroulante la liste des chambres correspondant au service sélectionné n'ayant pas de surveillant jour / nuit selon la rotation sléectionnée
+                        // requete de sélection des chambres disponilbes à la surveillance
+                        
+                        liste = maconnexion.Requete_chambre_dispo_surveillant( rotation_recu,  code_service_recu);
+
+                        int taille = liste.size();
+                        // On affiche le résultat de la requete
+                        for (int i = 0; i < liste.size(); i++)
+                        {
+                             // Connnexion renvoit un tableau de String, avec dans chaque string tous les attirbuts désirés par la requete séparés par des virgules
+                            String value = liste.get(i);
+                            System.out.println("" + value);
+                        }
+                
+                        // si toutes les chambres du service ont déjà un surveillant pour la rotation sélectionnée, on affiche un message 
+                        if (taille ==0)
+                        {
+                            JOptionPane.showMessageDialog(null, "Toutes les chambres de ce service ont déjà un surveillant", "Erreur", JOptionPane.ERROR_MESSAGE);
+                        }
+                        
+                        
+                        // on enregistre la chambre sélectionnée
+                        
+                        
+                        // on écrit la requete pour inscrire le surveillant et on l'exécute
+                        /*requete_surveillant = maconnexion.CreerRequete_surveillant( id_recup, rotation_recu,  code_service_recu,  no_chambre_recu);
+                        try 
+                        {
+                            // on enregistre les infos dans la table hospitalisation
+                            maconnexion.executeUpdate(requete_surveillant);
+                            // on affiche à l'utilisateur que le nouvel infirmier a bien été inscrit
+                            JOptionPane.showMessageDialog(null, "L'infirmier a été enregistré en tant que surveillant.", "Info", JOptionPane.ERROR_MESSAGE);
+                        }
+                        catch (SQLException ex)
+                        {
+                             System.out.println("Echec SQL");
+                            ex.printStackTrace();
+                        }
+                        */
+                        
+                    }
+
+                    
                 }
                 
             }
@@ -1344,6 +1412,8 @@ public class Fenetre extends JFrame{
                          // INVISIBLES
                          p14.setVisible(false); // liste rotation
                          p15.setVisible(false); // liste code service 
+                         p20.setVisible(false); // checkbox surveillant
+                         
 
                     }                  
                     else if(e.getItem().toString() == "Infirmier")
@@ -1351,6 +1421,7 @@ public class Fenetre extends JFrame{
                          // VISIBLES
                          p14.setVisible(true); // liste rotation 
                          p15.setVisible(true); // liste code service
+                         p20.setVisible(true); // checkbox surveillant
                          
                          // INVISIBLES
                          p13.setVisible(false); // liste specialites
@@ -1381,9 +1452,12 @@ public class Fenetre extends JFrame{
         this.add(p17); // ORL
         this.add(p18); // REA
         this.add(p19); // CHG
+        this.add(p20); // surveillant
         
         p14.setVisible(false);
         p15.setVisible(false);
+        p20.setVisible(false);
+
 
         this.add(p11);
         

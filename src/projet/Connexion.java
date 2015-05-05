@@ -15,6 +15,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import javax.swing.JOptionPane;
 
 
 /*
@@ -299,23 +300,63 @@ public class Connexion
         return requete;
     }
     
+    public ArrayList Requete_chambre_dispo_surveillant(String rotation, String code_service)
+    {
+            ArrayList<String> liste =null;
+
+                    try 
+                    {
+                       // on renvoie les chambres disponibles à la surveillance dans ce service
+                       if (rotation == "JOUR") 
+                       {
+                            liste  = RemplirChampsRequete("SELECT no_chambre FROM chambre WHERE (code_service LIKE '" + code_service + "' AND no_surveillant_jour IS NULL);");
+                       }
+                       else if (rotation == "NUIT") 
+                       {
+                            liste  = RemplirChampsRequete("SELECT no_chambre FROM chambre WHERE (code_service LIKE '" + code_service + "' AND no_surveillant_nuit IS NULL);");
+                       }
+                        
+                    }
+                     catch (SQLException ex)
+                    {
+                         System.out.println("Echec SQL");
+                        ex.printStackTrace();
+                    }
+                    
+                return liste;
+    }
+    
+    
+    public String CreerRequete_surveillant(int no_infirmier, String rotation, String code_service, int no_chambre)
+    {
+        String requete = null;
+        
+        if (rotation == "JOUR")
+        {
+            requete = "INSERT into chambre (no_surveillant_jour) values (no_infirmier) WHERE (code_service LIKE '" + code_service + "' AND no_chambre = " + no_chambre + ");";
+        }
+        else if (rotation == "NUIT")
+        {
+            requete = "INSERT into chambre (no_surveillant_nuit) values (no_infirmier) WHERE (code_service LIKE '" + code_service + "' AND no_chambre = " + no_chambre + ");";
+        }
+        
+        return requete;
+    }
+    
     public void docteurs_requetes_services(JCheckBox jch_ORL, JCheckBox jch_REA, JCheckBox jch_CHG, int no_docteur)
     {
         if (jch_ORL.isSelected())
         {
-            System.out.println("ORL check");
             ajouterRequete_creer("INSERT INTO appartient VALUES (" + no_docteur + ", 'ORL');");
 
         }
         if (jch_REA.isSelected())
         {
-            System.out.println("REA check");
             ajouterRequete_creer("INSERT INTO appartient VALUES (" + no_docteur + ", 'REA');");
             
         }
         if (jch_CHG.isSelected())
         {
-            System.out.println("CHG check");
             ajouterRequete_creer("INSERT INTO appartient VALUES (" + no_docteur + ", 'CHG');");     
         }
         
