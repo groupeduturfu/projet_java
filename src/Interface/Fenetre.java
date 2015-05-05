@@ -1003,6 +1003,8 @@ public class Fenetre extends JFrame{
         JButton retour = new JButton("Retour");
         JPanel p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13, p14, p15, p16, p17, p18, p19, p20;
         
+       
+        
         // checkboxes des services si docteur
         JCheckBox jch_ORL = new JCheckBox("ORL");
         JCheckBox jch_REA = new JCheckBox("REA");
@@ -1021,6 +1023,11 @@ public class Fenetre extends JFrame{
         JCheckBox jch_surveillant = new JCheckBox("Surveillant");
         jch_surveillant.setSelected(false);
 
+        // liste déroulante pour les chambres disponibles à la surveillance
+        JComboBox Jcombo_chambres;
+        String[] chambres_string = {""};	
+        Jcombo_chambres = new JComboBox(chambres_string);
+        
         
         // liste déroulante pour Infirmier / Docteur
         JComboBox Jcombo_fonction;
@@ -1176,8 +1183,13 @@ public class Fenetre extends JFrame{
         
         p20 = new JPanel();
         p20.add(jch_surveillant);
+        p20.add(Jcombo_chambres);
         p20.setOpaque(false);
         p20.setPreferredSize(new Dimension(600, 30));
+        
+        
+        
+        
         
         p11 = new JPanel();
         p11.add(retour);
@@ -1213,9 +1225,12 @@ public class Fenetre extends JFrame{
             salaire_recu = Integer.parseInt(jtf_salaire.getText().trim());
             d_naissance_recu= jtf_date_naissance.getText();
             
+            
+            
             // enregistre la valeur de la liste deroulante infirmier/docteur
             fonction_recu = Jcombo_fonction.getSelectedItem().toString();
 
+            
  
             if(jtf_nom.getText().equals("") || jtf_prenom.getText().equals("") || jtf_adresse.getText().equals("") || jtf_tel.getText().equals("") || jtf_salaire.getText().equals("") || jtf_date_naissance.getText().equals("")) 
             {
@@ -1248,8 +1263,7 @@ public class Fenetre extends JFrame{
                 // no_infirmier
                 int surveillant;
                 
-                // recupere les chambres disponibles à la surveillance selon le service
-                ArrayList<String> liste;
+                
 
                         
                 // enregistrement des premieres infos dans la table employe
@@ -1334,34 +1348,22 @@ public class Fenetre extends JFrame{
                     }
                     
                     // TABLE CHAMBRE : 
-                    if (jch_surveillant.isSelected())
+                    // on enregistre la chambre sélectionnée
+                    
+                    // si il y a des chambres disponibles
+                    if (p20.isVisible())
                     {
-                        // on affiche dans une liste déroulante la liste des chambres correspondant au service sélectionné n'ayant pas de surveillant jour / nuit selon la rotation sléectionnée
-                        // requete de sélection des chambres disponilbes à la surveillance
                         
-                        liste = maconnexion.Requete_chambre_dispo_surveillant( rotation_recu,  code_service_recu);
+                        // enregistre la valeur de la chambre selectionnée dans la liste
+                        String chambre = Jcombo_chambres.getSelectedItem().toString().trim();
+                        int chambre_recu = Integer.parseInt(chambre);
 
-                        int taille = liste.size();
-                        // On affiche le résultat de la requete
-                        for (int i = 0; i < liste.size(); i++)
-                        {
-                             // Connnexion renvoit un tableau de String, avec dans chaque string tous les attirbuts désirés par la requete séparés par des virgules
-                            String value = liste.get(i);
-                            System.out.println("" + value);
-                        }
-                
-                        // si toutes les chambres du service ont déjà un surveillant pour la rotation sélectionnée, on affiche un message 
-                        if (taille ==0)
-                        {
-                            JOptionPane.showMessageDialog(null, "Toutes les chambres de ce service ont déjà un surveillant", "Erreur", JOptionPane.ERROR_MESSAGE);
-                        }
-                        
-                        
-                        // on enregistre la chambre sélectionnée
                         
                         
                         // on écrit la requete pour inscrire le surveillant et on l'exécute
-                        /*requete_surveillant = maconnexion.CreerRequete_surveillant( id_recup, rotation_recu,  code_service_recu,  no_chambre_recu);
+                        requete_surveillant = maconnexion.CreerRequete_surveillant( id_recup, rotation_recu,  code_service_recu,  chambre_recu);
+                        System.out.println(requete_surveillant);
+
                         try 
                         {
                             // on enregistre les infos dans la table hospitalisation
@@ -1374,10 +1376,10 @@ public class Fenetre extends JFrame{
                              System.out.println("Echec SQL");
                             ex.printStackTrace();
                         }
-                        */
                         
                     }
-
+                        
+                        
                     
                 }
                 
@@ -1396,6 +1398,11 @@ public class Fenetre extends JFrame{
             fenetre_accueil();
           }
         });
+        
+      
+        
+        
+
         
         Jcombo_fonction.addItemListener(new ItemListener() 
         {
@@ -1436,6 +1443,58 @@ public class Fenetre extends JFrame{
         });
 
         
+        jch_surveillant.addItemListener(new ItemListener() 
+        {
+            public void itemStateChanged(ItemEvent e) 
+            {
+                if (e.getStateChange() == 1) 
+                {    
+                    if (jch_surveillant.isSelected())
+                    {
+                        // on affiche dans une liste déroulante la liste des chambres correspondant au service sélectionné n'ayant pas de surveillant jour / nuit selon la rotation sléectionnée
+                        // requete de sélection des chambres disponilbes à la surveillance
+                                                
+                       // enregistre la valeur de la liste rotation
+                        String rotation = Jcombo_rotation.getSelectedItem().toString();
+                        // enregistre le code service recu
+                        String code_service= Jcombo_service.getSelectedItem().toString();
+                        
+                        
+                        // recupere les chambres disponibles à la surveillance selon le service
+                        ArrayList<String> liste;
+                        
+                        Jcombo_chambres.removeAllItems();
+                        
+                        liste = maconnexion.Requete_chambre_dispo_surveillant( rotation, code_service);
+                        
+                        
+                        int taille = liste.size();
+                       
+                        for (int i = 0; i < liste.size(); i++)
+                        {
+                            System.out.println(""+ liste.get(i));
+                             // Connnexion renvoit un tableau de String, avec dans chaque string tous les attirbuts désirés par la requete séparés par des virgules                            
+                            Jcombo_chambres.addItem(liste.get(i));
+                        }
+                        
+                        // si toutes les chambres du service ont déjà un surveillant pour la rotation sélectionnée, on affiche un message 
+                        if (taille ==0)
+                        {
+                            JOptionPane.showMessageDialog(null, "Toutes les chambres de ce service ont déjà un surveillant", "Erreur", JOptionPane.ERROR_MESSAGE);
+                            // on n'affiche plus l'option cocher la case surveillant
+                            p20.setVisible(false);
+                        }
+                        
+                        
+                        
+                        
+                    }
+                }
+            }   
+            
+        });
+
+        
         // On ajoute tous les JPannel à la fenêtre
         this.setContentPane(new ImagePanel(new ImageIcon("fond66.jpg").getImage())); // Met l'image en background
         this.add(p1);
@@ -1462,7 +1521,7 @@ public class Fenetre extends JFrame{
 
         this.add(p11);
         
-        this.setSize(700,700);
+        this.setSize(600,600);
         
         this.setVisible(true); 
     }

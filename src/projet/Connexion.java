@@ -303,17 +303,26 @@ public class Connexion
     public ArrayList Requete_chambre_dispo_surveillant(String rotation, String code_service)
     {
             ArrayList<String> liste =null;
+            
+            System.out.println(""+ rotation);
+            System.out.println(""+ code_service);
+
 
                     try 
                     {
+                       System.out.println("chambres sans surveillant jour" + RemplirChampsRequete("SELECT code_service, no_chambre FROM chambre WHERE ( no_surveillant_jour = 0);"));
+                       System.out.println("chambres sans surveillant nuit" + RemplirChampsRequete("SELECT code_service, no_chambre FROM chambre WHERE ( no_surveillant_nuit = 0);"));
+
                        // on renvoie les chambres disponibles à la surveillance dans ce service
                        if (rotation == "JOUR") 
                        {
-                            liste  = RemplirChampsRequete("SELECT no_chambre FROM chambre WHERE (code_service LIKE '" + code_service + "' AND no_surveillant_jour IS NULL);");
+                            System.out.println ("rentre dans jour");
+                            liste  = RemplirChampsRequete("SELECT no_chambre FROM chambre WHERE (code_service LIKE '" + code_service + "' AND no_surveillant_jour = 0);");
                        }
                        else if (rotation == "NUIT") 
                        {
-                            liste  = RemplirChampsRequete("SELECT no_chambre FROM chambre WHERE (code_service LIKE '" + code_service + "' AND no_surveillant_nuit IS NULL);");
+                            System.out.println ("rentre dans nuit");
+                            liste  = RemplirChampsRequete("SELECT no_chambre FROM chambre WHERE (code_service LIKE '" + code_service + "' AND no_surveillant_nuit = 0);");
                        }
                         
                     }
@@ -333,11 +342,12 @@ public class Connexion
         
         if (rotation == "JOUR")
         {
-            requete = "INSERT into chambre (no_surveillant_jour) values (no_infirmier) WHERE (code_service LIKE '" + code_service + "' AND no_chambre = " + no_chambre + ");";
+            
+            requete = "UPDATE chambre SET no_surveillant_jour = " + no_infirmier + " WHERE (code_service LIKE '" + code_service + "' AND no_chambre = " + no_chambre + ");";
         }
         else if (rotation == "NUIT")
         {
-            requete = "INSERT into chambre (no_surveillant_nuit) values (no_infirmier) WHERE (code_service LIKE '" + code_service + "' AND no_chambre = " + no_chambre + ");";
+            requete = "UPDATE chambre SET no_surveillant_nuit = " + no_infirmier + " WHERE (code_service LIKE '" + code_service + "' AND no_chambre = " + no_chambre + ");";
         }
         
         return requete;
@@ -499,4 +509,8 @@ public class Connexion
         // Retourner l'ArrayList
         return liste;
     }
+    
+    
+    
+    
 }
