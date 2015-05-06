@@ -25,6 +25,8 @@ import javax.swing.JOptionPane;
  */
 public class Connexion 
 {
+    
+    private static Connexion laConnexion = null;
     /**
      * Attributs prives : connexion JDBC, statement, ordre requete et resultat requete
      */
@@ -39,7 +41,7 @@ public class Connexion
     public ArrayList<String> Liste_requetes = new ArrayList<String>();
     
 
-    public Connexion() throws SQLException, ClassNotFoundException 
+    private Connexion() throws SQLException, ClassNotFoundException 
     {
         //String user = "chebassi";
         //String login_DataBase = "chebassi-rw";
@@ -75,7 +77,17 @@ public class Connexion
         }
     }
     
-    
+    public synchronized static Connexion getInstance() {
+        try { 
+        if (laConnexion == null) {
+            laConnexion = new Connexion();
+        }
+        } catch (Exception e) {
+            System.err.println("getConnexion(): " + e);
+            e.printStackTrace();
+        }
+        return laConnexion;
+    }
     
     
     /**

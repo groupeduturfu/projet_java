@@ -41,6 +41,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 import projet.Connexion;
 import projet.Malade;
+
+
 /**
  *
  * @author mathieuchebassier
@@ -48,43 +50,24 @@ import projet.Malade;
 public class Fenetre extends JFrame{
    // final JButton rechercher, ajouter, admin, consulter, emp_presents, lit_libre, stats;
 
-    // Attribut privés : objet de Connexion
-    private Connexion maconnexion;
-    
+
     
     public Fenetre()
     {
-        try 
-        {
-            try 
-            {
-                // tentative de connexion si les 4 attributs sont remplis
-                 maconnexion = new Connexion();
-            } 
-            catch (ClassNotFoundException cnfe) 
-            {
-                System.out.println("Connexion echouee : probleme de classe");
-                cnfe.printStackTrace();
-            }
-        } 
-        catch (SQLException e) 
-        {
-            System.out.println("Connexion echouee : probleme SQL");
-            e.printStackTrace();
-        }
         
+        // tentative de connexion si les 4 attributs sont remplis
+        Connexion maconnexion = Connexion.getInstance();
         
         this.setTitle("Gestion Hopital");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Quand on clique sur la croix, ça quitte proprement
         this.setLayout(new FlowLayout()); // La fenêtre est répartie en grille : 8 lignes, 2 colonnes
         
-        fenetre_accueil();
-        //fenetre_rechercher_patient();
+       // new Fenetre_accueil(this);
         
     }
     
     
-    public void fenetre_accueil()
+ /*   public void fenetre_accueil()
     {
         JButton rechercher, ajouter, admin, emp_presents, lit_libre, stats;        
         
@@ -204,6 +187,7 @@ public class Fenetre extends JFrame{
         
         this.setVisible(true);  
     }
+    
 
     // RECHERCHE D UN PATIENT HOSPITALISE (table hopsitalisation)
     public void fenetre_rechercher_patient()
@@ -420,7 +404,7 @@ public class Fenetre extends JFrame{
         {
           public void actionPerformed(ActionEvent e)
           { 
-            fenetre_accueil();
+//            fenetre_accueil();
           }
         });
         
@@ -456,6 +440,8 @@ public class Fenetre extends JFrame{
             fenetre_rechercher_archives();
         }
     }
+    
+    
     
     public void fenetre_rechercher_archives()
     {
@@ -690,7 +676,7 @@ public class Fenetre extends JFrame{
         {
           public void actionPerformed(ActionEvent e)
           { 
-            fenetre_accueil();
+       //     fenetre_accueil();
           }
         });
         
@@ -920,7 +906,6 @@ public class Fenetre extends JFrame{
                     // RecupererId renvoie une chaine de caractere, on le transforme en int
                     id_malade_recup = Integer.parseInt(id_string_malade_recup.trim());
                     System.out.println("id malade recupéré : "+ id_malade_recup);
-
                 }
                 catch (SQLException ex)
                 {
@@ -969,7 +954,7 @@ public class Fenetre extends JFrame{
         {
           public void actionPerformed(ActionEvent e)
           { 
-            fenetre_accueil();
+//            fenetre_accueil();
           }
         });
         
@@ -1230,8 +1215,6 @@ public class Fenetre extends JFrame{
             // enregistre la valeur de la liste deroulante infirmier/docteur
             fonction_recu = Jcombo_fonction.getSelectedItem().toString();
 
-            
- 
             if(jtf_nom.getText().equals("") || jtf_prenom.getText().equals("") || jtf_adresse.getText().equals("") || jtf_tel.getText().equals("") || jtf_salaire.getText().equals("") || jtf_date_naissance.getText().equals("")) 
             {
                 JOptionPane.showMessageDialog(null, "Il y a au moins un champs vide", "Erreur", JOptionPane.ERROR_MESSAGE);
@@ -1395,7 +1378,7 @@ public class Fenetre extends JFrame{
         {
           public void actionPerformed(ActionEvent e)
           { 
-            fenetre_accueil();
+//            fenetre_accueil();
           }
         });
         
@@ -1549,6 +1532,8 @@ public class Fenetre extends JFrame{
         else return false;
     }
     
+    
+    
     public void fenetre_admin()
     {
         JButton employe, ajouter, service, chambre, retour;
@@ -1645,7 +1630,7 @@ public class Fenetre extends JFrame{
         {
           public void actionPerformed(ActionEvent e)
           { 
-            fenetre_accueil();
+//            fenetre_accueil();
           }
         });
         
@@ -1661,7 +1646,7 @@ public class Fenetre extends JFrame{
         
         this.setVisible(true);
     }
-  
+    
     
     public void fenetre_reponse_patient(ArrayList<ArrayList<String>> tab)
     {
@@ -1818,7 +1803,7 @@ public class Fenetre extends JFrame{
 
         SELECT m.no_malade, m.nom, m.prenom, m.adresse, m.tel, m.mutuelle, h.no_chambre, h.no_lit, h.date_arrivee "
         "FROM malade m, hospitalisation h WHERE …..
-        */
+        
 
           }
         });
@@ -1827,7 +1812,7 @@ public class Fenetre extends JFrame{
         {
           public void actionPerformed(ActionEvent e)
           { 
-            fenetre_accueil();
+//            fenetre_accueil();
           }
         });
         
@@ -1849,6 +1834,8 @@ public class Fenetre extends JFrame{
         this.setVisible(true); 
     }
     
+    
+    
     public void fenetre_reponse_archives(ArrayList tab)
     {
         
@@ -1856,9 +1843,11 @@ public class Fenetre extends JFrame{
         pour les archives : SELECT m.no_malade, m.nom, m.prenom, m.adresse, m.tel, m.mutuelle, h.date_arrivee, h.date_sortie, d.no_docteur, h.description, "
                        + "h.code_service "
                        + "FROM malade m, historique h, docteur d
-        */
+        
         
     }
+    
+    
     
     public void fenetre_afficher_patient(ArrayList tab, int no)
     {
@@ -2034,6 +2023,9 @@ public class Fenetre extends JFrame{
         this.setSize(600,600);
         
         this.setVisible(true);
-        */
-    }}
+        
+    }
+    
+    */
+}
 
