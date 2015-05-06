@@ -23,11 +23,11 @@ import projet.Connexion;
  *
  * @author meyronneaudrey
  */
-public class Ajouter_patient {
+public class Ajouter_malade {
     
-    private static Ajouter_patient fenetre = null;
+    private static Ajouter_malade fenetre = null;
     
-     private  Ajouter_patient(JFrame f) {
+     private  Ajouter_malade(JFrame f) {
         JTextField jtf_nom, jtf_prenom, jtf_no_chambre, jtf_no_lit, jtf_adresse, jtf_tel, jtf_mutuelle, jtf_docteur, jtf_description, jtf_date_naissance;
         JLabel jl_no_id, jl_nom, jl_prenom, jl_no_chambre, jl_no_lit, jl_adresse, jl_tel, jl_mutuelle, jl_docteur, jl_description, jl_date_naissance, texte;
         JButton valider = new JButton("Valider");

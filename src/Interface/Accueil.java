@@ -24,11 +24,11 @@ import static javax.swing.SwingConstants.CENTER;
  *
  * @author meyronneaudrey
  */
-public class Fenetre_accueil {
+public class Accueil {
     
-    private static Fenetre_accueil fenetre = null;
+    private static Accueil fenetre = null;
     
-    private Fenetre_accueil(JFrame f)
+    private Accueil(JFrame f)
     {
         JButton rechercher, ajouter, admin, emp_presents, lit_libre, stats;        
         
@@ -103,7 +103,7 @@ public class Fenetre_accueil {
           public void actionPerformed(ActionEvent e)
           { 
             
-            new Fenetre_choix_patient(f); 
+            new Choix_malade(f); 
           }
         });
         
@@ -149,9 +149,9 @@ public class Fenetre_accueil {
         f.setVisible(true);
     }
     
-    public static Fenetre_accueil getFenetre_accueil(JFrame f) {
+    public static Accueil getFenetre_accueil(JFrame f) {
             
-    if (fenetre == null ) fenetre = new Fenetre_accueil(f);
+    if (fenetre == null ) fenetre = new Accueil(f);
 
         return fenetre;
     }

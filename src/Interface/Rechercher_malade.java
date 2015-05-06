@@ -5,22 +5,30 @@
  */
 package Interface;
 
+import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import projet.Connexion;
 
 /**
  *
  * @author meyronneaudrey
  */
-public class Afficher_patient {
+public class Rechercher_malade {
     
-    private Afficher_patient fenetre = null;
+    private Rechercher_malade fenetre = null;
     
-     private Afficher_patient (JFrame f) {
-         
+    private Rechercher_malade (JFrame f) {
+
         JTextField jtf_no_id, jtf_nom, jtf_prenom, jtf_no_chambre, jtf_no_lit, jtf_datea, jtf_adresse, jtf_tel, jtf_mutuelle;
         JLabel jl_no_id, jl_nom, jl_prenom, jl_no_chambre, jl_no_lit, jl_datea, jl_adresse, jl_tel, jl_mutuelle, texte;
         JButton valider = new JButton("Valider");
@@ -41,15 +49,15 @@ public class Afficher_patient {
         jl_mutuelle = new JLabel("Mutuelle");
         
         // On iitialise les JTF
-/*        jtf_no_id = new JTextField(no_id);
-        jtf_nom = new JTextField(nom);
-        jtf_prenom = new JTextField(prenom);
-        jtf_no_chambre = new JTextField(no_chambre);
-        jtf_no_lit = new JTextField(no_lit);
-        jtf_datea = new JTextField(datea);
-        jtf_adresse = new JTextField(adresse);
-        jtf_tel = new JTextField(tel);
-        jtf_mutuelle = new JTextField(mutuelle);
+        jtf_no_id = new JTextField();
+        jtf_nom = new JTextField();
+        jtf_prenom = new JTextField();
+        jtf_no_chambre = new JTextField();
+        jtf_no_lit = new JTextField();
+        jtf_datea = new JTextField();
+        jtf_adresse = new JTextField();
+        jtf_tel = new JTextField();
+        jtf_mutuelle = new JTextField();
         
         jtf_no_id.setColumns(10);
         jtf_nom.setColumns(10);
@@ -138,25 +146,86 @@ public class Afficher_patient {
         {
           public void actionPerformed(ActionEvent e)
           { 
-            System.out.println("Il valide avec :");
-            System.out.println("N° id : "+jtf_no_id.getText());
-            System.out.println("Nom : "+jtf_nom.getText()); // ETC
+            // Pour la recherche des patients hopsitalisés et la recherche dans les archives
+            int id_recu;  
+            String nom_recu;
+            String prenom_recu;
+            int no_chambre_recu;
+            int no_lit_recu;
+            String adresse_recu;
+            String tel_recu;
+            String mutuelle_recu;
+            String date_arrivee_recu;
+
             
-            // ESSAI SEULEMENT : afficher en console tous les prenoms de la table malade si clique sur "Valider"
+            // si l'utilisateur n'a pas rempli certains champs, on initialise ces champs avec les valeurs 0 et null
+            // no identification
+            if(jtf_no_id.getText().equals(""))
+                id_recu = 0;
+            else id_recu = Integer.parseInt(jtf_no_id.getText().trim());
+            // nom
+            if(jtf_nom.getText().equals(""))
+                nom_recu = "%";
+            else nom_recu= jtf_nom.getText();
+            // prenom
+            if(jtf_prenom.getText().equals(""))
+                prenom_recu = "%";
+            else prenom_recu= jtf_prenom.getText();
+            // no chambre
+            if(jtf_no_chambre.getText().equals(""))
+                no_chambre_recu = 0;
+            else no_chambre_recu = Integer.parseInt(jtf_no_chambre.getText().trim());            
+            // no lit
+            if(jtf_no_lit.getText().equals(""))
+                no_lit_recu = 0;
+            else no_lit_recu = Integer.parseInt(jtf_no_lit.getText().trim());
+            // date arrivée
+            if(jtf_datea.getText().equals(""))
+                date_arrivee_recu = "%";
+            else date_arrivee_recu= jtf_datea.getText();
+            //adresse
+            if(jtf_adresse.getText().equals(""))
+                adresse_recu = "%";
+            else adresse_recu= jtf_adresse.getText();
+            //tel
+            if(jtf_tel.getText().equals(""))
+                tel_recu = "%";
+            else tel_recu= jtf_tel.getText();
+            //mutuelle
+            if(jtf_mutuelle.getText().equals(""))
+                mutuelle_recu = "%";
+            else mutuelle_recu= jtf_mutuelle.getText();
+
+            // chaine de caractère dans laquelle on écrit la requete correspondant aux infos du formulaire rempli 
+            String requete_malade;
+
+            ArrayList<ArrayList<String>> liste =null;
+
+            // écriture de la requete exacte en fonction de la maniere dont a été rempli le formulaire
+            requete_malade = Connexion.getInstance().CreerRequete_Recherche_Hospitalisation(id_recu, nom_recu, prenom_recu, no_chambre_recu, no_lit_recu, adresse_recu, tel_recu, mutuelle_recu, date_arrivee_recu);
             try 
             {
-                // Liste qui récupérera les tuples de réponse à notre requête
-                ArrayList<String> liste;
-                String requete = ("SELECT prenom FROM malade;");
-                liste = maconnexion.RemplirChampsRequete(requete);
+                // on envoit la requete à la base de données via RemplirChampsRequete qui est dans la classe Connexion
                 
-                // Loop through elements.
-                for (int i = 0; i < liste.size(); i++) 
-                {   
-                    // Dans l'exemple on récupère une liste de prenom donc que des string => facilite pour le 1er essai 
-                    String value = liste.get(i);
-                    System.out.println("Element: " + value);
+                liste = Connexion.getInstance().RemplirChampsRequete_Malade(requete_malade);
+                int taille=liste.size();
+                // On affiche le résultat de la requete
+                for (int i = 0; i < liste.size(); i++)
+                {
+                
+                    // Connnexion renvoit un tableau de String, avec dans chaque string tous les attirbuts désirés par la requete séparés par des virgules
+                    ArrayList<String> value = liste.get(i);
+                    System.out.println("" + value);
                 }
+                
+                // si la recherche n'aboutit à aucun malade, on affiche un message d'erreur
+                if (taille ==0)
+                {
+                    JOptionPane.showMessageDialog(null, "Aucun patient ne correspond à votre recherche. Regardez éventuellement dans les archives.", "Erreur", JOptionPane.ERROR_MESSAGE);
+                }
+                //else fenetre_reponse_patient(liste);
+
+                    
                 
             }
             catch (SQLException ex)
@@ -164,6 +233,7 @@ public class Afficher_patient {
                 System.out.println("Echec SQL");
                 ex.printStackTrace();
             }
+            
                        
           }
         });
@@ -172,13 +242,12 @@ public class Afficher_patient {
         {
           public void actionPerformed(ActionEvent e)
           { 
-            fenetre_accueil();
+            //fenetre_accueil();
           }
         });
         
         // On ajoute tous les JPannel à la fenêtre
         f.setContentPane(new ImagePanel(new ImageIcon("fond66.jpg").getImage())); // Met l'image en background
-        f.add(p1);
         f.add(p2);
         f.add(p3);
         f.add(p4);
@@ -192,9 +261,7 @@ public class Afficher_patient {
         
         f.setSize(600,600);
         
-        f.setVisible(true);
-        */
+        f.setVisible(true); 
+        
     }
 }
-    
-

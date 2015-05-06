@@ -20,11 +20,11 @@ import javax.swing.JTextField;
  *
  * @author meyronneaudrey
  */
-public class Reponse_patient {
+public class Reponse_malade {
     
-    private Reponse_patient fenetre = null;
+    private Reponse_malade fenetre = null;
     
-    private Reponse_patient (JFrame f) {
+    private Reponse_malade (JFrame f) {
       
         
         

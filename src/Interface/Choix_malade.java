@@ -12,9 +12,9 @@ import javax.swing.JOptionPane;
  *
  * @author meyronneaudrey
  */
-public class Fenetre_choix_patient {
+public class Choix_malade {
 
-    public Fenetre_choix_patient(JFrame f) {
+    public Choix_malade(JFrame f) {
         
         int dialogButton = JOptionPane.YES_NO_OPTION;
         int dialogResult = JOptionPane.showConfirmDialog(f, "Le patient est-il actuellement dans l'hôpital ?", "Title on Box", dialogButton);
