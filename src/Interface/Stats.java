@@ -18,6 +18,7 @@ public class Stats {
     private Stats(JFrame f)
     {
         // Y'a rien pour l'instant
+        // Il faut qu'on discute de la présentation de cette page
     }
     
     public static Stats getFenetre(JFrame f) {

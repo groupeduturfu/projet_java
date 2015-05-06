@@ -22,11 +22,11 @@ public class Choix_malade {
         int dialogResult = JOptionPane.showConfirmDialog(f, "Le patient est-il actuellement dans l'hôpital ?", "Title on Box", dialogButton);
         // Oui le patient est toujours dans l'hopital : recherche dans la table hospitalisation
         if(dialogResult == 0) {
-          //new Fenetre_rechercher_patient(f); 
+          Rechercher_malade.getFenetre(f); 
         } 
         // non le patient n'est plus dnas l'hopital : recherche dans les archives (table historique)
         else {
-            //fenetre_rechercher_archives();
+            Rechercher_archives.getFenetre(f);
         }
         
     }
