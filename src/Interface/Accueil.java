@@ -133,7 +133,7 @@ public class Accueil {
         {
           public void actionPerformed(ActionEvent e)
           { 
-            System.out.println("Données statistiques...");
+            Stats.getFenetre(f);
           }
         });
         

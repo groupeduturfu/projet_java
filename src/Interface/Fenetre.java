@@ -66,8 +66,8 @@ public class Fenetre extends JFrame{
         
     }
     
-    
- /*   public void fenetre_accueil()
+   /* 
+    public void fenetre_accueil()
     {
         JButton rechercher, ajouter, admin, emp_presents, lit_libre, stats;        
         
@@ -1871,7 +1871,7 @@ public class Fenetre extends JFrame{
         jl_mutuelle = new JLabel("Mutuelle");
         
         // On iitialise les JTF
-/*        jtf_no_id = new JTextField(no_id);
+        jtf_no_id = new JTextField(no_id);
         jtf_nom = new JTextField(nom);
         jtf_prenom = new JTextField(prenom);
         jtf_no_chambre = new JTextField(no_chambre);
@@ -2027,5 +2027,6 @@ public class Fenetre extends JFrame{
     }
     
     */
+               
 }
-
+    

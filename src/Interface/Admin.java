@@ -83,7 +83,7 @@ public class Admin {
         {
           public void actionPerformed(ActionEvent e)
           { 
-                //fenetre_ajouter_employe();
+                Ajouter_employe.getFenetre(null);
           }
         });
         
@@ -92,7 +92,8 @@ public class Admin {
         {
           public void actionPerformed(ActionEvent e)
           { 
-            
+            // Ici on rechercher employé
+              //Rechercher_employe.getFenetre();
                 
           }
         });
