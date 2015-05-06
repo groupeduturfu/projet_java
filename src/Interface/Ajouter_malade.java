@@ -279,12 +279,12 @@ public class Ajouter_malade {
         {
           public void actionPerformed(ActionEvent e)
           { 
-//            fenetre_accueil();
+              Accueil.getFenetre(f);
           }
         });
         
         // On ajoute tous les JPannel à la fenêtre
-        f.setContentPane(new ImagePanel(new ImageIcon("fond66.jpg").getImage())); // Met l'image en background
+        f.setContentPane(new ImagePanel(new ImageIcon("fond66.jpg").getImage())); // Met l'image en background qui recouvre la fenetre d'avant
         f.add(p1);
         f.add(p3);
         f.add(p4);

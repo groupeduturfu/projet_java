@@ -137,6 +137,7 @@ public class Accueil {
           }
         });
         
+        
         // On affiche le reste
         f.setContentPane(new ImagePanel(new ImageIcon("fond66.jpg").getImage())); // Met l'image en background
         f.add(pAdmin, BorderLayout.LINE_END); // POUR ALIGNER À DROITE

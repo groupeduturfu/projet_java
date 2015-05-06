@@ -224,6 +224,7 @@ public class Rechercher_malade {
                     JOptionPane.showMessageDialog(null, "Aucun patient ne correspond à votre recherche. Regardez éventuellement dans les archives.", "Erreur", JOptionPane.ERROR_MESSAGE);
                 }
                 //else fenetre_reponse_patient(liste);
+                
 
                     
                 

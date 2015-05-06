@@ -251,7 +251,7 @@ public class Rechercher_archives {
               
               
             
-            // fenetre_reponse_archives(liste);
+           // Reponse_archives(liste);
                        
           }
         });
@@ -260,7 +260,7 @@ public class Rechercher_archives {
         {
           public void actionPerformed(ActionEvent e)
           { 
-       //     fenetre_accueil();
+            Accueil.getFenetre(f);
           }
         });
         
