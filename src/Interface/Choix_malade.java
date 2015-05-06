@@ -19,7 +19,7 @@ public class Choix_malade {
     public Choix_malade(JFrame f) {
         
         int dialogButton = JOptionPane.YES_NO_OPTION;
-        int dialogResult = JOptionPane.showConfirmDialog(f, "Le patient est-il actuellement dans l'hôpital ?", "Title on Box", dialogButton);
+        int dialogResult = JOptionPane.showConfirmDialog(f, "Le patient est-il actuellement dans l'hôpital ?", "Choix de recherche", dialogButton);
         // Oui le patient est toujours dans l'hopital : recherche dans la table hospitalisation
         if(dialogResult == 0) {
           Rechercher_malade.getFenetre(f); 

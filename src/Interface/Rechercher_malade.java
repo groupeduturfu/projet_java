@@ -243,7 +243,7 @@ public class Rechercher_malade {
         {
           public void actionPerformed(ActionEvent e)
           { 
-            //fenetre_accueil();
+            Accueil.getFenetre(f);
           }
         });
         

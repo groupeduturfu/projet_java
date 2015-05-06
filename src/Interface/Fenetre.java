@@ -63,7 +63,7 @@ public class Fenetre extends JFrame{
         this.setLayout(new FlowLayout()); // La fenêtre est répartie en grille : 8 lignes, 2 colonnes
         
         Accueil.getFenetre(this);
-        
+        //Rechercher_infirmier.getFenetre(this);
     }
     
    /* 
