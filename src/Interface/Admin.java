@@ -22,9 +22,9 @@ import static javax.swing.SwingConstants.CENTER;
  */
 public class Admin {
     
-    private Admin fenetre = null ;
+    private static Admin fenetre = null ;
     
-     private Admin (JFrame f) {
+    private Admin (JFrame f) {
          
         JButton employe, ajouter, service, chambre, retour;
         JPanel p1, p2, p3, p4, p5, p6;
@@ -137,4 +137,10 @@ public class Admin {
         f.setVisible(true);
     }
     
+    public static Admin getFenetre_admin(JFrame f) {
+            
+    if (fenetre == null ) fenetre = new Admin(f);
+
+        return fenetre;
+    }
 }

@@ -22,14 +22,21 @@ import javax.swing.JTextField;
  */
 public class Reponse_malade {
     
-    private Reponse_malade fenetre = null;
+    private static Reponse_malade fenetre = null;
     
     private Reponse_malade (JFrame f) {
       
+        // A coder
         
         
         
-        
+    }
+    
+    public static Reponse_malade getFenetre(JFrame f) {
+            
+    if (fenetre == null ) fenetre = new Reponse_malade(f);
+
+        return fenetre;
     }
     
 }

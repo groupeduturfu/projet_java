@@ -29,7 +29,7 @@ import projet.Connexion;
  */
 public class Ajouter_employe {
     
-    private Ajouter_employe fenetre = null;
+    private static Ajouter_employe fenetre = null;
     
     private Ajouter_employe(JFrame f){
         
@@ -560,6 +560,11 @@ public class Ajouter_employe {
         f.setVisible(true); 
     }
         
-   
+   public static Ajouter_employe getFenetre(JFrame f) {
+            
+    if (fenetre == null ) fenetre = new Ajouter_employe(f);
+
+    return fenetre;
+    }
     
 }

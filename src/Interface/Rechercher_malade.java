@@ -25,7 +25,7 @@ import projet.Connexion;
  */
 public class Rechercher_malade {
     
-    private Rechercher_malade fenetre = null;
+    private static Rechercher_malade fenetre = null;
     
     private Rechercher_malade (JFrame f) {
 
@@ -263,5 +263,12 @@ public class Rechercher_malade {
         
         f.setVisible(true); 
         
+    }
+    
+    public static Rechercher_malade getFenetre(JFrame f) {
+            
+    if (fenetre == null ) fenetre = new Rechercher_malade(f);
+
+        return fenetre;
     }
 }

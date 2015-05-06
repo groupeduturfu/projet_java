@@ -285,6 +285,11 @@ public class Rechercher_archives {
         
     }
     
+    public static Rechercher_archives getFenetre(JFrame f) {
+            
+    if (fenetre == null ) fenetre = new Rechercher_archives(f);
 
+        return fenetre;
+    }
     
 }

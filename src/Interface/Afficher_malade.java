@@ -17,9 +17,9 @@ import javax.swing.JTextField;
  */
 public class Afficher_malade {
     
-    private Afficher_malade fenetre = null;
+    private static Afficher_malade fenetre = null;
     
-     private Afficher_malade (JFrame f) {
+    private Afficher_malade (JFrame f) {
          
         JTextField jtf_no_id, jtf_nom, jtf_prenom, jtf_no_chambre, jtf_no_lit, jtf_datea, jtf_adresse, jtf_tel, jtf_mutuelle;
         JLabel jl_no_id, jl_nom, jl_prenom, jl_no_chambre, jl_no_lit, jl_datea, jl_adresse, jl_tel, jl_mutuelle, texte;
@@ -195,6 +195,13 @@ public class Afficher_malade {
         f.setVisible(true);
         */
     }
+     
+    public static Afficher_malade getFenetre(JFrame f) {
+            
+    if (fenetre == null ) fenetre = new Afficher_malade(f);
+
+        return fenetre;
+    } 
 }
     
 
