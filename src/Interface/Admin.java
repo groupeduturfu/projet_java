@@ -137,7 +137,7 @@ public class Admin {
         f.setVisible(true);
     }
     
-    public static Admin getFenetre_admin(JFrame f) {
+    public static Admin getFenetre(JFrame f) {
             
     if (fenetre == null ) fenetre = new Admin(f);
 

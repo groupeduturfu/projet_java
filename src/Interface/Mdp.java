@@ -32,11 +32,7 @@ public class Mdp {
     
     private Mdp fenetre = null;
     
-    private Mdp(JFrame f){
-        
-    }
-    
-    public boolean mdp_fonctionnement()
+    public static boolean mdp_fonctionnement()
     {
        JPanel p = new JPanel();
         JLabel l = new JLabel("Entrer le mot de passe pour acceder à la partie admin :");

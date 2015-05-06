@@ -102,7 +102,7 @@ public class Accueil {
         {
           public void actionPerformed(ActionEvent e)
           { 
-                //Choix_malade.getFenetre(f);
+                Choix_malade.getFenetre(f);
           }
         });
         
@@ -111,9 +111,9 @@ public class Accueil {
         {
           public void actionPerformed(ActionEvent e)
           { 
-             if(/*Mdp.mdp_fonctionnement()*/ true) 
+             if(Mdp.mdp_fonctionnement()) 
              {
-                  //  Admin.getFenetre(f); // On accede a la partie admin, le mdp est bon
+                    Admin.getFenetre(f); // On accede a la partie admin, le mdp est bon
              }
              else JOptionPane.showMessageDialog(null, "Le mot de passe est faux, l'accès est refusé", "Erreur", JOptionPane.ERROR_MESSAGE); // Le mdp est faux, on accede pas à la partie admin
           }
