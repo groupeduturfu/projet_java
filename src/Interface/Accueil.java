@@ -93,7 +93,7 @@ public class Accueil {
         {
           public void actionPerformed(ActionEvent e)
           { 
-            //    fenetre_ajouter_patient();
+                Ajouter_malade.getFenetre(f);
           }
         });
         
@@ -102,8 +102,7 @@ public class Accueil {
         {
           public void actionPerformed(ActionEvent e)
           { 
-            
-            new Choix_malade(f); 
+                //Choix_malade.getFenetre(f);
           }
         });
         
@@ -112,8 +111,11 @@ public class Accueil {
         {
           public void actionPerformed(ActionEvent e)
           { 
-       //     if(mdp()) fenetre_admin(); // On accede a la partie admin, le mdp est bon
-        //    else JOptionPane.showMessageDialog(null, "Le mot de passe est faux, l'accès est refusé", "Erreur", JOptionPane.ERROR_MESSAGE); // Le mdp est faux, on accede pas à la partie admin
+             if(/*Mdp.mdp_fonctionnement()*/ true) 
+             {
+                  //  Admin.getFenetre(f); // On accede a la partie admin, le mdp est bon
+             }
+             else JOptionPane.showMessageDialog(null, "Le mot de passe est faux, l'accès est refusé", "Erreur", JOptionPane.ERROR_MESSAGE); // Le mdp est faux, on accede pas à la partie admin
           }
         });
         
@@ -122,7 +124,7 @@ public class Accueil {
         {
           public void actionPerformed(ActionEvent e)
           { 
-            System.out.println("Liste lits libres...");
+                System.out.println("Liste lits libres...");
           }
         });
         
@@ -149,7 +151,7 @@ public class Accueil {
         f.setVisible(true);
     }
     
-    public static Accueil getFenetre_accueil(JFrame f) {
+    public static Accueil getFenetre(JFrame f) {
             
     if (fenetre == null ) fenetre = new Accueil(f);
 

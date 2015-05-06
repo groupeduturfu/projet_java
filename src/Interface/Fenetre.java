@@ -62,7 +62,7 @@ public class Fenetre extends JFrame{
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Quand on clique sur la croix, ça quitte proprement
         this.setLayout(new FlowLayout()); // La fenêtre est répartie en grille : 8 lignes, 2 colonnes
         
-         Accueil.getFenetre_accueil(this);
+         Accueil.getFenetre(this);
         
     }
     

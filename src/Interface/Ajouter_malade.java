@@ -303,4 +303,13 @@ public class Ajouter_malade {
         f.setVisible(true); 
     }
     
+     
+    public static Ajouter_malade getFenetre(JFrame f) {
+            
+    if (fenetre == null ) fenetre = new Ajouter_malade(f);
+
+        return fenetre;
+    }
+     
+     
 }
