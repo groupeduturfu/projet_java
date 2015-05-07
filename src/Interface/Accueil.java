@@ -26,7 +26,8 @@ import static javax.swing.SwingConstants.CENTER;
  */
 public class Accueil {
     
-    private static Accueil fenetre = null;
+    private static Accueil fenetre_accueil = null;
+    private static JPanel p1, p2, p3, p5, p6, p7 ,pAdmin;
     
     private Accueil(JFrame f)
     {
@@ -39,7 +40,6 @@ public class Accueil {
         emp_presents = new JButton("Employés présents");
         lit_libre = new JButton("Rechercher un lit libre");
         stats = new JButton("Données statistiques");
-        JPanel p1, p2, p3, p5, p6, p7 ,pAdmin;
         JLabel texte = new JLabel("Veuillez choisir ce que vous voulez faire");
         
         // Mise en page 
@@ -102,7 +102,7 @@ public class Accueil {
         {
           public void actionPerformed(ActionEvent e)
           { 
-                Choix_malade.getFenetre(f);
+                new Choix_malade(f); // Pour celui ci, étant donné qu'on pose une question il faut recréer l'objet à chaque fois
           }
         });
         
@@ -111,7 +111,7 @@ public class Accueil {
         {
           public void actionPerformed(ActionEvent e)
           { 
-             if(Mdp.mdp_fonctionnement()) 
+             if(Mdp.mdp_fonctionnement(f)) 
              {
                     Admin.getFenetre(f); // On accede a la partie admin, le mdp est bon
              }
@@ -138,7 +138,16 @@ public class Accueil {
         });
         
         
-        // On affiche le reste
+        
+        
+        f.setVisible(true);
+    }
+    
+    public static Accueil getFenetre(JFrame f) {
+            
+    if (fenetre_accueil == null ) fenetre_accueil = new Accueil(f);
+        
+    // On affiche le reste
         f.setContentPane(new ImagePanel(new ImageIcon("fond66.jpg").getImage())); // Met l'image en background
         f.add(pAdmin, BorderLayout.LINE_END); // POUR ALIGNER À DROITE
         f.add(p1);
@@ -148,15 +157,8 @@ public class Accueil {
         f.add(p6);
         f.add(p7);
         f.setSize(600,600);
-        
         f.setVisible(true);
-    }
-    
-    public static Accueil getFenetre(JFrame f) {
-            
-    if (fenetre == null ) fenetre = new Accueil(f);
-
-        return fenetre;
+        return fenetre_accueil;
     }
 }
 

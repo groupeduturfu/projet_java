@@ -13,8 +13,6 @@ import javax.swing.JOptionPane;
  * @author meyronneaudrey
  */
 public class Choix_malade {
-    
-    private static Choix_malade fenetre = null;
 
     public Choix_malade(JFrame f) {
         
@@ -30,13 +28,5 @@ public class Choix_malade {
         }
         
     }
-    
-    public static Choix_malade getFenetre(JFrame f) {
-            
-    if (fenetre == null ) fenetre = new Choix_malade(f);
-
-        return fenetre;
-    }
-    
-    
+   
 }

@@ -24,12 +24,13 @@ import javax.swing.JTextField;
 public class Rechercher_docteur {
     
     private static Rechercher_docteur fenetre = null;
+    private static JPanel panel, p0, p1, p2, p3, p4, p5, p6, p7, p8, p9;
+        
     
     private Rechercher_docteur(JFrame f)
     {
         JLabel jl_spe, jl_nom, jl_prenom, jl_date, jl_adresse, jl_no_id, jl_tel, jl_salaire;
         JTextField jtf_spe, jtf_no_id, jtf_nom, jtf_prenom, jtf_date, jtf_adresse, jtf_tel, jtf_salaire;
-        JPanel panel, p0, p1, p2, p3, p4, p5, p6, p7, p8, p9;
         JLabel texte = new JLabel("Veuillez remplir les informations connues sur le patient");
         JButton valider = new JButton("Valider");
         JButton retour = new JButton("Retour");
@@ -148,7 +149,16 @@ public class Rechercher_docteur {
           }
         });
                 
-        // On ajoute tous les JPannel à la fenêtre
+       
+                
+          
+    }
+    
+    public static Rechercher_docteur getFenetre(JFrame f) {
+            
+    if (fenetre == null ) fenetre = new Rechercher_docteur(f);
+
+     // On ajoute tous les JPannel à la fenêtre
         f.setContentPane(new ImagePanel(new ImageIcon("fond66.jpg").getImage())); // Met l'image en background
         f.add(p0);
         f.add(p1);
@@ -164,14 +174,7 @@ public class Rechercher_docteur {
         f.setSize(600,600);
         
         f.setVisible(true); 
-                
-          
-    }
-    
-    public static Rechercher_docteur getFenetre(JFrame f) {
-            
-    if (fenetre == null ) fenetre = new Rechercher_docteur(f);
-
+        
         return fenetre;
     }
 }

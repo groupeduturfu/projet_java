@@ -22,12 +22,13 @@ import javax.swing.JTextField;
 public class Rechercher_infirmier {
     
     private static Rechercher_infirmier fenetre = null;
+    private static JPanel panel, p0, p1, p2, p3, p4, p5, p6, p7, p8, p9, p8b;
+        
     
     public Rechercher_infirmier(JFrame f)
     {
         JLabel jl_rotation, jl_nom, jl_prenom, jl_date, jl_adresse, jl_no_id, jl_tel, jl_salaire, jl_nom_service;
         JTextField jtf_rotation, jtf_no_id, jtf_nom, jtf_prenom, jtf_date, jtf_adresse, jtf_tel, jtf_salaire, jtf_nom_service;
-        JPanel panel, p0, p1, p2, p3, p4, p5, p6, p7, p8, p9, p8b;
         JLabel texte = new JLabel("Veuillez remplir les informations connues sur le patient");
         JButton valider = new JButton("Valider");
         JButton retour = new JButton("Retour");
@@ -154,8 +155,14 @@ public class Rechercher_infirmier {
               Admin.getFenetre(f);
           }
         });
-                
-        // On ajoute tous les JPannel à la fenêtre
+             
+    }
+    
+    public static Rechercher_infirmier getFenetre(JFrame f) {
+            
+    if (fenetre == null ) fenetre = new Rechercher_infirmier(f);
+
+    // On ajoute tous les JPannel à la fenêtre
         f.setContentPane(new ImagePanel(new ImageIcon("fond66.jpg").getImage())); // Met l'image en background
         f.add(p0);
         f.add(p1);
@@ -171,14 +178,7 @@ public class Rechercher_infirmier {
         f.setSize(600,600);
         
         f.setVisible(true); 
-                
-          
-    }
-    
-    public static Rechercher_infirmier getFenetre(JFrame f) {
-            
-    if (fenetre == null ) fenetre = new Rechercher_infirmier(f);
-
+        
         return fenetre;
     }
 }

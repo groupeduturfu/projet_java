@@ -26,13 +26,13 @@ import projet.Connexion;
 public class Ajouter_malade {
     
     private static Ajouter_malade fenetre = null;
+    private static JPanel p1, p2, p3, p4, p5, p6, p8, p9, p10, p11, p12, p13, p14;
     
      private  Ajouter_malade(JFrame f) {
         JTextField jtf_nom, jtf_prenom, jtf_no_chambre, jtf_no_lit, jtf_adresse, jtf_tel, jtf_mutuelle, jtf_docteur, jtf_description, jtf_date_naissance;
         JLabel jl_no_id, jl_nom, jl_prenom, jl_no_chambre, jl_no_lit, jl_adresse, jl_tel, jl_mutuelle, jl_docteur, jl_description, jl_date_naissance, texte;
         JButton valider = new JButton("Valider");
         JButton retour = new JButton("Retour");
-        JPanel p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13, p14;
         
         
         // On initialise les JLabel
@@ -263,6 +263,7 @@ public class Ajouter_malade {
                     Connexion.getInstance().executeUpdate(requete_hopsitalisation);
                     // on affiche à l'utilisateur que le nouveau patient a bien été inscrit
                     JOptionPane.showMessageDialog(null, "Le patient a été enregistré.", "Info", JOptionPane.ERROR_MESSAGE);
+                    
                 }
                 catch (SQLException ex)
                 {
@@ -270,7 +271,7 @@ public class Ajouter_malade {
                     ex.printStackTrace();
                 }
                 
-                
+                Accueil.getFenetre(f);
             }
            }
         });
@@ -283,7 +284,15 @@ public class Ajouter_malade {
           }
         });
         
-        // On ajoute tous les JPannel à la fenêtre
+        
+    }
+    
+     
+    public static Ajouter_malade getFenetre(JFrame f) {
+            
+    if (fenetre == null ) fenetre = new Ajouter_malade(f);
+        
+    // On ajoute tous les JPannel à la fenêtre
         f.setContentPane(new ImagePanel(new ImageIcon("fond66.jpg").getImage())); // Met l'image en background qui recouvre la fenetre d'avant
         f.add(p1);
         f.add(p3);
@@ -301,13 +310,7 @@ public class Ajouter_malade {
         f.setSize(600,600);
         
         f.setVisible(true); 
-    }
-    
-     
-    public static Ajouter_malade getFenetre(JFrame f) {
-            
-    if (fenetre == null ) fenetre = new Ajouter_malade(f);
-
+        
         return fenetre;
     }
      

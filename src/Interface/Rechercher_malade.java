@@ -26,14 +26,14 @@ import projet.Connexion;
 public class Rechercher_malade {
     
     private static Rechercher_malade fenetre = null;
-    
+    private static JPanel p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11;
+        
     private Rechercher_malade (JFrame f) {
 
         JTextField jtf_no_id, jtf_nom, jtf_prenom, jtf_no_chambre, jtf_no_lit, jtf_datea, jtf_adresse, jtf_tel, jtf_mutuelle;
         JLabel jl_no_id, jl_nom, jl_prenom, jl_no_chambre, jl_no_lit, jl_datea, jl_adresse, jl_tel, jl_mutuelle, texte;
         JButton valider = new JButton("Valider");
         JButton retour = new JButton("Retour");
-        JPanel p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11;
         
         
         // On initialise les JLabel
@@ -247,8 +247,17 @@ public class Rechercher_malade {
           }
         });
         
-        // On ajoute tous les JPannel à la fenêtre
+         
+        
+    }
+    
+    public static Rechercher_malade getFenetre(JFrame f) {
+            
+    if (fenetre == null ) fenetre = new Rechercher_malade(f);
+
+    // On ajoute tous les JPannel à la fenêtre
         f.setContentPane(new ImagePanel(new ImageIcon("fond66.jpg").getImage())); // Met l'image en background
+        f.add(p1);
         f.add(p2);
         f.add(p3);
         f.add(p4);
@@ -262,14 +271,8 @@ public class Rechercher_malade {
         
         f.setSize(600,600);
         
-        f.setVisible(true); 
+        f.setVisible(true);
         
-    }
-    
-    public static Rechercher_malade getFenetre(JFrame f) {
-            
-    if (fenetre == null ) fenetre = new Rechercher_malade(f);
-
         return fenetre;
     }
 }

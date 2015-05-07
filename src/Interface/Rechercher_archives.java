@@ -26,6 +26,7 @@ import projet.Connexion;
 public class Rechercher_archives {
     
     private static Rechercher_archives fenetre = null;
+    private static JPanel p1, p2, p3, p4, p5, p6, p7, p7b, p8, p9, p10, p11;
     
     private Rechercher_archives (JFrame f)
     {
@@ -35,8 +36,6 @@ public class Rechercher_archives {
         JLabel jl_no_id, jl_nom, jl_prenom, jl_nom_service, jl_nom_docteur, jl_datea, jl_dated, jl_adresse, jl_tel, jl_mutuelle, texte;
         JButton valider = new JButton("Valider");
         JButton retour = new JButton("Retour");
-        JPanel p1, p2, p3, p4, p5, p6, p7, p7b, p8, p9, p10, p11;
-        
         
         // On initialise les JLabel
         texte = new JLabel("Veuillez remplir les informations connues sur le patient");
@@ -264,7 +263,15 @@ public class Rechercher_archives {
           }
         });
         
-        // On ajoute tous les JPannel à la fenêtre
+        
+        
+    }
+    
+    public static Rechercher_archives getFenetre(JFrame f) {
+            
+    if (fenetre == null ) fenetre = new Rechercher_archives(f);
+
+    // On ajoute tous les JPannel à la fenêtre
         f.setContentPane(new ImagePanel(new ImageIcon("fond66.jpg").getImage())); // Met l'image en background
         f.add(p1);
         f.add(p2);
@@ -283,12 +290,6 @@ public class Rechercher_archives {
         
         f.setVisible(true); 
         
-    }
-    
-    public static Rechercher_archives getFenetre(JFrame f) {
-            
-    if (fenetre == null ) fenetre = new Rechercher_archives(f);
-
         return fenetre;
     }
     

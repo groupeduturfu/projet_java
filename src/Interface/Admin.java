@@ -23,11 +23,11 @@ import static javax.swing.SwingConstants.CENTER;
 public class Admin {
     
     private static Admin fenetre = null ;
+    private static JPanel p1, p2, p3, p4, p5, p6;
     
     private Admin (JFrame f) {
          
         JButton employe, ajouter, service, chambre, retour;
-        JPanel p1, p2, p3, p4, p5, p6;
         JLabel texte = new JLabel("Veuillez choisir ce que vous voulez faire");
         
         // Déclaration variables
@@ -93,7 +93,7 @@ public class Admin {
           public void actionPerformed(ActionEvent e)
           { 
             // Ici on rechercher employé
-              Choix_employe.getFenetre(f);
+              new Choix_employe(f); // Ici on crée a chaque fois l'objet car c'est un choix qui peut être différent a chaque fois
                 
           }
         });
@@ -103,7 +103,7 @@ public class Admin {
         {
           public void actionPerformed(ActionEvent e)
           { 
-            
+            Rechercher_chambre.getFenetre(f);
           }
         });
         
@@ -125,6 +125,13 @@ public class Admin {
           }
         });
         
+        
+    }
+    
+    public static Admin getFenetre(JFrame f) {
+            
+    if (fenetre == null ) fenetre = new Admin(f);
+
         // On affiche le reste
         f.setContentPane(new ImagePanel(new ImageIcon("fond66.jpg").getImage())); // Met l'image en background
         f.add(p1);
@@ -136,12 +143,7 @@ public class Admin {
         f.setSize(600,600);
         
         f.setVisible(true);
-    }
     
-    public static Admin getFenetre(JFrame f) {
-            
-    if (fenetre == null ) fenetre = new Admin(f);
-
         return fenetre;
     }
 }

@@ -30,9 +30,7 @@ import projet.Connexion;
  */
 public class Mdp {
     
-    private Mdp fenetre = null;
-    
-    public static boolean mdp_fonctionnement()
+    public static boolean mdp_fonctionnement(JFrame f)
     {
        JPanel p = new JPanel();
         JLabel l = new JLabel("Entrer le mot de passe pour acceder à la partie admin :");
@@ -41,14 +39,16 @@ public class Mdp {
                  
         p.add(l);
         p.add(mdp);
-        String[] options = new String[]{"OK", "Cancel"};
-        int option = JOptionPane.showOptionDialog(null, p, "The title",
+        String[] options = new String[]{"OK", "Retour"};
+        int option = JOptionPane.showOptionDialog(null, p, "Mot de passe",
                                  JOptionPane.NO_OPTION, JOptionPane.PLAIN_MESSAGE,
                                  null, options, options[1]);
-        if(option == 0) // pressing OK button
+        if(option == 0) // Boutton OK
         {
             mdp_tape  = mdp.getText();
         }
+        else Accueil.getFenetre(f); // Retour
+        
         if(mdp_tape.equals("hopital")) return true;
         else return false; 
     }

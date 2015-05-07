@@ -30,6 +30,9 @@ import projet.Connexion;
 public class Ajouter_employe {
     
     private static Ajouter_employe fenetre = null;
+    private static JPanel p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13, p14, p15, p16, p17, p18, p19, p20;
+        
+       
     
     private Ajouter_employe(JFrame f){
         
@@ -37,9 +40,6 @@ public class Ajouter_employe {
         JLabel texte, jl_nom, jl_prenom, jl_adresse, jl_tel, jl_salaire, jl_fonction, jl_specialite, jl_rotation, jl_code_service, jl_date_naissance, jl_services;
         JButton valider = new JButton("Valider");
         JButton retour = new JButton("Retour");
-        JPanel p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13, p14, p15, p16, p17, p18, p19, p20;
-        
-       
         
         // checkboxes des services si docteur
         JCheckBox jch_ORL = new JCheckBox("ORL");
@@ -429,7 +429,7 @@ public class Ajouter_employe {
         {
           public void actionPerformed(ActionEvent e)
           { 
-//            fenetre_accueil();
+            Admin.getFenetre(f);
           }
         });
         
@@ -529,7 +529,14 @@ public class Ajouter_employe {
         });
 
         
-        // On ajoute tous les JPannel à la fenêtre
+        
+    }
+        
+   public static Ajouter_employe getFenetre(JFrame f) {
+            
+    if (fenetre == null ) fenetre = new Ajouter_employe(f);
+    
+    // On ajoute tous les JPannel à la fenêtre
         f.setContentPane(new ImagePanel(new ImageIcon("fond66.jpg").getImage())); // Met l'image en background
         f.add(p1);
         f.add(p3);
@@ -558,11 +565,6 @@ public class Ajouter_employe {
         f.setSize(600,600);
         
         f.setVisible(true); 
-    }
-        
-   public static Ajouter_employe getFenetre(JFrame f) {
-            
-    if (fenetre == null ) fenetre = new Ajouter_employe(f);
 
     return fenetre;
     }
