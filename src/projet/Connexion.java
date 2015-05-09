@@ -41,7 +41,7 @@ public class Connexion
      * ArrayList public pour les requêtes de sélection
      */
     public ArrayList<String> Liste_requetes = new ArrayList<String>();
-    
+
     private Connexion(String adresse, String password) throws SQLException, ClassNotFoundException  // "jdbc:mysql://http://localhost:8888"
     {
         conn = DriverManager.getConnection(adresse, "root", password);
@@ -87,18 +87,11 @@ public class Connexion
             System.out.println("Connexion reussie");
 
         //création d'une connexion JDBC à la base
-        conn = DriverManager.getConnection("jdbc:mysql://localhost:3305/chebassi","chebassi-rw", "cvKTbS3k");
-        
 
+        conn = DriverManager.getConnection("jdbc:mysql://localhost:3305/chebassi","chebassi-rw", "cvKTbS3k");
 
         // création d'un ordre SQL (statement)
         stmt = conn.createStatement();
-
-                
-        // ESSAI : initialisation de la liste des requetes de selection 
-        //Remplir_Requetes_Selection();
-        //Afficher_Requetes_Selection();
-        // 
         }
     }
     
@@ -451,7 +444,7 @@ public class Connexion
     public String RecupererId(String requete) throws SQLException 
     {
         
-        String id="101";
+        String id="NotExist";
         
         // récupération de l'ordre de la requete
         rset = stmt.executeQuery(requete);
@@ -466,9 +459,6 @@ public class Connexion
                 
         return id;
     }
-
-    
-    
     
     /**
      * Methode qui retourne l'ArrayList réponse à la requête en parametre 
@@ -541,8 +531,6 @@ public class Connexion
         // Retourner l'ArrayList
         return liste;
     }
-    
-    
         
     public ArrayList nb_malade_services() throws SQLException 
     {
@@ -576,6 +564,14 @@ public class Connexion
         return i;
     }
     
-    
+    public String CreerRequete_Check_lit_chambre(int chambre, int lit)
+    {
+        String requete = "initialisee";
+        requete = "SELECT * FROM hospitalisation WHERE no_chambre=" + chambre + " AND no_lit=" + lit + ";";
+        System.out.println(requete);
+        
+        return requete;
+    }
+
     
 }

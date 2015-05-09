@@ -56,6 +56,10 @@ public class Fenetre extends JFrame {
         // tentative de connexion si les 4 attributs sont remplis
         //Connexion maconnexion = Connexion.getInstance(); // en ligne
         //Connexion maconnexion = Connexion.getInstance("jdbc:mysql://localhost/chebassi", ""); // hors ligne
+
+        // Connexion maconnexion = Connexion.getInstance("jdbc:mysql://localhost/chebassi", "root");
+        
+
         this.setTitle("Gestion Hopital");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Quand on clique sur la croix, ça quitte proprement
         this.setLayout(new FlowLayout()); // La fenêtre est répartie en grille : 8 lignes, 2 colonnes
