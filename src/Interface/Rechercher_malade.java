@@ -5,6 +5,7 @@
  */
 package Interface;
 
+
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -27,15 +28,17 @@ public class Rechercher_malade {
     
     private static Rechercher_malade fenetre = null;
     private static JPanel p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11;
+    private Connexion maconnexion;
         
     private Rechercher_malade (JFrame f) {
 
-        JTextField jtf_no_id, jtf_nom, jtf_prenom, jtf_no_chambre, jtf_no_lit, jtf_datea, jtf_adresse, jtf_tel, jtf_mutuelle;
+JTextField jtf_no_id, jtf_nom, jtf_prenom, jtf_no_chambre, jtf_no_lit, jtf_datea, jtf_adresse, jtf_tel, jtf_mutuelle;
         JLabel jl_no_id, jl_nom, jl_prenom, jl_no_chambre, jl_no_lit, jl_datea, jl_adresse, jl_tel, jl_mutuelle, texte;
         JButton valider = new JButton("Valider");
         JButton retour = new JButton("Retour");
-        
-        
+        JPanel p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11;
+        maconnexion=Connexion.getInstance();
+                    
         // On initialise les JLabel
         texte = new JLabel("Veuillez remplir les informations connues sur le patient");
         jl_no_id = new JLabel("N° identification");
@@ -65,7 +68,7 @@ public class Rechercher_malade {
         jtf_no_chambre.setColumns(10);
         jtf_no_lit.setColumns(10);
         jtf_datea.setColumns(10);
-        jtf_adresse.setColumns(10);
+        jtf_adresse.setColumns(40);
         jtf_tel.setColumns(10);
         jtf_mutuelle.setColumns(10);
         
@@ -156,6 +159,7 @@ public class Rechercher_malade {
             String tel_recu;
             String mutuelle_recu;
             String date_arrivee_recu;
+            String requete;
 
             
             // si l'utilisateur n'a pas rempli certains champs, on initialise ces champs avec les valeurs 0 et null
@@ -197,17 +201,16 @@ public class Rechercher_malade {
             else mutuelle_recu= jtf_mutuelle.getText();
 
             // chaine de caractère dans laquelle on écrit la requete correspondant aux infos du formulaire rempli 
-            String requete_malade;
+           
 
             ArrayList<ArrayList<String>> liste =null;
-
             // écriture de la requete exacte en fonction de la maniere dont a été rempli le formulaire
-            requete_malade = Connexion.getInstance().CreerRequete_Recherche_Hospitalisation(id_recu, nom_recu, prenom_recu, no_chambre_recu, no_lit_recu, adresse_recu, tel_recu, mutuelle_recu, date_arrivee_recu);
+            requete = maconnexion.CreerRequete_Recherche_Hospitalisation(id_recu, nom_recu, prenom_recu, no_chambre_recu, no_lit_recu, adresse_recu, tel_recu, mutuelle_recu, date_arrivee_recu);
+
             try 
             {
                 // on envoit la requete à la base de données via RemplirChampsRequete qui est dans la classe Connexion
-                
-                liste = Connexion.getInstance().RemplirChampsRequete_Malade(requete_malade);
+                liste = maconnexion.RemplirChampsRequete_Malade(requete);
                 int taille=liste.size();
                 // On affiche le résultat de la requete
                 for (int i = 0; i < liste.size(); i++)
@@ -221,12 +224,9 @@ public class Rechercher_malade {
                 // si la recherche n'aboutit à aucun malade, on affiche un message d'erreur
                 if (taille ==0)
                 {
-                    JOptionPane.showMessageDialog(null, "Aucun patient ne correspond à votre recherche. Regardez éventuellement dans les archives.", "Erreur", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "Aucun patient ne correspond à votre recherche. Regardez dans les archives.", "Erreur", JOptionPane.ERROR_MESSAGE);
+                    Rechercher_archives.getFenetre(f);
                 }
-                //else fenetre_reponse_patient(liste);
-                
-
-                    
                 
             }
             catch (SQLException ex)
@@ -235,11 +235,11 @@ public class Rechercher_malade {
                 ex.printStackTrace();
             }
             
+           Afficher_malade.getFenetre(f, liste);
                        
           }
         });
-        
-        retour.addActionListener(new ActionListener()
+                retour.addActionListener(new ActionListener()
         {
           public void actionPerformed(ActionEvent e)
           { 
@@ -247,17 +247,9 @@ public class Rechercher_malade {
           }
         });
         
-         
         
-    }
-    
-    public static Rechercher_malade getFenetre(JFrame f) {
-            
-    if (fenetre == null ) fenetre = new Rechercher_malade(f);
-
-    // On ajoute tous les JPannel à la fenêtre
+        // On ajoute tous les JPannel à la fenêtre
         f.setContentPane(new ImagePanel(new ImageIcon("fond66.jpg").getImage())); // Met l'image en background
-        f.add(p1);
         f.add(p2);
         f.add(p3);
         f.add(p4);
@@ -271,7 +263,20 @@ public class Rechercher_malade {
         
         f.setSize(600,600);
         
-        f.setVisible(true);
+        f.setVisible(true); 
+        
+    
+
+         
+        
+    }
+    
+    public static Rechercher_malade getFenetre(JFrame f) {
+            
+    if (fenetre == null ) fenetre = new Rechercher_malade(f);
+
+    // On ajoute tous les JPannel à la fenêtre
+
         
         return fenetre;
     }
