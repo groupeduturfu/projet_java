@@ -177,11 +177,12 @@ public class Ajouter_malade {
                 String requete_hopsitalisation;
                 String requete_id_recup;
                 String requete_docteur;
-                String requete_verif_docteur;
+                String requete_verif_lit_chambre;
 
                 // vont récupérer le numéro du malade et le numéro du docteur
                 String id_string_malade_recup;
                 String id_string_docteur_recup;
+                String check_chambre;
                 int id_malade_recup = 100;
                 int id_docteur_recup = 100;
 
@@ -218,46 +219,65 @@ public class Ajouter_malade {
                                     JOptionPane.showMessageDialog(null, "Le docteur recherché n'existe pas.", "Erreur", JOptionPane.ERROR_MESSAGE);
                                 } // sinon on vérifie la date de naissance 
                                 else {
-                                    // si la date envoyee est au bon format, on enregistre le patient
+                                    // RecupererId renvoie une chaine de caractere, on le transforme en int
+                                    id_docteur_recup = Integer.parseInt(id_string_docteur_recup.trim());
+
+                                    // si la date envoyee est au bon format
                                     if (date_naissance_recu.matches("([0-9]{4})-([0-9]{2})-([0-9]{2})")) {
 
-                                        // RecupererId renvoie une chaine de caractere, on le transforme en int
-                                        id_docteur_recup = Integer.parseInt(id_string_docteur_recup.trim());
-
-                                        // écriture de la requete : écrire infos dans la table malade
-                                        requete_malade = Connexion.getInstance().CreerRequete_malade(nom_recu, prenom_recu, adresse_recu, tel_recu, mutuelle_recu, date_naissance_recu);
+                                        // on regarde si le lit situé dans cette chambre est déjà pris
+                                        requete_verif_lit_chambre = Connexion.getInstance().CreerRequete_Check_lit_chambre(no_chambre_recu, no_lit_recu);
                                         try {
-                                            // on enregistre les infos dans la table malade
-                                            Connexion.getInstance().executeUpdate(requete_malade);
+                                            check_chambre = Connexion.getInstance().RecupererId(requete_verif_lit_chambre);
+                                            // si la requete renvoie not exist alors le lit est libre, on enregistre le patient
+                                            if (check_chambre == "NotExist") {
 
-                                            // écriture de la requete : récupération du numéro malade attribué au patient
-                                            requete_id_recup = Connexion.getInstance().CreerRequete_recup_id(1, nom_recu, prenom_recu, tel_recu);
-                                            try {
-                                                // on recupere le numero du malade qui vient d'etre inscrit
-                                                id_string_malade_recup = Connexion.getInstance().RecupererId(requete_id_recup);
-
-                                                // RecupererId renvoie une chaine de caractere, on le transforme en int
-                                                id_malade_recup = Integer.parseInt(id_string_malade_recup.trim());
-                                                System.out.println("id malade recupéré : " + id_malade_recup);
-
-                                                // on crée un nouveau tuple dans la table hospitalisation avec comme no_malade celui créé à l'instant
-                                                requete_hopsitalisation = Connexion.getInstance().CreerRequete_hospitalisation(id_malade_recup, no_chambre_recu, no_lit_recu, id_docteur_recup);
+                                                // écriture de la requete : écrire infos dans la table malade
+                                                requete_malade = Connexion.getInstance().CreerRequete_malade(nom_recu, prenom_recu, adresse_recu, tel_recu, mutuelle_recu, date_naissance_recu);
                                                 try {
-                                                    // on enregistre les infos dans la table hospitalisation
-                                                    Connexion.getInstance().executeUpdate(requete_hopsitalisation);
-                                                    // on affiche à l'utilisateur que le nouveau patient a bien été inscrit
-                                                    JOptionPane.showMessageDialog(null, "Le patient a été enregistré.", "Info", JOptionPane.ERROR_MESSAGE);
-                                                    Accueil.getFenetre(f);
+                                                    // on enregistre les infos dans la table malade
+                                                    Connexion.getInstance().executeUpdate(requete_malade);
+
+                                                    // écriture de la requete : récupération du numéro malade attribué au patient
+                                                    requete_id_recup = Connexion.getInstance().CreerRequete_recup_id(1, nom_recu, prenom_recu, tel_recu);
+                                                    try {
+                                                        // on recupere le numero du malade qui vient d'etre inscrit
+                                                        id_string_malade_recup = Connexion.getInstance().RecupererId(requete_id_recup);
+
+                                                        // RecupererId renvoie une chaine de caractere, on le transforme en int
+                                                        id_malade_recup = Integer.parseInt(id_string_malade_recup.trim());
+                                                        System.out.println("id malade recupéré : " + id_malade_recup);
+
+                                                        // on crée un nouveau tuple dans la table hospitalisation avec comme no_malade celui créé à l'instant
+                                                        requete_hopsitalisation = Connexion.getInstance().CreerRequete_hospitalisation(id_malade_recup, no_chambre_recu, no_lit_recu, id_docteur_recup);
+                                                        try {
+                                                            // on enregistre les infos dans la table hospitalisation
+                                                            Connexion.getInstance().executeUpdate(requete_hopsitalisation);
+                                                            // on affiche à l'utilisateur que le nouveau patient a bien été inscrit
+                                                            JOptionPane.showMessageDialog(null, "Le patient a été enregistré.", "Info", JOptionPane.ERROR_MESSAGE);
+                                                            Accueil.getFenetre(f);
+
+                                                        } catch (SQLException ex) {
+                                                            System.out.println("Echec SQL");
+                                                            ex.printStackTrace();
+                                                        }
+
+                                                    } catch (SQLException ex) {
+                                                        System.out.println("Echec SQL");
+                                                        ex.printStackTrace();
+                                                    }
 
                                                 } catch (SQLException ex) {
                                                     System.out.println("Echec SQL");
                                                     ex.printStackTrace();
                                                 }
 
-                                            } catch (SQLException ex) {
-                                                System.out.println("Echec SQL");
-                                                ex.printStackTrace();
                                             }
+                                            else 
+                                            {
+                                                JOptionPane.showMessageDialog(null, "Le lit de cette chambre est déjà pris", "Erreur", JOptionPane.ERROR_MESSAGE);
+                                            }
+                                            
 
                                         } catch (SQLException ex) {
                                             System.out.println("Echec SQL");

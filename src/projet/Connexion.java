@@ -448,6 +448,7 @@ public class Connexion
     
     
     
+    
     /**
      * Methode qui retourne l'ArrayList réponse à la requête en parametre 
      */
@@ -520,6 +521,13 @@ public class Connexion
         return liste;
     }
     
-    
+    public String CreerRequete_Check_lit_chambre(int chambre, int lit)
+    {
+        String requete = "initialisee";
+        requete = "SELECT * FROM hospitalisation WHERE no_chambre=" + chambre + " AND no_lit=" + lit + ";";
+        System.out.println(requete);
+        
+        return requete;
+    }
     
 }
