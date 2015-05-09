@@ -282,35 +282,37 @@ public class Ajouter_employe {
                             // Récupération du format du téléphone
                             if (tel_recu.matches("([0-9]{2}) ([0-9]{2}) ([0-9]{2}) ([0-9]{2}) ([0-9]{2})")) {
 
-                                // TABLE EMPLOYE
-                                // Création de la requete pour remplir la table employé
-                                requete_employe = Connexion.getInstance().CreerRequete_employe(nom_recu, prenom_recu, adresse_recu, tel_recu, salaire_recu, fonction_recu, d_naissance_recu);
-                                try {
-                                    Connexion.getInstance().executeUpdate(requete_employe);
+                                // check la cohérence enter les checkboxs de services et directeurs
+                                cocher_directeurs = docteurs_cohérence_chboxs(jch_ORL, jch_dorl, jch_REA, jch_drea, jch_CHG, jch_dchg);
+                                // s'il n'y a pas d'incohérence entre les services et directeurs cochés
+                                if (cocher_directeurs == 1) {
 
-                                    // recuperation du numero employe de l'employé enregistré à l'instant pour ensuite l'enregistrer dans les tables infirmier / docteur
-                                    requete_id_recup = Connexion.getInstance().CreerRequete_recup_id(2, nom_recu, prenom_recu, tel_recu);
+                                    // TABLE EMPLOYE
+                                    // Création de la requete pour remplir la table employé
+                                    requete_employe = Connexion.getInstance().CreerRequete_employe(nom_recu, prenom_recu, adresse_recu, tel_recu, salaire_recu, fonction_recu, d_naissance_recu);
                                     try {
-                                        // on recupere le numero de l'employe qui vient d'etre inscrit
-                                        id_string_recup = Connexion.getInstance().RecupererId(requete_id_recup);
-                                        // RecupererId renvoie une chaine de caractere, on le transforme en int
-                                        id_recup = Integer.parseInt(id_string_recup.trim());
-                                        System.out.println("id employe recupéré : " + id_recup);
+                                        Connexion.getInstance().executeUpdate(requete_employe);
 
-                                        System.out.println("fonction : " + fonction_recu);
+                                        // recuperation du numero employe de l'employé enregistré à l'instant pour ensuite l'enregistrer dans les tables infirmier / docteur
+                                        requete_id_recup = Connexion.getInstance().CreerRequete_recup_id(2, nom_recu, prenom_recu, tel_recu);
+                                        try {
+                                            // on recupere le numero de l'employe qui vient d'etre inscrit
+                                            id_string_recup = Connexion.getInstance().RecupererId(requete_id_recup);
+                                            // RecupererId renvoie une chaine de caractere, on le transforme en int
+                                            id_recup = Integer.parseInt(id_string_recup.trim());
+                                            System.out.println("id employe recupéré : " + id_recup);
 
-                                        if (fonction_recu == "Docteur") {
-                                        // ON REMPLIT LA TABLEA DOCTEUR
+                                            System.out.println("fonction : " + fonction_recu);
 
-                                            // enregistre la valeur de la liste specialite
-                                            specialite_recu = Jcombo_specialite.getSelectedItem().toString();
-                                            // on crée un nouveau tuple dans la table docteur avec comme no_docteur celui créé à l'instant
-                                            requete_docteur = Connexion.getInstance().CreerRequete_docteur_infirmier(1, id_recup, specialite_recu, " ", " ");
-                                            try {
-                                                // check la cohérence enter les checkboxs de services et directeurs
-                                                cocher_directeurs = docteurs_cohérence_chboxs(jch_ORL, jch_dorl, jch_REA, jch_drea, jch_CHG, jch_dchg);
-                                                // s'il n'y a pas d'incohérence entre les services et directeurs cochés
-                                                if (cocher_directeurs == 1) {
+                                            if (fonction_recu == "Docteur") {
+                                            // ON REMPLIT LA TABLEA DOCTEUR
+
+                                                // enregistre la valeur de la liste specialite
+                                                specialite_recu = Jcombo_specialite.getSelectedItem().toString();
+                                                // on crée un nouveau tuple dans la table docteur avec comme no_docteur celui créé à l'instant
+                                                requete_docteur = Connexion.getInstance().CreerRequete_docteur_infirmier(1, id_recup, specialite_recu, " ", " ");
+                                                try {
+
                                                     // on enregistre les infos dans la table hospitalisation
                                                     Connexion.getInstance().executeUpdate(requete_docteur);
                                                     // on affiche à l'utilisateur que le nouveau docteur a bien été inscrit
@@ -321,56 +323,60 @@ public class Ajouter_employe {
 
                                                     // ON REMPLIT LA TABLE APPARTIENT
                                                     Connexion.getInstance().docteurs_requetes_directeur(jch_dorl, jch_drea, jch_dchg, id_recup);
-                                                }
 
-                                            } catch (SQLException ex) {
-                                                System.out.println("Echec SQL");
-                                                ex.printStackTrace();
-                                            }
-
-                                        } else if (fonction_recu == "Infirmier") {
-                                            // enregistre la valeur de la liste rotation
-                                            rotation_recu = Jcombo_rotation.getSelectedItem().toString();
-                                            // enregistre le code service recu
-                                            code_service_recu = Jcombo_service.getSelectedItem().toString();
-
-                                            // TABLE INFIRMIER : on crée un nouveau tuple dans la table infirmier avec comme no_infirmier celui créé à l'instant
-                                            requete_infirmier = Connexion.getInstance().CreerRequete_docteur_infirmier(2, id_recup, " ", code_service_recu, rotation_recu);
-                                            try {
-                                                // on enregistre les infos dans la table hospitalisation
-                                                Connexion.getInstance().executeUpdate(requete_infirmier);
-                                                // on affiche à l'utilisateur que le nouvel infirmier a bien été inscrit
-                                                JOptionPane.showMessageDialog(null, "L'infirmier a été enregistré.", "Info", JOptionPane.ERROR_MESSAGE);
-                                            } catch (SQLException ex) {
-                                                System.out.println("Echec SQL");
-                                                ex.printStackTrace();
-                                            }
-
-                                            // TABLE CHAMBRE : 
-                                            // on enregistre la chambre sélectionnée
-                                            // si il y a des chambres disponibles
-                                            if (p20.isVisible()) {
-
-                                                // enregistre la valeur de la chambre selectionnée dans la liste
-                                                String chambre = Jcombo_chambres.getSelectedItem().toString().trim();
-                                                int chambre_recu = Integer.parseInt(chambre);
-
-                                                // on écrit la requete pour inscrire le surveillant et on l'exécute
-                                                requete_surveillant = Connexion.getInstance().CreerRequete_surveillant(id_recup, rotation_recu, code_service_recu, chambre_recu);
-                                                System.out.println(requete_surveillant);
-
-                                                try {
-                                                    // on enregistre les infos dans la table hospitalisation
-                                                    Connexion.getInstance().executeUpdate(requete_surveillant);
-                                                    // on affiche à l'utilisateur que le nouvel infirmier a bien été inscrit
-                                                    JOptionPane.showMessageDialog(null, "L'infirmier a été enregistré en tant que surveillant.", "Info", JOptionPane.ERROR_MESSAGE);
                                                 } catch (SQLException ex) {
                                                     System.out.println("Echec SQL");
                                                     ex.printStackTrace();
                                                 }
 
+                                            } else if (fonction_recu == "Infirmier") {
+                                                // enregistre la valeur de la liste rotation
+                                                rotation_recu = Jcombo_rotation.getSelectedItem().toString();
+                                                // enregistre le code service recu
+                                                code_service_recu = Jcombo_service.getSelectedItem().toString();
+
+                                                // TABLE INFIRMIER : on crée un nouveau tuple dans la table infirmier avec comme no_infirmier celui créé à l'instant
+                                                requete_infirmier = Connexion.getInstance().CreerRequete_docteur_infirmier(2, id_recup, " ", code_service_recu, rotation_recu);
+                                                try {
+                                                    // on enregistre les infos dans la table hospitalisation
+                                                    Connexion.getInstance().executeUpdate(requete_infirmier);
+                                                    // on affiche à l'utilisateur que le nouvel infirmier a bien été inscrit
+                                                    JOptionPane.showMessageDialog(null, "L'infirmier a été enregistré.", "Info", JOptionPane.ERROR_MESSAGE);
+                                                } catch (SQLException ex) {
+                                                    System.out.println("Echec SQL");
+                                                    ex.printStackTrace();
+                                                }
+
+                                                // TABLE CHAMBRE : 
+                                                // on enregistre la chambre sélectionnée
+                                                // si il y a des chambres disponibles
+                                                if (p20.isVisible()) {
+
+                                                    // enregistre la valeur de la chambre selectionnée dans la liste
+                                                    String chambre = Jcombo_chambres.getSelectedItem().toString().trim();
+                                                    int chambre_recu = Integer.parseInt(chambre);
+
+                                                    // on écrit la requete pour inscrire le surveillant et on l'exécute
+                                                    requete_surveillant = Connexion.getInstance().CreerRequete_surveillant(id_recup, rotation_recu, code_service_recu, chambre_recu);
+                                                    System.out.println(requete_surveillant);
+
+                                                    try {
+                                                        // on enregistre les infos dans la table hospitalisation
+                                                        Connexion.getInstance().executeUpdate(requete_surveillant);
+                                                        // on affiche à l'utilisateur que le nouvel infirmier a bien été inscrit
+                                                        JOptionPane.showMessageDialog(null, "L'infirmier a été enregistré en tant que surveillant.", "Info", JOptionPane.ERROR_MESSAGE);
+                                                    } catch (SQLException ex) {
+                                                        System.out.println("Echec SQL");
+                                                        ex.printStackTrace();
+                                                    }
+
+                                                }
+
                                             }
 
+                                        } catch (SQLException ex) {
+                                            System.out.println("Echec SQL");
+                                            ex.printStackTrace();
                                         }
 
                                     } catch (SQLException ex) {
@@ -378,10 +384,8 @@ public class Ajouter_employe {
                                         ex.printStackTrace();
                                     }
 
-                                } catch (SQLException ex) {
-                                    System.out.println("Echec SQL");
-                                    ex.printStackTrace();
                                 }
+                                // sinon on n'enregistre pas le docteur, en attendant qu'il remplisse les checkboxes de manière cohérente
 
                             } else {
                                 JOptionPane.showMessageDialog(null, "Le téléphone n'est pas au format '-- -- -- -- --'.", "Erreur", JOptionPane.ERROR_MESSAGE);
