@@ -432,7 +432,7 @@ public class Connexion
     public String RecupererId(String requete) throws SQLException 
     {
         
-        String id="101";
+        String id="NotExist";
         
         // récupération de l'ordre de la requete
         rset = stmt.executeQuery(requete);
@@ -521,7 +521,6 @@ public class Connexion
         // Retourner l'ArrayList
         return liste;
     }
-    
     
     
     
