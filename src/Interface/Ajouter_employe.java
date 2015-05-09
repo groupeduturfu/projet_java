@@ -299,7 +299,7 @@ public class Ajouter_employe {
                                         System.out.println("fonction : " + fonction_recu);
 
                                         if (fonction_recu == "Docteur") {
-                                // ON REMPLIT LA TABLEA DOCTEUR
+                                        // ON REMPLIT LA TABLEA DOCTEUR
                                             // enregistre la valeur de la liste specialite
                                             specialite_recu = Jcombo_specialite.getSelectedItem().toString();
                                             // on crée un nouveau tuple dans la table docteur avec comme no_docteur celui créé à l'instant
@@ -309,13 +309,14 @@ public class Ajouter_employe {
                                                 Connexion.getInstance().executeUpdate(requete_docteur);
                                                 // on affiche à l'utilisateur que le nouveau docteur a bien été inscrit
                                                 JOptionPane.showMessageDialog(null, "Le docteur a été enregistré.", "Info", JOptionPane.ERROR_MESSAGE);
+                                          
                                             } catch (SQLException ex) {
                                                 System.out.println("Echec SQL");
                                                 ex.printStackTrace();
                                             }
 
-                                            // ON REMPLIT LA TABLE APPARTIENT
-                                            Connexion.getInstance().docteurs_requetes_services(jch_ORL, jch_REA, jch_CHG, id_recup);
+                                            // ON REMPLIT LES TABLES APPARTIENT ET SERVICES
+                                            Connexion.getInstance().docteurs_requetes_services(jch_ORL, jch_dorl, jch_REA, jch_drea, jch_CHG, jch_dchg, id_recup);
 
                                         } else if (fonction_recu == "Infirmier") {
                                             // enregistre la valeur de la liste rotation

@@ -383,26 +383,42 @@ public class Connexion
         return requete;
     }
     
-    public void docteurs_requetes_services(JCheckBox jch_ORL, JCheckBox jch_REA, JCheckBox jch_CHG, int no_docteur)
+    public void docteurs_requetes_services(JCheckBox jch_ORL, JCheckBox jch_Dir_ORL, JCheckBox jch_REA, JCheckBox jch_Dir_REA, JCheckBox jch_CHG, JCheckBox jch_Dir_CHG, int no_docteur)
     {
+        // on supprime toutes les requêtes restées en mémoire dans la liste
+        Liste_requetes.clear();
+        
+        // services sélectionnés
         if (jch_ORL.isSelected())
         {
             ajouterRequete_creer("INSERT INTO appartient VALUES (" + no_docteur + ", 'ORL');");
-
         }
         if (jch_REA.isSelected())
         {
             ajouterRequete_creer("INSERT INTO appartient VALUES (" + no_docteur + ", 'REA');");
-            
         }
         if (jch_CHG.isSelected())
         {
             ajouterRequete_creer("INSERT INTO appartient VALUES (" + no_docteur + ", 'CHG');");     
         }
         
+        // directeurs sélectionnés
+        if (jch_Dir_ORL.isSelected())
+        {
+            ajouterRequete_creer("UPDATE service SET no_directeur = " + no_docteur + " WHERE code_service LIKE 'ORL';");
+        }
+        if (jch_Dir_REA.isSelected())
+        {
+            ajouterRequete_creer("UPDATE service SET no_directeur = " + no_docteur + " WHERE code_service LIKE 'REA';");
+        }
+        if (jch_Dir_CHG.isSelected())
+        {
+            ajouterRequete_creer("UPDATE service SET no_directeur = " + no_docteur + " WHERE code_service LIKE 'CHG';");
+        }
         
-            // executer la liste de requetes
-                    System.out.println("nb check boxes : " + Liste_requetes.size() );
+        
+        // executer la liste de requetes
+        System.out.println("nb check boxes : " + Liste_requetes.size() );
 
         int i;
         for (i = 0; i<Liste_requetes.size(); i++)
@@ -420,6 +436,10 @@ public class Connexion
         }
                 
     }
+    
+    
+    
+    
     /*
     public void CreerRequete_CreerPatient(String nom, String prenom, int chambre, int lit, String adresse, String tel, String mutuelle)
     {
