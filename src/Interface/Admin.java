@@ -83,7 +83,7 @@ public class Admin {
         {
           public void actionPerformed(ActionEvent e)
           { 
-                Ajouter_employe.getFenetre(null);
+                Ajouter_employe.getFenetre(f);
           }
         });
         

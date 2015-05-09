@@ -40,6 +40,28 @@ public class Connexion
      */
     public ArrayList<String> Liste_requetes = new ArrayList<String>();
     
+    
+    private Connexion(String adresse, String password) throws SQLException, ClassNotFoundException  // "jdbc:mysql://http://localhost:8888"
+    {
+        conn = DriverManager.getConnection(adresse, "root", password);
+        stmt = conn.createStatement();
+        System.out.println("Connexion reussie");
+        
+        
+    }
+    
+    public static Connexion getInstance(String a, String p)
+    {
+       try { 
+        if (laConnexion == null) {
+            laConnexion = new Connexion(a, p);
+        }
+        } catch (Exception e) {
+            System.err.println("getConnexion(): " + e);
+            e.printStackTrace();
+        }
+        return laConnexion;
+    }
 
     private Connexion() throws SQLException, ClassNotFoundException 
     {
@@ -64,16 +86,14 @@ public class Connexion
             System.out.println("Connexion reussie");
 
         //création d'une connexion JDBC à la base
-        conn = DriverManager.getConnection("jdbc:mysql://localhost:3305/chebassi","chebassi-rw", "cvKTbS3k");
-
+        //conn = DriverManager.getConnection("jdbc:mysql:localhost:8888/MAMP/?language=French");
+        conn = DriverManager.getConnection("jdbc:mysql://localhost:3305/chebassi","chebassi-rw", "cvKTbS3k");       
+        
+        
         // création d'un ordre SQL (statement)
         stmt = conn.createStatement();
 
-                
-        // ESSAI : initialisation de la liste des requetes de selection 
-        //Remplir_Requetes_Selection();
-        //Afficher_Requetes_Selection();
-        // 
+
         }
     }
     
