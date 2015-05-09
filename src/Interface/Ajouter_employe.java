@@ -267,6 +267,7 @@ public class Ajouter_employe {
                     String requete_id_recup;
                     String id_string_recup;
                     int id_recup = 100;
+                    int cocher_directeurs = 1;
 
                     // no_infirmier
                     int surveillant;
@@ -281,7 +282,7 @@ public class Ajouter_employe {
                             // Récupération du format du téléphone
                             if (tel_recu.matches("([0-9]{2}) ([0-9]{2}) ([0-9]{2}) ([0-9]{2}) ([0-9]{2})")) {
 
-                            // TABLE EMPLOYE
+                                // TABLE EMPLOYE
                                 // Création de la requete pour remplir la table employé
                                 requete_employe = Connexion.getInstance().CreerRequete_employe(nom_recu, prenom_recu, adresse_recu, tel_recu, salaire_recu, fonction_recu, d_naissance_recu);
                                 try {
@@ -300,23 +301,32 @@ public class Ajouter_employe {
 
                                         if (fonction_recu == "Docteur") {
                                         // ON REMPLIT LA TABLEA DOCTEUR
+
                                             // enregistre la valeur de la liste specialite
                                             specialite_recu = Jcombo_specialite.getSelectedItem().toString();
                                             // on crée un nouveau tuple dans la table docteur avec comme no_docteur celui créé à l'instant
                                             requete_docteur = Connexion.getInstance().CreerRequete_docteur_infirmier(1, id_recup, specialite_recu, " ", " ");
                                             try {
-                                                // on enregistre les infos dans la table hospitalisation
-                                                Connexion.getInstance().executeUpdate(requete_docteur);
-                                                // on affiche à l'utilisateur que le nouveau docteur a bien été inscrit
-                                                JOptionPane.showMessageDialog(null, "Le docteur a été enregistré.", "Info", JOptionPane.ERROR_MESSAGE);
-                                          
+                                                // check la cohérence enter les checkboxs de services et directeurs
+                                                cocher_directeurs = docteurs_cohérence_chboxs(jch_ORL, jch_dorl, jch_REA, jch_drea, jch_CHG, jch_dchg);
+                                                // s'il n'y a pas d'incohérence entre les services et directeurs cochés
+                                                if (cocher_directeurs == 1) {
+                                                    // on enregistre les infos dans la table hospitalisation
+                                                    Connexion.getInstance().executeUpdate(requete_docteur);
+                                                    // on affiche à l'utilisateur que le nouveau docteur a bien été inscrit
+                                                    JOptionPane.showMessageDialog(null, "Le docteur a été enregistré.", "Info", JOptionPane.ERROR_MESSAGE);
+
+                                                    // ON REMPLIT LA TABLE APPARTIENT
+                                                    Connexion.getInstance().docteurs_requetes_appartient(jch_ORL, jch_REA, jch_CHG, id_recup);
+
+                                                    // ON REMPLIT LA TABLE APPARTIENT
+                                                    Connexion.getInstance().docteurs_requetes_directeur(jch_dorl, jch_drea, jch_dchg, id_recup);
+                                                }
+
                                             } catch (SQLException ex) {
                                                 System.out.println("Echec SQL");
                                                 ex.printStackTrace();
                                             }
-
-                                            // ON REMPLIT LES TABLES APPARTIENT ET SERVICES
-                                            Connexion.getInstance().docteurs_requetes_services(jch_ORL, jch_dorl, jch_REA, jch_drea, jch_CHG, jch_dchg, id_recup);
 
                                         } else if (fonction_recu == "Infirmier") {
                                             // enregistre la valeur de la liste rotation
@@ -336,7 +346,7 @@ public class Ajouter_employe {
                                                 ex.printStackTrace();
                                             }
 
-                                     // TABLE CHAMBRE : 
+                                            // TABLE CHAMBRE : 
                                             // on enregistre la chambre sélectionnée
                                             // si il y a des chambres disponibles
                                             if (p20.isVisible()) {
@@ -506,4 +516,28 @@ public class Ajouter_employe {
         return fenetre;
     }
 
+    public int docteurs_cohérence_chboxs(JCheckBox jch_ORL, JCheckBox jch_Dir_ORL, JCheckBox jch_REA, JCheckBox jch_Dir_REA, JCheckBox jch_CHG, JCheckBox jch_Dir_CHG) {
+        // par défaut on va cocher les directeurs sélectionnés en renvoyant 1
+        int cocher_directeurs = 1;
+
+        // check si un directeur a été coché sans que le service associé ait été coché également 
+        // service ORL
+        if (jch_ORL.isSelected() == false && jch_Dir_ORL.isSelected() == true) {
+            JOptionPane.showMessageDialog(null, "La case directeur du service ORL a été cochée sans que la case du service ne l'ait été.", "Erreur", JOptionPane.ERROR_MESSAGE);
+            cocher_directeurs = 0;
+        }
+        // service REA
+        if (jch_REA.isSelected() == false && jch_Dir_REA.isSelected() == true) {
+            JOptionPane.showMessageDialog(null, "La case directeur du service REA a été cochée sans que la case du service ne l'ait été.", "Erreur", JOptionPane.ERROR_MESSAGE);
+            cocher_directeurs = 0;
+        }
+        // service CHG
+        if (jch_CHG.isSelected() == false && jch_Dir_CHG.isSelected() == true) {
+            JOptionPane.showMessageDialog(null, "La case directeur du service CHG a été cochée sans que la case du service ne l'ait été.", "Erreur", JOptionPane.ERROR_MESSAGE);
+            cocher_directeurs = 0;
+        }
+
+        return cocher_directeurs;
+
+    }
 }
