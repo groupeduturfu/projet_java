@@ -5,11 +5,20 @@
  */
 package Interface;
 
+import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import projet.Connexion;
 
 /**
  *
@@ -18,60 +27,85 @@ import javax.swing.JTextField;
 public class Afficher_malade {
     
     private static Afficher_malade fenetre = null;
+    private ArrayList<ArrayList<String>> liste;
     
-    private Afficher_malade (JFrame f) {
+    private Afficher_malade (JFrame f, ArrayList<ArrayList<String>> liste) {
          
-        JTextField jtf_no_id, jtf_nom, jtf_prenom, jtf_no_chambre, jtf_no_lit, jtf_datea, jtf_adresse, jtf_tel, jtf_mutuelle;
-        JLabel jl_no_id, jl_nom, jl_prenom, jl_no_chambre, jl_no_lit, jl_datea, jl_adresse, jl_tel, jl_mutuelle, texte;
-        JButton valider = new JButton("Valider");
+        JComboBox combo = new JComboBox();
         JButton retour = new JButton("Retour");
-        JPanel p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11;
-        
+        JButton modifier = new JButton("Modifier");
+        JButton suivant = new JButton ("Suivant");
+        JButton precedent = new JButton ("Precedent");
+        this.liste=liste;
+       
+        JPanel pbouton, ptexte, phaut, p2, p3, p4, p5, p6, p7, p8, p9, p10;
+        JTextField jtf_no_id, jtf_nom, jtf_prenom, jtf_no_chambre, jtf_no_lit, jtf_date_arrivee, jtf_adresse, jtf_tel, jtf_mutuelle;
+        JLabel jl_no_id, jl_nom, jl_prenom, jl_no_chambre, jl_no_lit, jl_date_arrivee, jl_adresse, jl_tel, jl_mutuelle, texte, jl_nom_malade;
         
         // On initialise les JLabel
-        texte = new JLabel("Veuillez remplir les informations connues sur le patient");
         jl_no_id = new JLabel("N° identification");
         jl_nom = new JLabel("Nom");
         jl_prenom = new JLabel("Prénom");
         jl_no_chambre = new JLabel("N° chambre");
         jl_no_lit = new JLabel("N° lit");
-        jl_datea = new JLabel("Date d'arrivée");
+        jl_date_arrivee = new JLabel("Date d'arrivée");
         jl_adresse = new JLabel("Adresse");
         jl_tel = new JLabel("N° telephone");
         jl_mutuelle = new JLabel("Mutuelle");
+        jl_nom_malade = new JLabel("");
         
-        // On iitialise les JTF
-/*        jtf_no_id = new JTextField(no_id);
-        jtf_nom = new JTextField(nom);
-        jtf_prenom = new JTextField(prenom);
-        jtf_no_chambre = new JTextField(no_chambre);
-        jtf_no_lit = new JTextField(no_lit);
-        jtf_datea = new JTextField(datea);
-        jtf_adresse = new JTextField(adresse);
-        jtf_tel = new JTextField(tel);
-        jtf_mutuelle = new JTextField(mutuelle);
+        // On initialise les JTF
+        jtf_no_id = new JTextField();
+        jtf_nom = new JTextField();
+        jtf_prenom = new JTextField();
+        jtf_no_chambre = new JTextField();
+        jtf_no_lit = new JTextField();
+        jtf_date_arrivee = new JTextField();
+        jtf_adresse = new JTextField();
+        jtf_tel = new JTextField();
+        jtf_mutuelle = new JTextField();
         
         jtf_no_id.setColumns(10);
         jtf_nom.setColumns(10);
         jtf_prenom.setColumns(10);
         jtf_no_chambre.setColumns(10);
         jtf_no_lit.setColumns(10);
-        jtf_datea.setColumns(10);
-        jtf_adresse.setColumns(10);
+        jtf_date_arrivee.setColumns(10);
+        jtf_adresse.setColumns(40);
         jtf_tel.setColumns(10);
         jtf_mutuelle.setColumns(10);
         
-        // On change le bouton de forme
-        valider.setPreferredSize(new Dimension(200,30));
-        valider.setOpaque(false);
-        retour.setPreferredSize(new Dimension(200,30));
+        // On initialise les objets
+        retour.setPreferredSize(new Dimension(300,30));
         retour.setOpaque(false);
+        modifier.setPreferredSize(new Dimension(300,30));
+        retour.setOpaque(false);
+        retour.setPreferredSize(new Dimension(300,30));
+        combo.setPreferredSize(new Dimension(400,30));
+        combo.setOpaque(false);
+        suivant.setPreferredSize(new Dimension(100,30));
+        suivant.setOpaque(false);
+        precedent.setPreferredSize(new Dimension(100,30));
+        precedent.setOpaque(false);
         
-        // On initialise les JPanel
-        p1 = new JPanel();
-        p1.add(texte);
-        p1.setOpaque(false);
-        p1.setPreferredSize(new Dimension(600, 100));
+        
+
+        //On initialise la liste avec les résultats correspondants à la recherche
+        for(int i=0; i<liste.size(); i++)
+        {
+            combo.addItem(this.liste.get(i));
+            
+        }
+        
+        // On crée les panels
+        
+        phaut = new JPanel();
+        phaut.add(precedent);
+        phaut.add(combo);
+        phaut.add(suivant);
+        phaut.setOpaque(false);
+        phaut.setPreferredSize(new Dimension(600, 30));
+       
         
         p2 = new JPanel();
         p2.add(jl_no_id);
@@ -104,8 +138,8 @@ public class Afficher_malade {
         p6.setPreferredSize(new Dimension(600, 30));
         
         p7 = new JPanel();
-        p7.add(jl_datea);
-        p7.add(jtf_datea);
+        p7.add(jl_date_arrivee);
+        p7.add(jtf_date_arrivee);
         p7.setOpaque(false);
         p7.setPreferredSize(new Dimension(600, 30));
         
@@ -127,58 +161,51 @@ public class Afficher_malade {
         p10.setOpaque(false);
         p10.setPreferredSize(new Dimension(600, 30));
         
-        p11 = new JPanel();
-        p11.add(retour);
-        p11.add(valider);
-        p11.setOpaque(false);
-        p11.setPreferredSize(new Dimension(600, 30));
+        pbouton = new JPanel();
+        pbouton.add(retour);
+        pbouton.add(modifier);
+        pbouton.setOpaque(false);
+        pbouton.setPreferredSize(new Dimension(600, 30));
         
-        // On gère l'évennement du bouton
-        valider.addActionListener(new ActionListener()
+        // Ici il faut remplir les champs pour voir les données de chaque patient
+        ArrayList <String> combobox_choix ;
+        combobox_choix = new ArrayList<String>();  
+        combobox_choix= (ArrayList<String>) combo.getSelectedItem();
+        // On REMPLIT les JTF --> Ca ne marche pas encore
+        jtf_no_id.setText(combobox_choix.get(0));
+        jtf_nom.setText(combobox_choix.get(1));
+        jtf_prenom.setText(combobox_choix.get(2));
+        jtf_no_chambre.setText(combobox_choix.get(3));
+        jtf_no_lit.setText(combobox_choix.get(4));
+        jtf_date_arrivee.setText(combobox_choix.get(5));
+        jtf_adresse.setText(combobox_choix.get(6));
+        jtf_tel.setText(combobox_choix.get(7));
+        jtf_mutuelle.setText(combobox_choix.get(8));
+                 
+
+        precedent.addActionListener(new ActionListener()
         {
-          public void actionPerformed(ActionEvent e)
-          { 
-            System.out.println("Il valide avec :");
-            System.out.println("N° id : "+jtf_no_id.getText());
-            System.out.println("Nom : "+jtf_nom.getText()); // ETC
-            
-            // ESSAI SEULEMENT : afficher en console tous les prenoms de la table malade si clique sur "Valider"
-            try 
+            public void actionPerformed (ActionEvent e)
             {
-                // Liste qui récupérera les tuples de réponse à notre requête
-                ArrayList<String> liste;
-                String requete = ("SELECT prenom FROM malade;");
-                liste = maconnexion.RemplirChampsRequete(requete);
-                
-                // Loop through elements.
-                for (int i = 0; i < liste.size(); i++) 
-                {   
-                    // Dans l'exemple on récupère une liste de prenom donc que des string => facilite pour le 1er essai 
-                    String value = liste.get(i);
-                    System.out.println("Element: " + value);
-                }
+               
                 
             }
-            catch (SQLException ex)
-            {
-                System.out.println("Echec SQL");
-                ex.printStackTrace();
-            }
-                       
-          }
-        });
-        
+
+          
+        }
+        );
+                 
         retour.addActionListener(new ActionListener()
         {
           public void actionPerformed(ActionEvent e)
           { 
-            fenetre_accueil();
+            Accueil.getFenetre(f);
           }
         });
         
-        // On ajoute tous les JPannel à la fenêtre
+        
         f.setContentPane(new ImagePanel(new ImageIcon("fond66.jpg").getImage())); // Met l'image en background
-        f.add(p1);
+        f.add(phaut);
         f.add(p2);
         f.add(p3);
         f.add(p4);
@@ -188,17 +215,16 @@ public class Afficher_malade {
         f.add(p8);
         f.add(p9);
         f.add(p10);
-        f.add(p11);
-        
+        f.add(pbouton);
         f.setSize(600,600);
         
-        f.setVisible(true);
-        */
+        f.setVisible(true); 
     }
+    
      
-    public static Afficher_malade getFenetre(JFrame f) {
+    public static Afficher_malade getFenetre(JFrame f, ArrayList<ArrayList<String>> liste) {
             
-    if (fenetre == null ) fenetre = new Afficher_malade(f);
+    if (fenetre == null ) fenetre = new Afficher_malade(f, liste);
 
         return fenetre;
     } 

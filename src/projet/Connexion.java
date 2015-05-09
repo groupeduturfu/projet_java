@@ -149,11 +149,9 @@ public class Connexion
     }
     
     
-    public String CreerRequete_Recherche_Hospitalisation(int id, String nom, 
-            String prenom, int chambre, int lit, String adresse, String tel, String mutuelle, String date_arrivee)
+    public String CreerRequete_Recherche_Hospitalisation(int id, String nom,String prenom, int chambre, int lit, String adresse, String tel, String mutuelle, String date_arrivee)
     {
         String requete = "initialisee";
-
         
             // RECHERCHER UN PATIENT
             // astuce : quand l'utilisateur ne remplit pas le champs, s'il s'agit d'un champs String on l'intialise avec un %, si c'est un int on ne peut rien faire, d'où les nombreux esle if 
@@ -163,7 +161,7 @@ public class Connexion
                     if (id != 0)
                     {
                         //requete = "SELECT * FROM malade m WHERE no_malade = " + id + ";";
-                        requete = "SELECT m.no_malade, m.nom, m.prenom, m.adresse, m.tel, m.mutuelle, h.no_chambre, h.no_lit, h.date_arrivee "
+                        requete = "SELECT m.no_malade, m.nom, m.prenom, h.no_chambre, h.no_lit, h.date_arrivee, m.adresse, m.tel, m.mutuelle "
                                 + "FROM malade m, hospitalisation h WHERE (m.no_malade = " + id + " AND m.no_malade = h.no_malade);";
                     }
                             
@@ -171,7 +169,7 @@ public class Connexion
                     //on affiche le numéro et les infos des malades correspond aux infos renseignées (que des string)
                     else if ((id == 0) && (chambre ==0) && (lit ==0))
                     {
-                        requete = "SELECT m.no_malade, m.nom, m.prenom, m.adresse, m.tel, m.mutuelle, h.no_chambre, h.no_lit, h.date_arrivee "
+                        requete = "SELECT m.no_malade, m.nom, m.prenom, h.no_chambre, h.no_lit, h.date_arrivee, m.adresse, m.tel, m.mutuelle "
                                 + "FROM malade m, hospitalisation h "
                                 + "WHERE (m.no_malade = h.no_malade AND m.nom LIKE '" + nom +
                             "' AND m.prenom LIKE '" + prenom + "' AND m.adresse LIKE '" + adresse + "' AND m.tel LIKE '" + tel + 
@@ -182,7 +180,7 @@ public class Connexion
                     // on ajoute le numero du lit dans la recherche
                     else if ((id == 0) && (chambre ==0) && (lit !=0))
                     {
-                          requete = "SELECT m.no_malade, m.nom, m.prenom, m.adresse, m.tel, m.mutuelle, h.no_chambre, h.no_lit, h.date_arrivee "
+                          requete = "SELECT m.no_malade, m.nom, m.prenom, h.no_chambre, h.no_lit, h.date_arrivee, m.adresse, m.tel, m.mutuelle "
                                   + "FROM malade m, hospitalisation h "
                                   + "WHERE (m.no_malade = h.no_malade AND m.nom LIKE '" + nom +
                             "' AND m.prenom LIKE '" + prenom + "' AND m.adresse LIKE '" + adresse + "' AND m.tel LIKE '" + tel + 
@@ -193,7 +191,7 @@ public class Connexion
                     // on ajoute le numero du lit dans la recherche
                     else if ((id == 0) && (chambre !=0) && (lit ==0))
                     {
-                          requete = "SELECT m.no_malade, m.nom, m.prenom, m.adresse, m.tel, m.mutuelle, h.no_chambre, h.no_lit, h.date_arrivee "
+                          requete = "SELECT m.no_malade, m.nom, m.prenom, h.no_chambre, h.no_lit, h.date_arrivee, m.adresse, m.tel, m.mutuelle "
                                   + "FROM malade m, hospitalisation h "
                                   + "WHERE (m.no_malade = h.no_malade AND m.nom LIKE '" + nom +
                             "' AND m.prenom LIKE '" + prenom + "' AND m.adresse LIKE '" + adresse + "' AND m.tel LIKE '" + tel + 
@@ -204,7 +202,7 @@ public class Connexion
                     // on ajoute le numero du lit dans la recherche
                     else if ((id == 0) && (chambre !=0) && (lit !=0))
                     {
-                          requete = "SELECT m.no_malade, m.nom, m.prenom, m.adresse, m.tel, m.mutuelle, h.no_chambre, h.no_lit, h.date_arrivee "
+                          requete = "SELECT m.no_malade, m.nom, m.prenom, h.no_chambre, h.no_lit, h.date_arrivee, m.adresse, m.tel, m.mutuelle "
                                   + "FROM malade m, hospitalisation h WHERE (m.nom LIKE '" + nom +
                             "' AND m.prenom LIKE '" + prenom + "' AND m.adresse LIKE '" + adresse + "' AND m.tel LIKE '" + tel + 
                             "' AND m.mutuelle LIKE '" + mutuelle + "' AND h.date_arrivee LIKE '" + date_arrivee + "' AND h.no_chambre = " + chambre + " AND h.no_lit = " + lit + ");";  
@@ -509,7 +507,7 @@ public class Connexion
         while (rset.next()) {
             System.out.println("" +j);
             // Concatener les champs de la ligne separes par 
-            for (int i = 1; i < nbColonne; i++) {
+            for (int i = 1; i < nbColonne+1; i++) {
                             System.out.println("" +i);
                             champs=rset.getString(i);
                             ligne.add(champs);
