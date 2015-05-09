@@ -638,5 +638,6 @@ public class Connexion
     {
         Liste_requetes_directeur.add(requete);
     }
+
     
 }
