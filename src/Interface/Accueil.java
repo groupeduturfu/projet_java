@@ -52,9 +52,9 @@ public class Accueil {
         stats.setPreferredSize(new Dimension(400,30));
         
         pAdmin = new JPanel();
-        pAdmin.setOpaque(false);;
+        pAdmin.setOpaque(false);
+        pAdmin.setLocation(100, 100);
         pAdmin.add(admin);
-        admin.setHorizontalTextPosition(SwingConstants.RIGHT);
 
         
         p1 = new JPanel(); 
