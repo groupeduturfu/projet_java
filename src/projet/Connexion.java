@@ -13,6 +13,8 @@ import Interface.Fenetre;
  */
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
@@ -40,7 +42,28 @@ public class Connexion
      */
     public ArrayList<String> Liste_requetes = new ArrayList<String>();
     
-
+    private Connexion(String adresse, String password) throws SQLException, ClassNotFoundException  // "jdbc:mysql://http://localhost:8888"
+    {
+        conn = DriverManager.getConnection(adresse, "root", password);
+        stmt = conn.createStatement();
+        System.out.println("Connexion reussie");
+        
+        
+    }
+    
+    public static Connexion getInstance(String a, String p)
+    {
+       try { 
+        if (laConnexion == null) {
+            laConnexion = new Connexion(a, p);
+        }
+        } catch (Exception e) {
+            System.err.println("getConnexion(): " + e);
+            e.printStackTrace();
+        }
+        return laConnexion;
+    }
+    
     private Connexion() throws SQLException, ClassNotFoundException 
     {
         //String user = "chebassi";
@@ -65,6 +88,8 @@ public class Connexion
 
         //création d'une connexion JDBC à la base
         conn = DriverManager.getConnection("jdbc:mysql://localhost:3305/chebassi","chebassi-rw", "cvKTbS3k");
+        
+
 
         // création d'un ordre SQL (statement)
         stmt = conn.createStatement();
@@ -221,8 +246,6 @@ public class Connexion
         Liste_requetes.add(requete);
     }  
     
-    
-    
     public String CreerRequete_employe(String nom, String prenom, String adresse, String tel, int salaire, String fonction, String d_naissance)
     {
         String requete = "initialisee";
@@ -274,7 +297,6 @@ public class Connexion
         
         return requete;
     }
-    
     
     public String CreerRequete_docteur_infirmier(int no_fonction, int id, String specialite, String code_service, String rotation)
     {
@@ -344,8 +366,7 @@ public class Connexion
                     
                 return liste;
     }
-    
-    
+        
     public String CreerRequete_surveillant(int no_infirmier, String rotation, String code_service, int no_chambre)
     {
         String requete = null;
@@ -445,6 +466,7 @@ public class Connexion
                 
         return id;
     }
+
     
     
     
@@ -520,6 +542,39 @@ public class Connexion
         return liste;
     }
     
+    
+        
+    public ArrayList nb_malade_services() throws SQLException 
+    {
+        
+        ArrayList<Integer> liste = null;
+        liste = new ArrayList<Integer>();
+        System.out.println("m :1 ");
+        
+        // récupération de l'ordre de la requete
+        rset = stmt.executeQuery("COUNT (*) FROM hospitalisation, chambre WHERE hospitalisation.no_chambre=chambre.no_chambre AND chambre.code_service='REA'");
+        System.out.println("m : ");
+        
+        int i = rset.getInt(1);
+        
+        System.out.println("m : " + i);
+        
+        return liste;
+    }
+    
+    public int moyenne_salaired ()
+    {
+        String requete = "SELECT AVG (salaire) FROM employe WHERE fonction LIKE 'docteur'";
+        int i=0;
+        try {
+            rset = stmt.executeQuery("SELECT AVG (salaire) FROM employe WHERE fonction LIKE 'docteur'");
+            i = rset.getInt(1);
+        } catch (SQLException ex) {
+            Logger.getLogger(Connexion.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return i;
+    }
     
     
     

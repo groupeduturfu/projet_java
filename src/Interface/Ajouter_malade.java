@@ -304,7 +304,6 @@ public class Ajouter_malade {
         f.add(p9);
         f.add(p10);
         f.add(p12);
-        //f.add(p13);
         f.add(p11);
         
         f.setSize(600,600);
