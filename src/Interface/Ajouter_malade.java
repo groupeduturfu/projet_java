@@ -16,6 +16,8 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import projet.Connexion;
 
@@ -29,10 +31,13 @@ public class Ajouter_malade {
     private static JPanel p1, p2, p3, p4, p5, p6, p8, p9, p10, p11, p12, p13, p14;
 
     private Ajouter_malade(JFrame f) {
-        JTextField jtf_nom, jtf_prenom, jtf_no_chambre, jtf_no_lit, jtf_adresse, jtf_tel, jtf_mutuelle, jtf_docteur, jtf_description, jtf_date_naissance;
+        JTextField jtf_nom, jtf_prenom, jtf_no_chambre, jtf_no_lit, jtf_adresse, jtf_tel, jtf_mutuelle, jtf_docteur, jtf_date_naissance;
         JLabel jl_no_id, jl_nom, jl_prenom, jl_no_chambre, jl_no_lit, jl_adresse, jl_tel, jl_mutuelle, jl_docteur, jl_description, jl_date_naissance, texte;
         JButton valider = new JButton("Valider");
         JButton retour = new JButton("Retour");
+        
+        JTextArea jtf_description;
+        JScrollPane jsp;
 
         // On initialise les JLabel
         texte = new JLabel("Merci de remplir toutes les informations suivantes");
@@ -57,8 +62,15 @@ public class Ajouter_malade {
         jtf_tel = new JTextField();
         jtf_mutuelle = new JTextField();
         jtf_docteur = new JTextField();
-        jtf_description = new JTextField();
         jtf_date_naissance = new JTextField();
+        
+        
+        jtf_description = new JTextArea();
+        jtf_description.setLineWrap(true);
+        jsp = new JScrollPane(jtf_description);
+        
+        
+        
 
         //jtf_no_id.setColumns(10);
         jtf_nom.setColumns(15);
@@ -69,7 +81,8 @@ public class Ajouter_malade {
         jtf_tel.setColumns(15);
         jtf_mutuelle.setColumns(15);
         jtf_docteur.setColumns(15);
-        jtf_description.setColumns(15);
+        jtf_description.setColumns(25);
+        jtf_description.setPreferredSize(new Dimension (50, 100));
         jtf_date_naissance.setColumns(15);
 
         // On change le bouton de forme
@@ -82,7 +95,7 @@ public class Ajouter_malade {
         p1 = new JPanel();
         p1.add(texte);
         p1.setOpaque(false);
-        p1.setPreferredSize(new Dimension(600, 100));
+        p1.setPreferredSize(new Dimension(600, 30));
 
         p3 = new JPanel();
         p3.add(jl_nom);
@@ -140,9 +153,9 @@ public class Ajouter_malade {
 
         p13 = new JPanel();
         p13.add(jl_description);
-        p13.add(jtf_description);
+        p13.add(jsp);
         p13.setOpaque(false);
-        p13.setPreferredSize(new Dimension(600, 30));
+        p13.setPreferredSize(new Dimension(600, 100));
 
         p14 = new JPanel();
         p14.add(jl_date_naissance);
@@ -150,7 +163,7 @@ public class Ajouter_malade {
         p14.setOpaque(false);
         p14.setPreferredSize(new Dimension(600, 30));
 
-        System.out.println("nom : ");
+        
 
         // On gère l'évennement du bouton
         valider.addActionListener(new ActionListener() {
@@ -337,6 +350,7 @@ public class Ajouter_malade {
         f.add(p9);
         f.add(p10);
         f.add(p12);
+        f.add(p13);
         f.add(p11);
 
         f.setSize(600, 600);
