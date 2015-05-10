@@ -72,6 +72,14 @@ public class Ajouter_malade {
         jtf_mutuelle = new JTextField();
         jtf_docteur = new JTextField();
         jtf_date_naissance = new JTextField();
+        
+        
+        jtf_description = new JTextArea();
+        jtf_description.setLineWrap(true);
+        jsp = new JScrollPane(jtf_description);
+        
+        
+        
 
         jtf_description = new JTextArea();
         jtf_description.setLineWrap(true);
@@ -85,8 +93,9 @@ public class Ajouter_malade {
         jtf_tel.setColumns(15);
         jtf_mutuelle.setColumns(15);
         jtf_docteur.setColumns(15);
-        jtf_description.setColumns(15);
-        jtf_description.setPreferredSize(new Dimension(50, 100));
+        jtf_description.setColumns(25);
+        jtf_description.setPreferredSize(new Dimension (50, 100));
+
         jtf_date_naissance.setColumns(15);
 
         // On change le bouton de forme
@@ -99,7 +108,7 @@ public class Ajouter_malade {
         p1 = new JPanel();
         p1.add(texte);
         p1.setOpaque(false);
-        p1.setPreferredSize(new Dimension(600, 100));
+        p1.setPreferredSize(new Dimension(600, 30));
 
         p3 = new JPanel();
         p3.add(jl_nom);

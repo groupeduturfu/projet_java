@@ -5,13 +5,20 @@
  */
 package Interface;
 
+import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.scene.chart.Axis;
+import javafx.scene.chart.BarChart;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -21,6 +28,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import projet.Connexion;
+
 
 /**
  *
@@ -81,7 +89,31 @@ public class Stats {
                     System.out.println("Nb de patients en REA : " + Connexion.getInstance().nb_malade_services("\"REA\""));
                     System.out.println("Nb de patients en ORL : " + Connexion.getInstance().nb_malade_services("\"ORL\""));
                     System.out.println("Nb de patients en CHG : " + Connexion.getInstance().nb_malade_services("\"CHG\""));
+                   
+    /*        /////////////////////
+                    JFrame frame = new JFrame();
+                    frame.setSize(400, 300);
+                    double[] values = new double[3];
+                    String[] names = new String[3];
+                    values[0] = 1;
+                    names[0] = "Item 1";
 
+                    values[1] = 2;
+                    names[1] = "Item 2";
+
+                    values[2] = 4;
+                    names[2] = "Item 3";
+
+                    frame.getContentPane().add(new ChartPanel(values, names, "title"));
+                    WindowListener wndCloser = new WindowAdapter() {
+                        public void windowClosing(WindowEvent e) {
+                            System.exit(0);
+                        }
+                    };
+                    frame.addWindowListener(wndCloser);
+                    frame.setVisible(true);
+     */       ////////////////////////
+                    
                 } else if (combo.getSelectedItem().equals("Salaire moyen des employés")) {
                     JLabel jf_doc, jf_inf, jf_emp;
                     JTextField jtf_doc, jtf_inf, jtf_emp;
