@@ -5,6 +5,7 @@
  */
 package Interface;
 
+import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -36,17 +37,15 @@ public class Ajouter_malade {
         JLabel jl_no_id, jl_nom, jl_prenom, jl_no_chambre, jl_no_lit, jl_adresse, jl_tel, jl_mutuelle, jl_docteur, jl_code_service, jl_description, jl_date_naissance, texte;
         JButton valider = new JButton("Valider");
         JButton retour = new JButton("Retour");
-        
+
         // description de l'intervention
         JTextArea jtf_description;
         JScrollPane jsp;
-        
+
         // Liste deroulante si infirmier pour le service des infirmiers
         JComboBox Jcombo_service;
         String[] service_string = {"ORL", "REA", "CHG"};
         Jcombo_service = new JComboBox(service_string);
-
-        
 
         // On initialise les JLabel
         texte = new JLabel("Merci de remplir toutes les informations suivantes");
@@ -74,11 +73,10 @@ public class Ajouter_malade {
         jtf_docteur = new JTextField();
         jtf_date_naissance = new JTextField();
 
-        
         jtf_description = new JTextArea();
         jtf_description.setLineWrap(true);
         jsp = new JScrollPane(jtf_description);
-        
+
         jtf_nom.setColumns(15);
         jtf_prenom.setColumns(15);
         jtf_no_chambre.setColumns(15);
@@ -88,7 +86,7 @@ public class Ajouter_malade {
         jtf_mutuelle.setColumns(15);
         jtf_docteur.setColumns(15);
         jtf_description.setColumns(15);
-        jtf_description.setPreferredSize(new Dimension (50, 100));
+        jtf_description.setPreferredSize(new Dimension(50, 100));
         jtf_date_naissance.setColumns(15);
 
         // On change le bouton de forme
@@ -163,22 +161,18 @@ public class Ajouter_malade {
         p13.setOpaque(false);
         p13.setPreferredSize(new Dimension(600, 100));
 
-
         p14 = new JPanel();
         p14.add(jl_date_naissance);
         p14.add(jtf_date_naissance);
         p14.setOpaque(false);
         p14.setPreferredSize(new Dimension(600, 30));
- 
-        
+
         // liste déroulante des code service
         p15 = new JPanel();
         p15.add(jl_code_service);
         p15.add(Jcombo_service);
         p15.setOpaque(false);
         p15.setPreferredSize(new Dimension(600, 30));
-        
-        
 
         // On gère l'évennement du bouton
         valider.addActionListener(new ActionListener() {
@@ -230,7 +224,7 @@ public class Ajouter_malade {
                     date_naissance_recu = jtf_date_naissance.getText();
                     // enregistre le code service recu
                     code_service_recu = Jcombo_service.getSelectedItem().toString();
-                                    
+
                     // récupération du numéro de chambre
                     try {
                         no_chambre_recu = Integer.parseInt(jtf_no_chambre.getText().trim());
@@ -238,8 +232,7 @@ public class Ajouter_malade {
                         // récupération du numéro de lit
                         try {
                             no_lit_recu = Integer.parseInt(jtf_no_lit.getText().trim());
-                            
-                           
+
                             // avant d'enregistrer le malade on vérifie que le nom du docteur existe
                             // on récupère le numéro de docteur correspondant au nom inscrit dans le formulaire 
                             requete_docteur = Connexion.getInstance().CreerRequete_recup_id_docteur(nom_docteur_recu);
@@ -251,7 +244,7 @@ public class Ajouter_malade {
                                     JOptionPane.showMessageDialog(null, "Le docteur recherché n'existe pas.", "Erreur", JOptionPane.ERROR_MESSAGE);
                                 } // sinon on vérifie la date de naissance 
                                 else {
-                                    
+
                                     // RecupererId renvoie une chaine de caractere, on le transforme en int
                                     id_docteur_recup = Integer.parseInt(id_string_docteur_recup.trim());
 
@@ -303,9 +296,13 @@ public class Ajouter_malade {
                                                             ex.printStackTrace();
                                                         }
 
-                                                    } catch (SQLException ex) {
-                                                        System.out.println("Echec SQL");
-                                                        ex.printStackTrace();
+                                                    } catch (SQLException ei) {
+                                                        if (ei instanceof MySQLIntegrityConstraintViolationException) {
+                                                            JOptionPane.showMessageDialog(null, "Ce patient est déjà enregistré.", "Erreur", JOptionPane.ERROR_MESSAGE);
+                                                            System.out.println("Echec SQL");
+                                                            ei.printStackTrace();
+                                                        }
+
                                                     }
 
                                                 } else {
@@ -374,7 +371,6 @@ public class Ajouter_malade {
         f.add(p15);
 
         f.add(p11);
-
 
         f.setSize(600, 600);
 
