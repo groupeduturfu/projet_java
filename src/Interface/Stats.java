@@ -15,6 +15,7 @@ import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -39,8 +40,7 @@ public class Stats {
         // On initialise et remplit la combobox
         combo.setPreferredSize(new Dimension(400, 30));
         combo.addItem("Nombre de patient par service");
-        combo.addItem("Salaire moyen des infirmiers");
-        combo.addItem("Salaire moyen des docteurs");
+        combo.addItem("Salaire moyen des employés");
 
         // On initialise les JLabels
         JLabel texte = new JLabel("Veuillez selectionner la requete à envoyer");
@@ -76,7 +76,62 @@ public class Stats {
         valider.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
 
-              System.out.println("Moyenne salaire docteurs : " + Connexion.getInstance().moyenne_salaired());
+                if (combo.getSelectedItem().equals("Nombre de patient par service")) {
+
+                    System.out.println("Nb de patients en REA : " + Connexion.getInstance().nb_malade_services("\"REA\""));
+                    System.out.println("Nb de patients en ORL : " + Connexion.getInstance().nb_malade_services("\"ORL\""));
+                    System.out.println("Nb de patients en CHG : " + Connexion.getInstance().nb_malade_services("\"CHG\""));
+
+                } else if (combo.getSelectedItem().equals("Salaire moyen des employés")) {
+                    JLabel jf_doc, jf_inf, jf_emp;
+                    JTextField jtf_doc, jtf_inf, jtf_emp;
+                    JPanel p5, p6, p7;
+
+                    // On initialise les JF
+                    jf_doc = new JLabel("Salaire moyen des docteurs");
+                    jf_inf = new JLabel("Salaire moyen des infirmiers");
+                    jf_emp = new JLabel("Salaire moyen de tous les employés");
+
+                    // On initialise les JTF
+                    jtf_doc = new JTextField();
+                    jtf_doc.setPreferredSize(new Dimension(200, 30));
+                    jtf_doc.setText(Float.toString(Connexion.getInstance().moyenne_salaired()) + " €");
+
+                    jtf_inf = new JTextField();
+                    jtf_inf.setPreferredSize(new Dimension(200, 30));
+                    jtf_inf.setText(Float.toString((Connexion.getInstance().moyenne_salairei())) + " €");
+
+                    jtf_emp = new JTextField();
+                    jtf_emp.setPreferredSize(new Dimension(160, 30));
+                    jtf_emp.setText(Float.toString((Connexion.getInstance().moyenne_salaire())) + " €");
+
+                    // On crée les JPanels
+                    p5 = new JPanel();
+                    p5.add(jf_doc);
+                    p5.add(jtf_doc);
+                    p5.setOpaque(false);
+
+                    p6 = new JPanel();
+                    p6.add(jf_inf);
+                    p6.add(jtf_inf);
+                    p6.setOpaque(false);
+
+                    p7 = new JPanel();
+                    p7.add(jf_emp);
+                    p7.add(jtf_emp);
+                    p7.setOpaque(false);
+
+                    f.setContentPane(new ImagePanel(new ImageIcon("fond66.jpg").getImage())); // Met l'image en background
+                    f.add(p1);
+                    f.add(p2);
+                    f.add(p4);
+                    f.add(p5);
+                    f.add(p6);
+                    f.add(p7);
+
+                    f.setVisible(true);
+                    f.setSize(new Dimension(600, 600));
+                }
             }
         });
     }
