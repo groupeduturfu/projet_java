@@ -20,6 +20,8 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import projet.Connexion;
 
@@ -39,6 +41,8 @@ public class Ajouter_employe {
         JButton valider = new JButton("Valider");
         JButton retour = new JButton("Retour");
 
+        
+        
         // checkboxes des services si docteur
         JCheckBox jch_ORL = new JCheckBox("ORL");
         JCheckBox jch_REA = new JCheckBox("REA");
@@ -54,7 +58,7 @@ public class Ajouter_employe {
         jch_dchg.setSelected(false);
 
         // checkbox si infirmier = surveillant
-        JCheckBox jch_surveillant = new JCheckBox("Surveillant");
+        JCheckBox jch_surveillant = new JCheckBox("Surveillant de la chambre : ");
         jch_surveillant.setSelected(false);
 
         // liste déroulante pour les chambres disponibles à la surveillance
@@ -88,13 +92,13 @@ public class Ajouter_employe {
         jl_nom = new JLabel("Nom");
         jl_prenom = new JLabel("Prénom");
         jl_adresse = new JLabel("Adresse");
-        jl_tel = new JLabel("N° telephone");
+        jl_tel = new JLabel("N° telephone '-- -- -- -- --'");
         jl_salaire = new JLabel("Salaire");
         jl_fonction = new JLabel("Fonction");
         jl_specialite = new JLabel("Specialite");
         jl_rotation = new JLabel("Rotation");
         jl_code_service = new JLabel("Code service");
-        jl_date_naissance = new JLabel("Date de naissance");
+        jl_date_naissance = new JLabel("Date de naissance 'aaaa-mm-jj'");
 
         // On iitialise les JTF
         //jtf_no_id = new JTextField();
