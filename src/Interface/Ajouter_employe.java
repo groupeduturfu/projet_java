@@ -330,7 +330,7 @@ public class Ajouter_employe {
 
                                                     // ON REMPLIT LA TABLE SERICE
                                                     Connexion.getInstance().docteurs_requetes_directeur(jch_dorl, jch_drea, jch_dchg, id_recup);
-                                                    
+
                                                     // on affiche à l'utilisateur que le nouveau docteur a bien été inscrit
                                                     JOptionPane.showMessageDialog(null, "Le docteur a été enregistré.", "Info", JOptionPane.ERROR_MESSAGE);
 
@@ -346,29 +346,32 @@ public class Ajouter_employe {
                                                 try {
                                                     // on enregistre les infos dans la table INFIRMIER
                                                     Connexion.getInstance().executeUpdate(requete_infirmier);
-                                                    
+
                                                     // on affiche à l'utilisateur que le nouvel infirmier a bien été inscrit
                                                     JOptionPane.showMessageDialog(null, "L'infirmier a été enregistré.", "Info", JOptionPane.ERROR_MESSAGE);
-                                                
+
                                                 } catch (SQLException ex) {
                                                     System.out.println("Echec SQL");
                                                     ex.printStackTrace();
                                                 }
 
-                                                // TABLE CHAMBRE : 
-                                                // on écrit la requete pour inscrire le surveillant et on l'exécute
-                                                requete_surveillant = Connexion.getInstance().CreerRequete_surveillant(id_recup, rotation_recu, code_service_recu, chambre_recu);
-                                                System.out.println(requete_surveillant);
+                                                // s'il a sélectionné la case "surveillant"
+                                                if (jch_surveillant.isSelected()) {
+                                                    // TABLE CHAMBRE : 
+                                                    // on écrit la requete pour inscrire le surveillant et on l'exécute
+                                                    requete_surveillant = Connexion.getInstance().CreerRequete_surveillant(id_recup, rotation_recu, code_service_recu, chambre_recu);
+                                                    System.out.println(requete_surveillant);
 
-                                                try {
-                                                    // on enregistre les infos dans la table CHAMBRE
-                                                    Connexion.getInstance().executeUpdate(requete_surveillant);
-                                                    
-                                                    // on affiche à l'utilisateur que le nouvel infirmier a bien été inscrit
-                                                    JOptionPane.showMessageDialog(null, "L'infirmier a été enregistré en tant que surveillant.", "Info", JOptionPane.ERROR_MESSAGE);
-                                                } catch (SQLException ex) {
-                                                    System.out.println("Echec SQL");
-                                                    ex.printStackTrace();
+                                                    try {
+                                                        // on enregistre les infos dans la table CHAMBRE
+                                                        Connexion.getInstance().executeUpdate(requete_surveillant);
+
+                                                        // on affiche à l'utilisateur que le nouvel infirmier a bien été inscrit
+                                                        JOptionPane.showMessageDialog(null, "L'infirmier a été enregistré en tant que surveillant.", "Info", JOptionPane.ERROR_MESSAGE);
+                                                    } catch (SQLException ex) {
+                                                        System.out.println("Echec SQL");
+                                                        ex.printStackTrace();
+                                                    }
                                                 }
 
                                             }
@@ -395,6 +398,8 @@ public class Ajouter_employe {
                         }
                     } catch (NumberFormatException nfe) {
                         JOptionPane.showMessageDialog(null, "Le salaire n'est pas correct.", "Erreur", JOptionPane.ERROR_MESSAGE);
+                        nfe.printStackTrace();
+
                     }
 
                 }

@@ -276,9 +276,9 @@ public class Connexion {
         return requete;
     }
 
-    public String CreerRequete_hospitalisation(int id, int chambre, int lit, int no_docteur) {
+    public String CreerRequete_hospitalisation(int id, int chambre, int lit, int no_docteur, String service) {
         String requete = "initialisee";
-        requete = "INSERT INTO hospitalisation (no_malade, no_chambre, no_lit, no_docteur) values (" + id + ", " + chambre + ", " + lit + ", " + no_docteur + ");";
+        requete = "INSERT INTO hospitalisation (no_malade, no_chambre, no_lit, no_docteur, code_service) values (" + id + ", " + chambre + ", " + lit + ", " + no_docteur + ",  '" + service + "');";
         System.out.println(requete);
 
         return requete;
@@ -435,7 +435,7 @@ public class Connexion {
 
     public String RecupererId(String requete) throws SQLException {
 
-        String id = "101";
+        String id = "NotExist";
 
         // récupération de l'ordre de la requete
         rset = stmt.executeQuery(requete);

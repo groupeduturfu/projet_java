@@ -12,6 +12,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -26,13 +27,21 @@ import projet.Connexion;
 public class Ajouter_malade {
 
     private static Ajouter_malade fenetre = null;
-    private static JPanel p1, p2, p3, p4, p5, p6, p8, p9, p10, p11, p12, p13, p14;
+    private static JPanel p1, p2, p3, p4, p5, p6, p8, p9, p10, p11, p12, p13, p14, p15;
 
     private Ajouter_malade(JFrame f) {
         JTextField jtf_nom, jtf_prenom, jtf_no_chambre, jtf_no_lit, jtf_adresse, jtf_tel, jtf_mutuelle, jtf_docteur, jtf_description, jtf_date_naissance;
-        JLabel jl_no_id, jl_nom, jl_prenom, jl_no_chambre, jl_no_lit, jl_adresse, jl_tel, jl_mutuelle, jl_docteur, jl_description, jl_date_naissance, texte;
+        JLabel jl_no_id, jl_nom, jl_prenom, jl_no_chambre, jl_no_lit, jl_adresse, jl_tel, jl_mutuelle, jl_docteur, jl_code_service, jl_description, jl_date_naissance, texte;
         JButton valider = new JButton("Valider");
         JButton retour = new JButton("Retour");
+        
+        
+        // Liste deroulante si infirmier pour le service des infirmiers
+        JComboBox Jcombo_service;
+        String[] service_string = {"ORL", "REA", "CHG"};
+        Jcombo_service = new JComboBox(service_string);
+
+        
 
         // On initialise les JLabel
         texte = new JLabel("Merci de remplir toutes les informations suivantes");
@@ -45,6 +54,7 @@ public class Ajouter_malade {
         jl_tel = new JLabel("N° telephone");
         jl_mutuelle = new JLabel("Mutuelle");
         jl_docteur = new JLabel("Nom du docteur");
+        jl_code_service = new JLabel("Code Service");
         jl_description = new JLabel("Description");
         jl_date_naissance = new JLabel("Date de naissance");
 
@@ -60,7 +70,7 @@ public class Ajouter_malade {
         jtf_description = new JTextField();
         jtf_date_naissance = new JTextField();
 
-        //jtf_no_id.setColumns(10);
+        
         jtf_nom.setColumns(15);
         jtf_prenom.setColumns(15);
         jtf_no_chambre.setColumns(15);
@@ -149,8 +159,16 @@ public class Ajouter_malade {
         p14.add(jtf_date_naissance);
         p14.setOpaque(false);
         p14.setPreferredSize(new Dimension(600, 30));
-
-        System.out.println("nom : ");
+ 
+        
+        // liste déroulante des code service
+        p15 = new JPanel();
+        p15.add(jl_code_service);
+        p15.add(Jcombo_service);
+        p15.setOpaque(false);
+        p15.setPreferredSize(new Dimension(600, 30));
+        
+        
 
         // On gère l'évennement du bouton
         valider.addActionListener(new ActionListener() {
@@ -171,6 +189,7 @@ public class Ajouter_malade {
                 String date_naissance_recu;
                 String no_chambre;
                 String no_lit;
+                String code_service_recu;
 
                 // chaines de caractère dans laquelle on écrit la requete correspondant aux infos du formulaire rempli 
                 String requete_malade;
@@ -199,7 +218,9 @@ public class Ajouter_malade {
                     mutuelle_recu = jtf_mutuelle.getText();
                     nom_docteur_recu = jtf_docteur.getText();
                     date_naissance_recu = jtf_date_naissance.getText();
-
+                    // enregistre le code service recu
+                    code_service_recu = Jcombo_service.getSelectedItem().toString();
+                                    
                     // récupération du numéro de chambre
                     try {
                         no_chambre_recu = Integer.parseInt(jtf_no_chambre.getText().trim());
@@ -207,7 +228,8 @@ public class Ajouter_malade {
                         // récupération du numéro de lit
                         try {
                             no_lit_recu = Integer.parseInt(jtf_no_lit.getText().trim());
-
+                            
+                           
                             // avant d'enregistrer le malade on vérifie que le nom du docteur existe
                             // on récupère le numéro de docteur correspondant au nom inscrit dans le formulaire 
                             requete_docteur = Connexion.getInstance().CreerRequete_recup_id_docteur(nom_docteur_recu);
@@ -215,10 +237,11 @@ public class Ajouter_malade {
                                 // on recupere le numero du medecin qui soigne le patient
                                 id_string_docteur_recup = Connexion.getInstance().RecupererId(requete_docteur);
                                 // si le nom du docteur mentionné n'exite pas dans la base
-                                if (id_string_docteur_recup == "NotExist") {
+                                if ("NotExist".equals(id_string_docteur_recup)) {
                                     JOptionPane.showMessageDialog(null, "Le docteur recherché n'existe pas.", "Erreur", JOptionPane.ERROR_MESSAGE);
                                 } // sinon on vérifie la date de naissance 
                                 else {
+                                    
                                     // RecupererId renvoie une chaine de caractere, on le transforme en int
                                     id_docteur_recup = Integer.parseInt(id_string_docteur_recup.trim());
 
@@ -252,7 +275,7 @@ public class Ajouter_malade {
                                                             System.out.println("id malade recupéré : " + id_malade_recup);
 
                                                             // on crée un nouveau tuple dans la table hospitalisation avec comme no_malade celui créé à l'instant
-                                                            requete_hopsitalisation = Connexion.getInstance().CreerRequete_hospitalisation(id_malade_recup, no_chambre_recu, no_lit_recu, id_docteur_recup);
+                                                            requete_hopsitalisation = Connexion.getInstance().CreerRequete_hospitalisation(id_malade_recup, no_chambre_recu, no_lit_recu, id_docteur_recup, code_service_recu);
                                                             try {
                                                                 // on enregistre les infos dans la table hospitalisation
                                                                 Connexion.getInstance().executeUpdate(requete_hopsitalisation);
@@ -337,7 +360,10 @@ public class Ajouter_malade {
         f.add(p9);
         f.add(p10);
         f.add(p12);
+        f.add(p15);
+
         f.add(p11);
+
 
         f.setSize(600, 600);
 
