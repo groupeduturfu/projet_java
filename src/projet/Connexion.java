@@ -276,9 +276,9 @@ public class Connexion {
         return requete;
     }
 
-    public String CreerRequete_hospitalisation(int id, int chambre, int lit, int no_docteur) {
+    public String CreerRequete_hospitalisation(int id, int chambre, int lit, int no_docteur, String service) {
         String requete = "initialisee";
-        requete = "INSERT INTO hospitalisation (no_malade, no_chambre, no_lit, no_docteur) values (" + id + ", " + chambre + ", " + lit + ", " + no_docteur + ");";
+        requete = "INSERT INTO hospitalisation (no_malade, no_chambre, no_lit, no_docteur, code_service) values (" + id + ", " + chambre + ", " + lit + ", " + no_docteur + ",  '" + service + "');";
         System.out.println(requete);
 
         return requete;
@@ -287,10 +287,44 @@ public class Connexion {
     public ArrayList Requete_chambre_dispo_surveillant(String rotation, String code_service) {
         ArrayList<String> liste = null;
 
+                    try 
+                    {
+                       //System.out.println("chambres sans surveillant jour" + RemplirChampsRequete("SELECT code_service, no_chambre FROM chambre WHERE ( no_surveillant_jour = 0);"));
+                       //System.out.println("chambres sans surveillant nuit" + RemplirChampsRequete("SELECT code_service, no_chambre FROM chambre WHERE ( no_surveillant_nuit = 0);"));
         System.out.println("" + rotation);
         System.out.println("" + code_service);
 
-        try {
+                       // on renvoie les chambres disponibles à la surveillance dans ce service
+                       if (rotation == "JOUR") 
+                       {
+                            liste  = RemplirChampsRequete("SELECT no_chambre FROM chambre WHERE (code_service LIKE '" + code_service + "' AND no_surveillant_jour = 0);");
+                       }
+                       else if (rotation == "NUIT") 
+                       {
+                            liste  = RemplirChampsRequete("SELECT no_chambre FROM chambre WHERE (code_service LIKE '" + code_service + "' AND no_surveillant_nuit = 0);");
+                       }
+                        
+                    }
+                     catch (SQLException ex)
+                    {
+                         System.out.println("Echec SQL");
+                        ex.printStackTrace();
+                    }
+                    
+                return liste;
+    }
+    
+    /*
+    public String CreerRequete_surveillant(int no_infirmier, String rotation, String code_service, int no_chambre)
+    {
+        String requete = null;
+        
+        if (rotation == "JOUR")
+        {
+            
+            requete = "UPDATE chambre SET no_surveillant_jour = " + no_infirmier + " WHERE (code_service LIKE '" + code_service + "' AND no_chambre = " + no_chambre + ");";
+            
+            try {
             System.out.println("chambres sans surveillant jour" + RemplirChampsRequete("SELECT code_service, no_chambre FROM chambre WHERE ( no_surveillant_jour = 0);"));
             System.out.println("chambres sans surveillant nuit" + RemplirChampsRequete("SELECT code_service, no_chambre FROM chambre WHERE ( no_surveillant_nuit = 0);"));
 
@@ -311,7 +345,12 @@ public class Connexion {
         return liste;
     }
 
-    public String CreerRequete_surveillant(int no_infirmier, String rotation, String code_service, int no_chambre) {
+    */
+
+    
+
+
+        public String CreerRequete_surveillant(int no_infirmier, String rotation, String code_service, int no_chambre) {
         String requete = null;
 
         if (rotation == "JOUR") {
@@ -396,7 +435,7 @@ public class Connexion {
 
     public String RecupererId(String requete) throws SQLException {
 
-        String id = "101";
+        String id = "NotExist";
 
         // récupération de l'ordre de la requete
         rset = stmt.executeQuery(requete);
