@@ -41,9 +41,10 @@ public class Connexion {
     /**
      * ArrayList public pour les requêtes de sélection
      */
-    public ArrayList<String> Liste_requetes = new ArrayList<String>();
-
-    private Connexion(String adresse, String password) throws SQLException, ClassNotFoundException // "jdbc:mysql://http://localhost:8888"
+    public ArrayList<String> Liste_requetes_appartient = new ArrayList<String>();
+    public ArrayList<String> Liste_requetes_directeur = new ArrayList<String>();
+    
+    private Connexion(String adresse, String password) throws SQLException, ClassNotFoundException  // "jdbc:mysql://http://localhost:8888"
     {
         conn = DriverManager.getConnection(adresse, "root", password);
         stmt = conn.createStatement();
@@ -201,12 +202,14 @@ public class Connexion {
         return requete;
 
     }
-
-    private void ajouterRequete_creer(String requete) {
-        Liste_requetes.add(requete);
-    }
-
-    public String CreerRequete_employe(String nom, String prenom, String adresse, String tel, int salaire, String fonction, String d_naissance) {
+    
+    private void ajouterRequete_appartient_creer(String requete)
+    {
+        Liste_requetes_appartient.add(requete);
+    }  
+    
+    public String CreerRequete_employe(String nom, String prenom, String adresse, String tel, int salaire, String fonction, String d_naissance)
+    {
         String requete = "initialisee";
         requete = "INSERT INTO employe (nom, prenom, adresse, tel, salaire, fonction, date_naissance) values ('" + nom + "', '" + prenom + "', '" + adresse + "', '" + tel + "', " + salaire + ", '" + fonction + "', '" + d_naissance + "');";
         System.out.println(requete);
@@ -320,35 +323,51 @@ public class Connexion {
 
         return requete;
     }
-
-    public void docteurs_requetes_services(JCheckBox jch_ORL, JCheckBox jch_REA, JCheckBox jch_CHG, int no_docteur) {
-        if (jch_ORL.isSelected()) {
-            ajouterRequete_creer("INSERT INTO appartient VALUES (" + no_docteur + ", 'ORL');");
-
+    
+    public void docteurs_requetes_appartient(JCheckBox jch_ORL, JCheckBox jch_REA, JCheckBox jch_CHG, int no_docteur)
+    {
+        // on supprime toutes les requêtes restées en mémoire dans la liste
+        Liste_requetes_directeur.clear();
+        
+        // services sélectionnés
+        if (jch_ORL.isSelected())
+        {
+            ajouterRequete_appartient_creer("INSERT INTO appartient VALUES (" + no_docteur + ", 'ORL');");
         }
-        if (jch_REA.isSelected()) {
-            ajouterRequete_creer("INSERT INTO appartient VALUES (" + no_docteur + ", 'REA');");
-
+        if (jch_REA.isSelected())
+        {
+            ajouterRequete_appartient_creer("INSERT INTO appartient VALUES (" + no_docteur + ", 'REA');");
         }
-        if (jch_CHG.isSelected()) {
-            ajouterRequete_creer("INSERT INTO appartient VALUES (" + no_docteur + ", 'CHG');");
+        if (jch_CHG.isSelected())
+        {
+            ajouterRequete_appartient_creer("INSERT INTO appartient VALUES (" + no_docteur + ", 'CHG');");     
         }
-
+        
+        
+        
         // executer la liste de requetes
-        System.out.println("nb check boxes : " + Liste_requetes.size());
+        System.out.println("nb check boxes : " + Liste_requetes_appartient.size() );
 
         int i;
-        for (i = 0; i < Liste_requetes.size(); i++) {
-            try {
-                this.executeUpdate(Liste_requetes.get(i));
-            } catch (SQLException ex) {
+        for (i = 0; i<Liste_requetes_appartient.size(); i++)
+        {
+            try
+            {
+               this.executeUpdate(Liste_requetes_appartient.get(i));
+            }
+            catch (SQLException ex)
+            {
                 System.out.println("Echec SQL");
                 ex.printStackTrace();
             }
-            System.out.println("" + Liste_requetes.get(i));
+            System.out.println("" + Liste_requetes_appartient.get(i));
         }
 
     }
+    
+    
+    
+    
     /*
      public void CreerRequete_CreerPatient(String nom, String prenom, int chambre, int lit, String adresse, String tel, String mutuelle)
      {
@@ -530,5 +549,52 @@ public class Connexion {
 
         return requete;
     }
+    
+    
+    public void docteurs_requetes_directeur(JCheckBox jch_Dir_ORL, JCheckBox jch_Dir_REA, JCheckBox jch_Dir_CHG, int no_docteur)
+    {
+        // on supprime toutes les requêtes restées en mémoire dans la liste
+        Liste_requetes_directeur.clear();
+        
+        // directeurs sélectionnés
+        if (jch_Dir_ORL.isSelected())
+        {
+            ajouterRequete_directeur_creer("UPDATE service SET no_directeur = " + no_docteur + " WHERE code_service LIKE 'ORL';");
+        }
+        if (jch_Dir_REA.isSelected())
+        {
+            ajouterRequete_directeur_creer("UPDATE service SET no_directeur = " + no_docteur + " WHERE code_service LIKE 'REA';");
+        }
+        if (jch_Dir_CHG.isSelected())
+        {
+            ajouterRequete_directeur_creer("UPDATE service SET no_directeur = " + no_docteur + " WHERE code_service LIKE 'CHG';");
+        }
+        
+        
+        // executer la liste de requetes
+        System.out.println("nb check boxes : " + Liste_requetes_directeur.size() );
 
+        int i;
+        for (i = 0; i<Liste_requetes_directeur.size(); i++)
+        {
+            try
+            {
+               this.executeUpdate(Liste_requetes_directeur.get(i));
+            }
+            catch (SQLException ex)
+            {
+                System.out.println("Echec SQL");
+                ex.printStackTrace();
+            }
+            System.out.println("" + Liste_requetes_directeur.get(i));
+        }
+                
+    }
+    
+    private void ajouterRequete_directeur_creer(String requete)
+    {
+        Liste_requetes_directeur.add(requete);
+    }
+
+    
 }
