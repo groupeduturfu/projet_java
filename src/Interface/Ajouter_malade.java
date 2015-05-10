@@ -261,7 +261,7 @@ public class Ajouter_malade {
                                                 // si la requete renvoie not exist alors le lit est libre, on enregistre le patient
                                                 if (check_chambre == "NotExist") {
 
-                                                    // écriture de la requete : écrire infos dans la table malade
+                                                    // écriture de la requete : écrire infos dans la table MALADE
                                                     requete_malade = Connexion.getInstance().CreerRequete_malade(nom_recu, prenom_recu, adresse_recu, tel_recu, mutuelle_recu, date_naissance_recu);
                                                     try {
                                                         // on enregistre les infos dans la table malade
