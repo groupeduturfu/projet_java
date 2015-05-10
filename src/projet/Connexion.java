@@ -343,18 +343,16 @@ public class Connexion
 
                     try 
                     {
-                       System.out.println("chambres sans surveillant jour" + RemplirChampsRequete("SELECT code_service, no_chambre FROM chambre WHERE ( no_surveillant_jour = 0);"));
-                       System.out.println("chambres sans surveillant nuit" + RemplirChampsRequete("SELECT code_service, no_chambre FROM chambre WHERE ( no_surveillant_nuit = 0);"));
+                       //System.out.println("chambres sans surveillant jour" + RemplirChampsRequete("SELECT code_service, no_chambre FROM chambre WHERE ( no_surveillant_jour = 0);"));
+                       //System.out.println("chambres sans surveillant nuit" + RemplirChampsRequete("SELECT code_service, no_chambre FROM chambre WHERE ( no_surveillant_nuit = 0);"));
 
                        // on renvoie les chambres disponibles à la surveillance dans ce service
                        if (rotation == "JOUR") 
                        {
-                            System.out.println ("rentre dans jour");
                             liste  = RemplirChampsRequete("SELECT no_chambre FROM chambre WHERE (code_service LIKE '" + code_service + "' AND no_surveillant_jour = 0);");
                        }
                        else if (rotation == "NUIT") 
                        {
-                            System.out.println ("rentre dans nuit");
                             liste  = RemplirChampsRequete("SELECT no_chambre FROM chambre WHERE (code_service LIKE '" + code_service + "' AND no_surveillant_nuit = 0);");
                        }
                         
