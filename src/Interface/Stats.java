@@ -13,6 +13,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.io.File;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -27,6 +29,13 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.data.category.DefaultCategoryDataset;
+import org.jfree.data.xy.XYDataset;
+import org.jfree.ui.RefineryUtilities;
 import projet.Connexion;
 
 
@@ -89,30 +98,8 @@ public class Stats {
                     System.out.println("Nb de patients en REA : " + Connexion.getInstance().nb_malade_services("\"REA\""));
                     System.out.println("Nb de patients en ORL : " + Connexion.getInstance().nb_malade_services("\"ORL\""));
                     System.out.println("Nb de patients en CHG : " + Connexion.getInstance().nb_malade_services("\"CHG\""));
-                   
-    /*        /////////////////////
-                    JFrame frame = new JFrame();
-                    frame.setSize(400, 300);
-                    double[] values = new double[3];
-                    String[] names = new String[3];
-                    values[0] = 1;
-                    names[0] = "Item 1";
 
-                    values[1] = 2;
-                    names[1] = "Item 2";
-
-                    values[2] = 4;
-                    names[2] = "Item 3";
-
-                    frame.getContentPane().add(new ChartPanel(values, names, "title"));
-                    WindowListener wndCloser = new WindowAdapter() {
-                        public void windowClosing(WindowEvent e) {
-                            System.exit(0);
-                        }
-                    };
-                    frame.addWindowListener(wndCloser);
-                    frame.setVisible(true);
-     */       ////////////////////////
+                    new Camembert(f, Connexion.getInstance().nb_malade_services("\"REA\""), Connexion.getInstance().nb_malade_services("\"ORL\""), Connexion.getInstance().nb_malade_services("\"CHG\""));
                     
                 } else if (combo.getSelectedItem().equals("Salaire moyen des employés")) {
                     JLabel jf_doc, jf_inf, jf_emp;
