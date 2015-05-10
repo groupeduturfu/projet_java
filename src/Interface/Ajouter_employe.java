@@ -5,6 +5,7 @@
  */
 package Interface;
 
+import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -41,8 +42,6 @@ public class Ajouter_employe {
         JButton valider = new JButton("Valider");
         JButton retour = new JButton("Retour");
 
-        
-        
         // checkboxes des services si docteur
         JCheckBox jch_ORL = new JCheckBox("ORL");
         JCheckBox jch_REA = new JCheckBox("REA");
@@ -333,9 +332,13 @@ public class Ajouter_employe {
                                                 System.out.println("Echec SQL");
                                                 ex.printStackTrace();
                                             }
-                                        } catch (SQLException ex) {
-                                            System.out.println("Echec SQL");
-                                            ex.printStackTrace();
+                                        } catch (SQLException ei) {
+                                            if (ei instanceof MySQLIntegrityConstraintViolationException) {
+                                                JOptionPane.showMessageDialog(null, "Cet employé est déjà enregistré.", "Erreur", JOptionPane.ERROR_MESSAGE);
+                                                System.out.println("Echec SQL");
+                                                ei.printStackTrace();
+                                            }
+
                                         }
                                     }// fin du if il n'y a pas d'incohérences dans les checkboxes docteurs
                                 } // sinon s'il s'agit d'un infirmier
@@ -393,13 +396,13 @@ public class Ajouter_employe {
 
                                                     // on affiche à l'utilisateur que le nouvel infirmier a bien été inscrit
                                                     JOptionPane.showMessageDialog(null, "L'infirmier a été enregistré en tant que surveillant.", "Info", JOptionPane.ERROR_MESSAGE);
-                                                
+
                                                     //on déselectionne la checkbox surveillant 
                                                     jch_surveillant.setSelected(false);
 
                                                     // et on rend vide la liste déroulante des chambres  
-                                                        Jcombo_chambres.removeAllItems();
-                                                
+                                                    Jcombo_chambres.removeAllItems();
+
                                                 } catch (SQLException ex) {
                                                     System.out.println("Echec SQL");
                                                     ex.printStackTrace();
@@ -411,9 +414,13 @@ public class Ajouter_employe {
 
                                         }
 
-                                    } catch (SQLException ex) {
-                                        System.out.println("Echec SQL");
-                                        ex.printStackTrace();
+                                    } catch (SQLException ei) {
+                                        if (ei instanceof MySQLIntegrityConstraintViolationException) {
+                                            JOptionPane.showMessageDialog(null, "Ce patient est déjà enregistré.", "Erreur", JOptionPane.ERROR_MESSAGE);
+                                            System.out.println("Echec SQL");
+                                            ei.printStackTrace();
+                                        }
+
                                     }
 
                                 } // fin du else if infirmier
