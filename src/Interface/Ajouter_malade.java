@@ -30,7 +30,7 @@ import projet.Connexion;
 public class Ajouter_malade {
 
     private static Ajouter_malade fenetre = null;
-    private static JPanel p1, p2, p3, p4, p5, p6, p8, p9, p10, p11, p12, p13, p14, p15;
+    private static JPanel p1, p2, p3, p4, p5, p6, p8, p9, p10, p11, p12, p12bis, p13, p14, p15;
 
     // recupere les numéros de chambre du service sélectionné 
     private ArrayList<String> liste_chambres = new ArrayList<String>();
@@ -38,8 +38,8 @@ public class Ajouter_malade {
 // recupere les numéros de lits de la chambre sélectionnée
     //private ArrayList<String> liste_lits = new ArrayList<String>();
     private Ajouter_malade(JFrame f) {
-        JTextField jtf_nom, jtf_prenom, jtf_no_chambre, jtf_no_lit, jtf_adresse, jtf_tel, jtf_mutuelle, jtf_docteur, jtf_date_naissance;
-        JLabel jl_no_id, jl_nom, jl_prenom, jl_no_chambre, jl_no_lit, jl_adresse, jl_tel, jl_mutuelle, jl_docteur, jl_code_service, jl_description, jl_date_naissance, texte;
+        JTextField jtf_nom, jtf_prenom, jtf_no_chambre, jtf_no_lit, jtf_adresse, jtf_tel, jtf_mutuelle, jtf_docteur, jtf_docteur_prenom, jtf_date_naissance;
+        JLabel jl_no_id, jl_nom, jl_prenom, jl_no_chambre, jl_no_lit, jl_adresse, jl_tel, jl_mutuelle, jl_docteur, jl_docteur_prenom, jl_code_service, jl_description, jl_date_naissance, texte;
         JButton valider = new JButton("Valider");
         JButton retour = new JButton("Retour");
 
@@ -70,9 +70,11 @@ public class Ajouter_malade {
         jl_tel = new JLabel("N° telephone");
         jl_mutuelle = new JLabel("Mutuelle");
         jl_docteur = new JLabel("Nom du docteur");
+        jl_docteur_prenom = new JLabel("Prenom du docteur");
         jl_code_service = new JLabel("Code Service");
         jl_description = new JLabel("Description");
         jl_date_naissance = new JLabel("Date de naissance");
+        
 
         // On iitialise les JTF
         jtf_nom = new JTextField();
@@ -83,6 +85,7 @@ public class Ajouter_malade {
         jtf_tel = new JTextField();
         jtf_mutuelle = new JTextField();
         jtf_docteur = new JTextField();
+        jtf_docteur_prenom = new JTextField();
         jtf_date_naissance = new JTextField();
 
         jtf_description = new JTextArea();
@@ -100,6 +103,7 @@ public class Ajouter_malade {
         jtf_tel.setColumns(15);
         jtf_mutuelle.setColumns(15);
         jtf_docteur.setColumns(15);
+        jtf_docteur_prenom.setColumns(15);
         jtf_description.setColumns(25);
         jtf_description.setPreferredSize(new Dimension(50, 100));
 
@@ -166,11 +170,17 @@ public class Ajouter_malade {
         p11.setPreferredSize(new Dimension(600, 30));
 
         p12 = new JPanel();
-        p12.add(jl_docteur);
-        p12.add(jtf_docteur);
+        p12.add(jl_docteur_prenom);
+        p12.add(jtf_docteur_prenom);
         p12.setOpaque(false);
         p12.setPreferredSize(new Dimension(600, 30));
 
+        p12bis = new JPanel();
+        p12bis.add(jl_docteur);
+        p12bis.add(jtf_docteur);
+        p12bis.setOpaque(false);
+        p12bis.setPreferredSize(new Dimension(600, 30));
+        
         p13 = new JPanel();
         p13.add(jl_description);
         p13.add(jsp);
@@ -206,6 +216,7 @@ public class Ajouter_malade {
                 String tel_recu;
                 String mutuelle_recu;
                 String nom_docteur_recu;
+                String prenom_docteur_recu;
                 String date_naissance_recu;
                 String no_chambre;
                 String no_lit;
@@ -237,6 +248,7 @@ public class Ajouter_malade {
                     tel_recu = jtf_tel.getText();
                     mutuelle_recu = jtf_mutuelle.getText();
                     nom_docteur_recu = jtf_docteur.getText();
+                    prenom_docteur_recu = jtf_docteur_prenom.getText();
                     date_naissance_recu = jtf_date_naissance.getText();
                     String chambre_string = jtf_no_chambre.getText().trim();
                     String description = jtf_description.getText();
@@ -259,7 +271,7 @@ public class Ajouter_malade {
 
                                 // avant d'enregistrer le malade on vérifie que le nom du docteur existe
                                 // on récupère le numéro de docteur correspondant au nom inscrit dans le formulaire 
-                                requete_docteur = Connexion.getInstance().CreerRequete_recup_id_docteur(nom_docteur_recu);
+                                requete_docteur = Connexion.getInstance().CreerRequete_recup_id_docteur(nom_docteur_recu, prenom_docteur_recu);
                                 try {
                                     // on recupere le numero du medecin qui soigne le patient
                                     id_string_docteur_recup = Connexion.getInstance().RecupererId(requete_docteur);
@@ -521,6 +533,7 @@ public class Ajouter_malade {
         f.add(p9);
         f.add(p10);
         f.add(p12);
+        f.add(p12bis);
         f.add(p13);
         //f.add(p5);
 

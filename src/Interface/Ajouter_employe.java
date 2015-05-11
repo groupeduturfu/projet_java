@@ -321,12 +321,15 @@ public class Ajouter_employe {
                                                 Connexion.getInstance().executeUpdate(requete_docteur);
                                                 // on affiche à l'utilisateur que le nouveau docteur a bien été inscrit
                                                 JOptionPane.showMessageDialog(null, "Le docteur a été enregistré.", "Info", JOptionPane.ERROR_MESSAGE);
+                                                
 
                                                 // ON REMPLIT LA TABLE APPARTIENT
                                                 Connexion.getInstance().docteurs_requetes_appartient(jch_ORL, jch_REA, jch_CHG, id_recup);
 
                                                 // ON REMPLIT LA TABLE DIRECTEUR
                                                 Connexion.getInstance().docteurs_requetes_directeur(jch_dorl, jch_drea, jch_dchg, id_recup);
+                                                
+                                                Accueil.getFenetre(f);
 
                                             } catch (SQLException ex) {
                                                 System.out.println("Echec SQL");
@@ -413,10 +416,11 @@ public class Ajouter_employe {
                                             }
 
                                         }
+                                        Accueil.getFenetre(f);
 
                                     } catch (SQLException ei) {
                                         if (ei instanceof MySQLIntegrityConstraintViolationException) {
-                                            JOptionPane.showMessageDialog(null, "Ce patient est déjà enregistré.", "Erreur", JOptionPane.ERROR_MESSAGE);
+                                            JOptionPane.showMessageDialog(null, "Cet employe est déjà enregistré.", "Erreur", JOptionPane.ERROR_MESSAGE);
                                             System.out.println("Echec SQL");
                                             ei.printStackTrace();
                                         }
@@ -463,6 +467,8 @@ public class Ajouter_employe {
                         p15.setVisible(false); // liste code service 
                         p20.setVisible(false); // checkbox surveillant
                         jch_surveillant.setSelected(false);
+                        Jcombo_chambres.removeAllItems();
+
 
                     } else if (e.getItem().toString() == "Infirmier") {
                         // VISIBLES

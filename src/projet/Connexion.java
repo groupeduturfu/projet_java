@@ -252,10 +252,10 @@ public class Connexion {
         return requete;
     }
 
-    public String CreerRequete_recup_id_docteur(String nom_docteur) {
+    public String CreerRequete_recup_id_docteur(String nom_docteur, String prenom_docteur) {
         // requete à renvoyer
         String requete = "initialisee";
-        requete = "SELECT e.no_employe FROM employe e, docteur d WHERE (e.no_employe = d.no_docteur AND e.nom LIKE '" + nom_docteur + "');";
+        requete = "SELECT e.no_employe FROM employe e, docteur d WHERE (e.no_employe = d.no_docteur AND e.nom LIKE '" + nom_docteur + "' AND e.prenom LIKE '" + prenom_docteur + "');";
 
         System.out.println(requete);
 
