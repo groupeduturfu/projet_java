@@ -12,6 +12,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -22,6 +23,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import projet.Connexion;
 
+
 /**
  *
  * @author meyronneaudrey
@@ -31,6 +33,12 @@ public class Ajouter_malade {
     private static Ajouter_malade fenetre = null;
     private static JPanel p1, p2, p3, p4, p5, p6, p8, p9, p10, p11, p12, p13, p14, p15;
 
+    // recupere les numéros de chambre du service sélectionné 
+    private ArrayList<String> liste_chambres = new ArrayList<String>();
+    
+
+// recupere les numéros de lits de la chambre sélectionnée
+    //private ArrayList<String> liste_lits = new ArrayList<String>();
     private Ajouter_malade(JFrame f) {
         JTextField jtf_nom, jtf_prenom, jtf_no_chambre, jtf_no_lit, jtf_adresse, jtf_tel, jtf_mutuelle, jtf_docteur, jtf_date_naissance;
         JLabel jl_no_id, jl_nom, jl_prenom, jl_no_chambre, jl_no_lit, jl_adresse, jl_tel, jl_mutuelle, jl_docteur, jl_code_service, jl_description, jl_date_naissance, texte;
@@ -48,6 +56,13 @@ public class Ajouter_malade {
 
         
 
+        // Liste deroulante pour le choix de la chambre et du lit : initialisées vides car seront remplies par requetes
+        //JComboBox Jcombo_chambres;
+        //String[] chambres_dispos_string = {""};
+        //Jcombo_chambres = new JComboBox(chambres_dispos_string);
+        //JComboBox Jcombo_lits;
+        //String[] lits_dispos_string = {""};
+        //Jcombo_lits = new JComboBox(lits_dispos_string);
         // On initialise les JLabel
         texte = new JLabel("Merci de remplir toutes les informations suivantes");
         //jl_no_id = new JLabel("N° identification");
@@ -73,14 +88,10 @@ public class Ajouter_malade {
         jtf_mutuelle = new JTextField();
         jtf_docteur = new JTextField();
         jtf_date_naissance = new JTextField();
-        
-        
+
         jtf_description = new JTextArea();
         jtf_description.setLineWrap(true);
         jsp = new JScrollPane(jtf_description);
-        
-        
-        
 
         
         jtf_description = new JTextArea();
@@ -96,7 +107,9 @@ public class Ajouter_malade {
         jtf_mutuelle.setColumns(15);
         jtf_docteur.setColumns(15);
         jtf_description.setColumns(25);
-        jtf_description.setPreferredSize(new Dimension (50, 100));
+        jtf_description.setPreferredSize(new Dimension(50, 100));
+
+
         jtf_date_naissance.setColumns(15);
 
         // On change le bouton de forme
@@ -197,8 +210,8 @@ public class Ajouter_malade {
                 int id_recu;
                 String nom_recu;
                 String prenom_recu;
-                int no_chambre_recu;
-                int no_lit_recu;
+                int no_chambre_recu = 1;
+                int no_lit_recu = 1;
                 String lit_string;
                 String adresse_recu;
                 String tel_recu;
@@ -207,7 +220,7 @@ public class Ajouter_malade {
                 String date_naissance_recu;
                 String no_chambre;
                 String no_lit;
-                String code_service_recu;
+                String code_service_recu = "ORL";
 
                 // chaines de caractère dans laquelle on écrit la requete correspondant aux infos du formulaire rempli 
                 String requete_malade;
@@ -236,14 +249,22 @@ public class Ajouter_malade {
                     mutuelle_recu = jtf_mutuelle.getText();
                     nom_docteur_recu = jtf_docteur.getText();
                     date_naissance_recu = jtf_date_naissance.getText();
+                    String chambre_string = jtf_no_chambre.getText().trim();
+                    
+                    // vérifie si la chambre donnée existe dans le service
+                    int chambre_cohérent;
+
                     // enregistre le code service recu
                     code_service_recu = Jcombo_service.getSelectedItem().toString();
-                                    
-                    // récupération du numéro de chambre
-                    try {
-                        no_chambre_recu = Integer.parseInt(jtf_no_chambre.getText().trim());
 
-                        // récupération du numéro de lit
+                    // récupération du numéro de chambre
+                    // on regarde si le numéro de la chambre existe
+                    try {
+                        no_chambre_recu = Integer.parseInt(chambre_string.trim());
+                         chambre_cohérent = malade_cohérence_chambre( Jcombo_service,  no_chambre_recu);
+                          if (chambre_cohérent == 1)
+                          {
+                              // récupération du numéro de lit
                         try {
                             no_lit_recu = Integer.parseInt(jtf_no_lit.getText().trim());
                             
@@ -269,6 +290,11 @@ public class Ajouter_malade {
                                         // Récupération du format du téléphone
                                         if (tel_recu.matches("([0-9]{2}) ([0-9]{2}) ([0-9]{2}) ([0-9]{2}) ([0-9]{2})")) {
 
+                                            
+                                            
+                                            
+                                            
+                                            
                                             // on regarde si le lit situé dans cette chambre est déjà pris
                                             requete_verif_lit_chambre = Connexion.getInstance().CreerRequete_Check_lit_chambre(no_chambre_recu, no_lit_recu);
                                             try {
@@ -276,7 +302,7 @@ public class Ajouter_malade {
                                                 // si la requete renvoie not exist alors le lit est libre, on enregistre le patient
                                                 if (check_chambre == "NotExist") {
 
-                                                    // écriture de la requete : écrire infos dans la table malade
+                                                    // écriture de la requete : écrire infos dans la table MALADE
                                                     requete_malade = Connexion.getInstance().CreerRequete_malade(nom_recu, prenom_recu, adresse_recu, tel_recu, mutuelle_recu, date_naissance_recu);
                                                     try {
                                                         // on enregistre les infos dans la table malade
@@ -343,6 +369,15 @@ public class Ajouter_malade {
                         } catch (NumberFormatException nfe) {
                             JOptionPane.showMessageDialog(null, "Le numéro de lit n'est pas correct.", "Erreur", JOptionPane.ERROR_MESSAGE);
                         }
+                          }
+                        else
+                          {
+                                JOptionPane.showMessageDialog(null, "Aucune chambre de ce numéro n'appartient à ce service.", "Erreur", JOptionPane.ERROR_MESSAGE);
+                          }
+                        
+                        
+                        
+                        
                     } catch (NumberFormatException nfe) {
                         JOptionPane.showMessageDialog(null, "Le numéro de chambre n'est pas correct.", "Erreur", JOptionPane.ERROR_MESSAGE);
                     }
@@ -354,10 +389,139 @@ public class Ajouter_malade {
         retour.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
+                // on vide les combo box
+                //Jcombo_chambres.removeAllItems();
+                //Jcombo_lits.removeAllItems();
                 Accueil.getFenetre(f);
             }
         });
 
+        /*
+         Jcombo_service.addItemListener(new ItemListener() {
+         public void itemStateChanged(ItemEvent e) {
+         if (e.getStateChange() == 1) {
+
+         // on enregistre la valeur du service sélectionné
+         String service = Jcombo_service.getSelectedItem().toString();
+
+         // on vide les listes déroulantes des lits et chambres
+         Jcombo_chambres.removeAllItems();
+         Jcombo_lits.removeAllItems();
+                    
+         liste_chambres.clear();
+                                        
+                    
+         // la liste des chambres se remplit des numéros de chambre appartenant à ce service
+         liste_chambres = Connexion.getInstance().Requete_chambre_dans_service(service);
+
+                    
+                    
+         System.out.println("nb chambres dispos :" + liste_chambres.size());
+         for (int i = 0; i < liste_chambres.size(); i++) {
+         System.out.println(""+ liste_chambres.get(i));
+         Jcombo_chambres.addItem(liste_chambres.get(i));
+         }
+                    
+                    
+         // si toutes les chambres du service ont déjà un surveillant pour la rotation sélectionnée, on affiche un message 
+         if (liste_chambres.size() == 0) {
+         JOptionPane.showMessageDialog(null, "Le service est plein, il n'y a plus de lits disponibles.", "Erreur", JOptionPane.ERROR_MESSAGE);
+         }
+         }
+         }
+         });
+
+         //Jcombo_chambres.addMouseListener(new MouseAdapter(){
+
+         //public void actionPerformed(ActionEvent e) {
+            
+         Component[] comps = Jcombo_chambres.getComponents();
+         for(int i = 0; i < comps.length; i++)
+         { 
+         comps[i].addMouseListener(new MouseAdapter() {
+
+         public void mouseClicked(MouseEvent me) {
+            
+         System.out.println("check chambres ");
+         //Jcombo_chambres.removeAllItems();
+         //for (int i = 0; i < liste_chambres.size(); i++) {
+         //        Jcombo_chambres.addItem(liste_chambres.get(i));
+         //    }
+
+         // on enregistre la valeur de la chambre sélectionnée
+         String chambre_string = Jcombo_chambres.getSelectedItem().toString();
+         int chambre = Integer.parseInt(chambre_string.trim());
+
+         // on enregistre la valeur du code service sélectionné
+         String service = Jcombo_service.getSelectedItem().toString();
+
+         // recuperera les numéros de lits déjà pris de cette chambre
+         ArrayList<String> liste_lits_occupes = new ArrayList<String>();
+
+         // recuperera les numéros de lits disponibles de cette chambre
+         ArrayList<String> liste_lits_dispos = new ArrayList<String>();
+
+         // nombre total de lits (occupés et libres) dans la chambre sélectionnée
+         String nb_lit_string = "0";
+         try {
+         nb_lit_string = Connexion.getInstance().RecupererId("SELECT nb_lits FROM chambre WHERE no_chambre=" + chambre +
+         " AND code_service LIKE '" + service + "';");
+
+         int nb_lit_int = Integer.parseInt(nb_lit_string.trim());
+
+         int ajout = 1;
+
+         System.out.println("int nb lits : " + nb_lit_int);
+
+         // on vide la liste déroulante des lits
+         Jcombo_lits.removeAllItems();
+                    
+                    
+
+         // la liste se remplit des numéros de lits déjà occupés de cette chambre
+         liste_lits_occupes = Connexion.getInstance().Requete_lits_dans_chambre(chambre, service);
+         System.out.println("nb libres occupés" + liste_lits_occupes.size());
+                    
+         for (int k = 0; k < liste_lits_occupes.size(); k++) 
+         {
+         System.out.println("k : " + liste_lits_occupes.get(k));
+         }
+
+                   
+         // pour chaque numéro de lit existant dans la chambre sélectionnée
+         for (int i = 1; i <= nb_lit_int; i++) {
+         ajout = 1; // par défaut on considère que le lit est libre et qu'on le notera dans la liste des lits dispos
+         // on regarde s'il est dans la liste des lits occupés
+         for (int j = 0; j < liste_lits_occupes.size(); j++) {
+         // s'il y est, on ne l'ajoutera pas dans la liste des lits disponibles
+         if (liste_lits_occupes.get(j) == Integer.toString(i));
+         ajout = 0;
+         }
+         // ajout est resté à 1 si on n'a pas trouvé ce numéro de lit dans les lits occupés
+         if (ajout == 1) {
+         // on l'ajoute alors à la liste des lits disponibles
+         liste_lits_dispos.add(Integer.toString(i));
+         Jcombo_lits.addItem(i);
+         }
+         }
+         // si toutes les chambres du service ont déjà un surveillant pour la rotation sélectionnée, on affiche un message 
+         if (liste_lits_dispos.size() == 0) {
+         JOptionPane.showMessageDialog(null, "Il n'y a plus de lits disponibles dans la chambre " + chambre, "Erreur", JOptionPane.ERROR_MESSAGE);
+         }
+
+         } catch (SQLException ex) {
+         System.out.println("Echec SQL");
+         ex.printStackTrace();
+         }
+
+         }
+
+         });
+         }
+            
+            
+
+         }*/
     }
 
     public static Ajouter_malade getFenetre(JFrame f) {
@@ -372,6 +536,7 @@ public class Ajouter_malade {
         f.add(p3);
         f.add(p4);
         f.add(p14);
+        f.add(p15);
         f.add(p5);
         f.add(p6);
         f.add(p8);
@@ -379,7 +544,7 @@ public class Ajouter_malade {
         f.add(p10);
         f.add(p12);
         f.add(p13);
-        f.add(p15);
+        //f.add(p5);
 
         f.add(p11);
 
@@ -389,6 +554,32 @@ public class Ajouter_malade {
         f.setVisible(true);
 
         return fenetre;
+    }
+
+    public int malade_cohérence_chambre(JComboBox Jcombo_service, int chambre) {
+        int coherent = 0;
+        // on enregistre la valeur du service sélectionné
+        String service = Jcombo_service.getSelectedItem().toString();
+        
+        
+        liste_chambres.clear();
+
+        // la liste des chambres se remplit des numéros de chambre appartenant à ce service
+        liste_chambres = Connexion.getInstance().Requete_chambre_dans_service(service);
+
+        System.out.println("nb chambres dispos :" + liste_chambres.size());
+        for (int i = 0; i < liste_chambres.size(); i++)
+        {
+            System.out.println("saisie : " + chambre);
+            System.out.println("check : " + liste_chambres.get(i));
+            if (chambre == Integer.parseInt(liste_chambres.get(i).trim()))
+            {
+                coherent = 1; // si la chambre saisie appartient aux chambres du service
+            }
+            System.out.println("coherent " + coherent);
+        }
+
+        return coherent;
     }
 
 }

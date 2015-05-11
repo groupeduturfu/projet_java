@@ -509,8 +509,7 @@ public class Ajouter_employe {
                         int taille = liste.size();
 
                         for (int i = 0; i < liste.size(); i++) {
-                            System.out.println("" + liste.get(i));
-                            // Connnexion renvoit un tableau de String, avec dans chaque string tous les attirbuts désirés par la requete séparés par des virgules                            
+                            System.out.println("chambres : " + liste.get(i));
                             Jcombo_chambres.addItem(liste.get(i));
                         }
 
@@ -623,4 +622,8 @@ public class Ajouter_employe {
         return cocher_directeurs;
 
     }
+
+
+
+
 }

@@ -606,6 +606,44 @@ public class Connexion {
         Liste_requetes_directeur.add(requete);
     }
 
+    public ArrayList Requete_chambre_dans_service(String service) {
+        ArrayList<String> liste = null;
+
+        try {
+            System.out.println("service selectionné : " + service);
+
+            // on renvoie les chambres appartenant à ce service
+            liste = RemplirChampsRequete("SELECT no_chambre FROM chambre WHERE (code_service LIKE '" + service + "');");
+
+        } catch (SQLException ex) {
+            System.out.println("Echec SQL");
+            ex.printStackTrace();
+        }
+
+        return liste;
+    }
+    
+    public ArrayList Requete_lits_dans_chambre(int chambre, String service) {
+        ArrayList<String> liste = new ArrayList<String>() ;
+
+        
+        
+        try {
+            System.out.println("chambre selectionnée : " + chambre);
+
+            // on renvoie les lits déjà pris dans cette chambre
+            liste = RemplirChampsRequete("SELECT no_lit FROM hospitalisation WHERE no_chambre=" + chambre + " AND code_service LIKE '" + service + "';");
+
+        } catch (SQLException ex) {
+            System.out.println("Echec SQL");
+            ex.printStackTrace();
+        }
+        
+        for (int k = 0; k < liste.size(); k++) 
+                    {
+                        System.out.println("k : " + liste.get(k));
+                    }
+
     public ArrayList<ArrayList> reporting(String requete) throws SQLException {
         // récupération de l'ordre de la requete
         rset = stmt.executeQuery(requete);
