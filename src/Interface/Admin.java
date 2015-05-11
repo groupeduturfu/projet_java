@@ -38,8 +38,6 @@ public class Admin {
         // Déclaration variables
         employe = new JButton("Rechercher un employé");
         ajouter = new JButton("Ajouter un employé");
-        service = new JButton("Rechercher un service");
-        chambre = new JButton("Rechercher une chambre");
         
         retour = new JButton("Retour");
         retour.setPreferredSize(new Dimension(200,30));
@@ -48,9 +46,7 @@ public class Admin {
         // Taille des boutons
         employe.setPreferredSize(new Dimension(400,30));
         ajouter.setPreferredSize(new Dimension(400,30));
-        service.setPreferredSize(new Dimension(400,30));
-        chambre.setPreferredSize(new Dimension(400,30));
-
+        
         
         p1 = new JPanel(); 
         p1.setOpaque(false);
@@ -70,13 +66,6 @@ public class Admin {
         p3.add(employe);
         p3.setOpaque(false);
         
-        p4 = new JPanel();
-        p4.add(service);
-        p4.setOpaque(false);
-        
-        p5 = new JPanel();
-        p5.add(chambre);
-        p5.setOpaque(false);
         
         p6 = new JPanel();
         p6.add(retour);
@@ -103,14 +92,6 @@ public class Admin {
           }
         });
         
-        //recherche service
-        service.addActionListener(new ActionListener()
-        {
-          public void actionPerformed(ActionEvent e)
-          { 
-            
-          }
-        });
         
         //retour
         retour.addActionListener(new ActionListener()
@@ -140,8 +121,6 @@ public class Admin {
         f.add(p1);
         f.add(p2);
         f.add(p3);
-        f.add(p4);
-        f.add(p5);
         f.add(p6);
         f.setSize(600,600);
         
