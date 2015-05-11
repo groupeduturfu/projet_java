@@ -23,7 +23,6 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import projet.Connexion;
 
-
 /**
  *
  * @author meyronneaudrey
@@ -35,7 +34,6 @@ public class Ajouter_malade {
 
     // recupere les numéros de chambre du service sélectionné 
     private ArrayList<String> liste_chambres = new ArrayList<String>();
-    
 
 // recupere les numéros de lits de la chambre sélectionnée
     //private ArrayList<String> liste_lits = new ArrayList<String>();
@@ -44,17 +42,15 @@ public class Ajouter_malade {
         JLabel jl_no_id, jl_nom, jl_prenom, jl_no_chambre, jl_no_lit, jl_adresse, jl_tel, jl_mutuelle, jl_docteur, jl_code_service, jl_description, jl_date_naissance, texte;
         JButton valider = new JButton("Valider");
         JButton retour = new JButton("Retour");
-        
+
         // description de l'intervention
         JTextArea jtf_description;
         JScrollPane jsp;
-        
+
         // Liste deroulante si infirmier pour le service des infirmiers
         JComboBox Jcombo_service;
         String[] service_string = {"ORL", "REA", "CHG"};
         Jcombo_service = new JComboBox(service_string);
-
-        
 
         // Liste deroulante pour le choix de la chambre et du lit : initialisées vides car seront remplies par requetes
         //JComboBox Jcombo_chambres;
@@ -93,11 +89,9 @@ public class Ajouter_malade {
         jtf_description.setLineWrap(true);
         jsp = new JScrollPane(jtf_description);
 
-        
-        jtf_description = new JTextArea();
-        jtf_description.setLineWrap(true);
+
         jsp = new JScrollPane(jtf_description);
-        
+
         jtf_nom.setColumns(15);
         jtf_prenom.setColumns(15);
         jtf_no_chambre.setColumns(15);
@@ -108,7 +102,6 @@ public class Ajouter_malade {
         jtf_docteur.setColumns(15);
         jtf_description.setColumns(25);
         jtf_description.setPreferredSize(new Dimension(50, 100));
-
 
         jtf_date_naissance.setColumns(15);
 
@@ -184,22 +177,18 @@ public class Ajouter_malade {
         p13.setOpaque(false);
         p13.setPreferredSize(new Dimension(600, 100));
 
-
         p14 = new JPanel();
         p14.add(jl_date_naissance);
         p14.add(jtf_date_naissance);
         p14.setOpaque(false);
         p14.setPreferredSize(new Dimension(600, 30));
- 
-        
+
         // liste déroulante des code service
         p15 = new JPanel();
         p15.add(jl_code_service);
         p15.add(Jcombo_service);
         p15.setOpaque(false);
         p15.setPreferredSize(new Dimension(600, 30));
-        
-        
 
         // On gère l'évennement du bouton
         valider.addActionListener(new ActionListener() {
@@ -250,7 +239,8 @@ public class Ajouter_malade {
                     nom_docteur_recu = jtf_docteur.getText();
                     date_naissance_recu = jtf_date_naissance.getText();
                     String chambre_string = jtf_no_chambre.getText().trim();
-                    
+                    String description = jtf_description.getText();
+
                     // vérifie si la chambre donnée existe dans le service
                     int chambre_cohérent;
 
@@ -261,71 +251,69 @@ public class Ajouter_malade {
                     // on regarde si le numéro de la chambre existe
                     try {
                         no_chambre_recu = Integer.parseInt(chambre_string.trim());
-                         chambre_cohérent = malade_cohérence_chambre( Jcombo_service,  no_chambre_recu);
-                          if (chambre_cohérent == 1)
-                          {
-                              // récupération du numéro de lit
-                        try {
-                            no_lit_recu = Integer.parseInt(jtf_no_lit.getText().trim());
-                            
-                           
-                            // avant d'enregistrer le malade on vérifie que le nom du docteur existe
-                            // on récupère le numéro de docteur correspondant au nom inscrit dans le formulaire 
-                            requete_docteur = Connexion.getInstance().CreerRequete_recup_id_docteur(nom_docteur_recu);
+                        chambre_cohérent = malade_cohérence_chambre(Jcombo_service, no_chambre_recu);
+                        if (chambre_cohérent == 1) {
+                            // récupération du numéro de lit
                             try {
-                                // on recupere le numero du medecin qui soigne le patient
-                                id_string_docteur_recup = Connexion.getInstance().RecupererId(requete_docteur);
-                                // si le nom du docteur mentionné n'exite pas dans la base
-                                if ("NotExist".equals(id_string_docteur_recup)) {
-                                    JOptionPane.showMessageDialog(null, "Le docteur recherché n'existe pas.", "Erreur", JOptionPane.ERROR_MESSAGE);
-                                } // sinon on vérifie la date de naissance 
-                                else {
-                                    
-                                    // RecupererId renvoie une chaine de caractere, on le transforme en int
-                                    id_docteur_recup = Integer.parseInt(id_string_docteur_recup.trim());
+                                no_lit_recu = Integer.parseInt(jtf_no_lit.getText().trim());
 
-                                    // si la date envoyee est au bon format
-                                    if (date_naissance_recu.matches("([0-9]{4})-([0-9]{2})-([0-9]{2})")) {
+                                // avant d'enregistrer le malade on vérifie que le nom du docteur existe
+                                // on récupère le numéro de docteur correspondant au nom inscrit dans le formulaire 
+                                requete_docteur = Connexion.getInstance().CreerRequete_recup_id_docteur(nom_docteur_recu);
+                                try {
+                                    // on recupere le numero du medecin qui soigne le patient
+                                    id_string_docteur_recup = Connexion.getInstance().RecupererId(requete_docteur);
+                                    // si le nom du docteur mentionné n'exite pas dans la base
+                                    if ("NotExist".equals(id_string_docteur_recup)) {
+                                        JOptionPane.showMessageDialog(null, "Le docteur recherché n'existe pas.", "Erreur", JOptionPane.ERROR_MESSAGE);
+                                    } // sinon on vérifie la date de naissance 
+                                    else {
 
-                                        // Récupération du format du téléphone
-                                        if (tel_recu.matches("([0-9]{2}) ([0-9]{2}) ([0-9]{2}) ([0-9]{2}) ([0-9]{2})")) {
+                                        // RecupererId renvoie une chaine de caractere, on le transforme en int
+                                        id_docteur_recup = Integer.parseInt(id_string_docteur_recup.trim());
 
-                                            
-                                            
-                                            
-                                            
-                                            
-                                            // on regarde si le lit situé dans cette chambre est déjà pris
-                                            requete_verif_lit_chambre = Connexion.getInstance().CreerRequete_Check_lit_chambre(no_chambre_recu, no_lit_recu);
-                                            try {
-                                                check_chambre = Connexion.getInstance().RecupererId(requete_verif_lit_chambre);
-                                                // si la requete renvoie not exist alors le lit est libre, on enregistre le patient
-                                                if (check_chambre == "NotExist") {
+                                        // si la date envoyee est au bon format
+                                        if (date_naissance_recu.matches("([0-9]{4})-([0-9]{2})-([0-9]{2})")) {
 
-                                                    // écriture de la requete : écrire infos dans la table MALADE
-                                                    requete_malade = Connexion.getInstance().CreerRequete_malade(nom_recu, prenom_recu, adresse_recu, tel_recu, mutuelle_recu, date_naissance_recu);
-                                                    try {
-                                                        // on enregistre les infos dans la table malade
-                                                        Connexion.getInstance().executeUpdate(requete_malade);
+                                            // Récupération du format du téléphone
+                                            if (tel_recu.matches("([0-9]{2}) ([0-9]{2}) ([0-9]{2}) ([0-9]{2}) ([0-9]{2})")) {
 
-                                                        // écriture de la requete : récupération du numéro malade attribué au patient
-                                                        requete_id_recup = Connexion.getInstance().CreerRequete_recup_id(1, nom_recu, prenom_recu, tel_recu);
+                                                // on regarde si le lit situé dans cette chambre est déjà pris
+                                                requete_verif_lit_chambre = Connexion.getInstance().CreerRequete_Check_lit_chambre(no_chambre_recu, no_lit_recu);
+                                                try {
+                                                    check_chambre = Connexion.getInstance().RecupererId(requete_verif_lit_chambre);
+                                                    // si la requete renvoie not exist alors le lit est libre, on enregistre le patient
+                                                    if (check_chambre == "NotExist") {
+
+                                                        // écriture de la requete : écrire infos dans la table MALADE
+                                                        requete_malade = Connexion.getInstance().CreerRequete_malade(nom_recu, prenom_recu, adresse_recu, tel_recu, mutuelle_recu, date_naissance_recu);
                                                         try {
-                                                            // on recupere le numero du malade qui vient d'etre inscrit
-                                                            id_string_malade_recup = Connexion.getInstance().RecupererId(requete_id_recup);
+                                                            // on enregistre les infos dans la table malade
+                                                            Connexion.getInstance().executeUpdate(requete_malade);
 
-                                                            // RecupererId renvoie une chaine de caractere, on le transforme en int
-                                                            id_malade_recup = Integer.parseInt(id_string_malade_recup.trim());
-                                                            System.out.println("id malade recupéré : " + id_malade_recup);
-
-                                                            // on crée un nouveau tuple dans la table hospitalisation avec comme no_malade celui créé à l'instant
-                                                            requete_hopsitalisation = Connexion.getInstance().CreerRequete_hospitalisation(id_malade_recup, no_chambre_recu, no_lit_recu, id_docteur_recup, code_service_recu);
+                                                            // écriture de la requete : récupération du numéro malade attribué au patient
+                                                            requete_id_recup = Connexion.getInstance().CreerRequete_recup_id(1, nom_recu, prenom_recu, tel_recu);
                                                             try {
-                                                                // on enregistre les infos dans la table hospitalisation
-                                                                Connexion.getInstance().executeUpdate(requete_hopsitalisation);
-                                                                // on affiche à l'utilisateur que le nouveau patient a bien été inscrit
-                                                                JOptionPane.showMessageDialog(null, "Le patient a été enregistré.", "Info", JOptionPane.ERROR_MESSAGE);
-                                                                Accueil.getFenetre(f);
+                                                                // on recupere le numero du malade qui vient d'etre inscrit
+                                                                id_string_malade_recup = Connexion.getInstance().RecupererId(requete_id_recup);
+
+                                                                // RecupererId renvoie une chaine de caractere, on le transforme en int
+                                                                id_malade_recup = Integer.parseInt(id_string_malade_recup.trim());
+                                                                System.out.println("id malade recupéré : " + id_malade_recup);
+
+                                                                // on crée un nouveau tuple dans la table hospitalisation avec comme no_malade celui créé à l'instant
+                                                                requete_hopsitalisation = Connexion.getInstance().CreerRequete_hospitalisation(id_malade_recup, no_chambre_recu, no_lit_recu, id_docteur_recup, code_service_recu, description);
+                                                                try {
+                                                                    // on enregistre les infos dans la table hospitalisation
+                                                                    Connexion.getInstance().executeUpdate(requete_hopsitalisation);
+                                                                    // on affiche à l'utilisateur que le nouveau patient a bien été inscrit
+                                                                    JOptionPane.showMessageDialog(null, "Le patient a été enregistré.", "Info", JOptionPane.ERROR_MESSAGE);
+                                                                    Accueil.getFenetre(f);
+
+                                                                } catch (SQLException ex) {
+                                                                    System.out.println("Echec SQL");
+                                                                    ex.printStackTrace();
+                                                                }
 
                                                             } catch (SQLException ex) {
                                                                 System.out.println("Echec SQL");
@@ -337,47 +325,37 @@ public class Ajouter_malade {
                                                             ex.printStackTrace();
                                                         }
 
-                                                    } catch (SQLException ex) {
-                                                        System.out.println("Echec SQL");
-                                                        ex.printStackTrace();
+                                                    } else {
+                                                        JOptionPane.showMessageDialog(null, "Le lit de cette chambre est déjà pris", "Erreur", JOptionPane.ERROR_MESSAGE);
                                                     }
 
-                                                } else {
-                                                    JOptionPane.showMessageDialog(null, "Le lit de cette chambre est déjà pris", "Erreur", JOptionPane.ERROR_MESSAGE);
+                                                } catch (SQLException ex) {
+                                                    System.out.println("Echec SQL");
+                                                    ex.printStackTrace();
                                                 }
 
-                                            } catch (SQLException ex) {
-                                                System.out.println("Echec SQL");
-                                                ex.printStackTrace();
+                                            } else {
+                                                JOptionPane.showMessageDialog(null, "Le téléphone n'est pas au format '-- -- -- -- --'.", "Erreur", JOptionPane.ERROR_MESSAGE);
                                             }
 
                                         } else {
-                                            JOptionPane.showMessageDialog(null, "Le téléphone n'est pas au format '-- -- -- -- --'.", "Erreur", JOptionPane.ERROR_MESSAGE);
+                                            JOptionPane.showMessageDialog(null, "La date de naissance n'est pas au format aaaa-mm-jj.", "Erreur", JOptionPane.ERROR_MESSAGE);
                                         }
 
-                                    } else {
-                                        JOptionPane.showMessageDialog(null, "La date de naissance n'est pas au format aaaa-mm-jj.", "Erreur", JOptionPane.ERROR_MESSAGE);
                                     }
 
+                                } catch (SQLException ex) {
+                                    System.out.println("Echec SQL");
+                                    ex.printStackTrace();
                                 }
 
-                            } catch (SQLException ex) {
-                                System.out.println("Echec SQL");
-                                ex.printStackTrace();
+                            } catch (NumberFormatException nfe) {
+                                JOptionPane.showMessageDialog(null, "Le numéro de lit n'est pas correct.", "Erreur", JOptionPane.ERROR_MESSAGE);
                             }
-
-                        } catch (NumberFormatException nfe) {
-                            JOptionPane.showMessageDialog(null, "Le numéro de lit n'est pas correct.", "Erreur", JOptionPane.ERROR_MESSAGE);
+                        } else {
+                            JOptionPane.showMessageDialog(null, "Aucune chambre de ce numéro n'appartient à ce service.", "Erreur", JOptionPane.ERROR_MESSAGE);
                         }
-                          }
-                        else
-                          {
-                                JOptionPane.showMessageDialog(null, "Aucune chambre de ce numéro n'appartient à ce service.", "Erreur", JOptionPane.ERROR_MESSAGE);
-                          }
-                        
-                        
-                        
-                        
+
                     } catch (NumberFormatException nfe) {
                         JOptionPane.showMessageDialog(null, "Le numéro de chambre n'est pas correct.", "Erreur", JOptionPane.ERROR_MESSAGE);
                     }
@@ -548,7 +526,6 @@ public class Ajouter_malade {
 
         f.add(p11);
 
-
         f.setSize(600, 600);
 
         f.setVisible(true);
@@ -560,20 +537,17 @@ public class Ajouter_malade {
         int coherent = 0;
         // on enregistre la valeur du service sélectionné
         String service = Jcombo_service.getSelectedItem().toString();
-        
-        
+
         liste_chambres.clear();
 
         // la liste des chambres se remplit des numéros de chambre appartenant à ce service
         liste_chambres = Connexion.getInstance().Requete_chambre_dans_service(service);
 
         System.out.println("nb chambres dispos :" + liste_chambres.size());
-        for (int i = 0; i < liste_chambres.size(); i++)
-        {
+        for (int i = 0; i < liste_chambres.size(); i++) {
             System.out.println("saisie : " + chambre);
             System.out.println("check : " + liste_chambres.get(i));
-            if (chambre == Integer.parseInt(liste_chambres.get(i).trim()))
-            {
+            if (chambre == Integer.parseInt(liste_chambres.get(i).trim())) {
                 coherent = 1; // si la chambre saisie appartient aux chambres du service
             }
             System.out.println("coherent " + coherent);
