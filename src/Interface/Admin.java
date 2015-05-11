@@ -25,6 +25,11 @@ public class Admin {
     private static Admin fenetre = null ;
     private static JPanel p1, p2, p3, p4, p5, p6;
     
+    /**
+     * Constructeur de la classe Admin, on lui envoie la JFrame dans laquelle
+     * il ajoutera ses objets
+     * @param f 
+     */
     private Admin (JFrame f) {
          
         JButton employe, ajouter, service, chambre, retour;
@@ -128,6 +133,13 @@ public class Admin {
         
     }
     
+    
+    /**
+     * Sous programme permettant de vérifier que chaque 
+     * fenêtre n'est crée qu'une fois puis uniquement réutilisée
+     * @param f
+     * @return type de la classe
+     */
     public static Admin getFenetre(JFrame f) {
             
     if (fenetre == null ) fenetre = new Admin(f);

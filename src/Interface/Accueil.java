@@ -29,6 +29,10 @@ public class Accueil {
     private static Accueil fenetre_accueil = null;
     private static JPanel p1, p2, p3, p7 ,pAdmin;
     
+    /**
+     * Constructeur de Accueil, on lui envoie la JFrame sur laquelle on ajoutera les éléments
+     * @param f 
+     */
     private Accueil(JFrame f)
     {
         JButton rechercher, ajouter, admin, stats;        
@@ -124,6 +128,12 @@ public class Accueil {
         f.setVisible(true);
     }
     
+    /**
+     * Sous programme permettant de vérifier que chaque 
+     * fenêtre n'est crée qu'une fois puis uniquement réutilisée
+     * @param f
+     * @return type de la classe
+     */
     public static Accueil getFenetre(JFrame f) {
             
     if (fenetre_accueil == null ) fenetre_accueil = new Accueil(f);
