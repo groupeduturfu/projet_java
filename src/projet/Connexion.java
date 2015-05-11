@@ -162,10 +162,11 @@ public class Connexion {
         return requete;
     }
 
+
     public String CreerRequete_Recherche_Hospitalisation(int id, String nom, String prenom, int chambre, int lit, String adresse, String tel, String mutuelle, String date_arrivee) {
         String requete = "initialisee";
 
-            // RECHERCHER UN PATIENT
+        // RECHERCHER UN PATIENT
         // astuce : quand l'utilisateur ne remplit pas le champs, s'il s'agit d'un champs String on l'intialise avec un %, si c'est un int on ne peut rien faire, d'où les nombreux esle if 
         // si l'utilisateur connait dejà le numéro du malade recherché, on affiche toutes les infos du malade d'apres ce numéro
         // si d'autres infos étaient renseignées, seul le no d'identification est pris en compte
@@ -211,7 +212,8 @@ public class Connexion {
         return requete;
 
     }
-
+    
+    
     private void ajouterRequete_appartient_creer(String requete) {
         Liste_requetes_appartient.add(requete);
     }
@@ -315,38 +317,7 @@ public class Connexion {
         return liste;
     }
 
-    /*
-     public String CreerRequete_surveillant(int no_infirmier, String rotation, String code_service, int no_chambre)
-     {
-     String requete = null;
-        
-     if (rotation == "JOUR")
-     {
-            
-     requete = "UPDATE chambre SET no_surveillant_jour = " + no_infirmier + " WHERE (code_service LIKE '" + code_service + "' AND no_chambre = " + no_chambre + ");";
-            
-     try {
-     System.out.println("chambres sans surveillant jour" + RemplirChampsRequete("SELECT code_service, no_chambre FROM chambre WHERE ( no_surveillant_jour = 0);"));
-     System.out.println("chambres sans surveillant nuit" + RemplirChampsRequete("SELECT code_service, no_chambre FROM chambre WHERE ( no_surveillant_nuit = 0);"));
 
-     // on renvoie les chambres disponibles à la surveillance dans ce service
-     if (rotation == "JOUR") {
-     System.out.println("rentre dans jour");
-     liste = RemplirChampsRequete("SELECT no_chambre FROM chambre WHERE (code_service LIKE '" + code_service + "' AND no_surveillant_jour = 0);");
-     } else if (rotation == "NUIT") {
-     System.out.println("rentre dans nuit");
-     liste = RemplirChampsRequete("SELECT no_chambre FROM chambre WHERE (code_service LIKE '" + code_service + "' AND no_surveillant_nuit = 0);");
-     }
-
-     } catch (SQLException ex) {
-     System.out.println("Echec SQL");
-     ex.printStackTrace();
-     }
-
-     return liste;
-     }
-
-     */
     public String CreerRequete_surveillant(int no_infirmier, String rotation, String code_service, int no_chambre) {
         String requete = null;
 
@@ -391,27 +362,9 @@ public class Connexion {
 
     }
 
-    /*
-     public void CreerRequete_CreerPatient(String nom, String prenom, int chambre, int lit, String adresse, String tel, String mutuelle)
-     {
-     // on cree les deux Strings
-     String requete_malade = "initialisee";
-     requete_malade = "INSERT INTO malade (nom, prenom, adresse, tel, mutuelle) values ('" + nom + "', '" + prenom + "', '" + adresse + "', '" + tel + "', '" + mutuelle + "');";
-     System.out.println(requete_malade);
-        
-     String requete_hopsitalisation = "initialisee";
-     //requete_hopsitalisation = "INSERT INTO hospitalisation values (SELECT no_malade FROM malade WHERE (nom LIKE '" + nom + "' AND prenom LIKE '" + prenom + "' AND tel LIKE '" + tel + "')," + chambre + "," + lit + ");";
-        
-     requete_hopsitalisation = "INSERT INTO hospitalisation (no_malade, no_chambre, no_lit) values (13," + chambre + "," + lit + ");";
 
-     System.out.println(requete_hopsitalisation);
-
-     // on les ajoute dans la liste
-     ajouterRequete_creer(requete_malade);
-     ajouterRequete_creer(requete_hopsitalisation);
-        
-     }
-     */
+    
+    
     public void executeUpdate(String requete) throws SQLException {
         stmt.executeUpdate(requete);
     }
@@ -436,45 +389,10 @@ public class Connexion {
     /**
      * Methode qui retourne l'ArrayList réponse à la requête en parametre
      */
-    public ArrayList RemplirChampsRequete(String requete) throws SQLException {
+
+public ArrayList RemplirChampsRequete_Malade(String requete) throws SQLException {
         // récupération de l'ordre de la requete
         rset = stmt.executeQuery(requete);
-
-        // récupération du résultat de l'ordre
-        rsetMeta = rset.getMetaData();
-
-        // calcul du nombre de colonnes du resultat
-        int nbColonne = rsetMeta.getColumnCount();
-
-        // creation d'une ArrayList de String
-        ArrayList<String> liste;
-        liste = new ArrayList<String>();
-
-        // tant qu'il reste une ligne 
-        while (rset.next()) {
-            String champs;
-            champs = rset.getString(1); // ajouter premier champ
-
-            // Concatener les champs de la ligne separes par ,
-            for (int i = 1; i < nbColonne; i++) {
-                champs = champs + "," + rset.getString(i + 1);
-            }
-
-            // ajouter un "\n" à la ligne des champs
-            champs = champs + "\n";
-
-            // ajouter les champs de la ligne dans l'ArrayList
-            liste.add(champs);
-        }
-
-        // Retourner l'ArrayList
-        return liste;
-    }
-
-    public ArrayList RemplirChampsRequete_Malade(String requete) throws SQLException {
-        // récupération de l'ordre de la requete
-        rset = stmt.executeQuery(requete);
-
         // récupération du résultat de l'ordre
         rsetMeta = rset.getMetaData();
         // calcul du nombre de colonnes du resultat
@@ -486,24 +404,28 @@ public class Connexion {
         ligne = new ArrayList<String>();
         int j = 0;
         String champs;
+
         // tant qu'il reste une ligne 
         while (rset.next()) {
-            System.out.println("" + j);
+            System.out.println("j:" + j);
+
             // Concatener les champs de la ligne separes par 
             for (int i = 1; i < nbColonne + 1; i++) {
-                System.out.println("" + i);
+                
+                //System.out.println("i:" +i);
                 champs = rset.getString(i);
                 ligne.add(champs);
-
-                liste.add(ligne);
-                j++;
+                System.out.println("ligne" + ligne);
             }
-
+            liste.add(ligne);
+            ligne=new ArrayList<String>();
+            System.out.println("liste_pdt:" + liste);
+            j++;
         }
         // Retourner l'ArrayList
+        System.out.println("liste_rendu" + liste);
         return liste;
     }
-
     
     /**
      * Requete renvoyant le nombre de malade dans un service donné recu en parametre
@@ -624,6 +546,42 @@ public class Connexion {
         Liste_requetes_directeur.add(requete);
     }
 
+    public ArrayList RemplirChampsRequete(String requete) throws SQLException {
+        // récupération de l'ordre de la requete
+        rset = stmt.executeQuery(requete);
+
+        // récupération du résultat de l'ordre
+        rsetMeta = rset.getMetaData();
+
+        // calcul du nombre de colonnes du resultat
+        int nbColonne = rsetMeta.getColumnCount();
+
+        // creation d'une ArrayList de String
+        ArrayList<String> liste;
+        liste = new ArrayList<String>();
+
+        // tant qu'il reste une ligne 
+        while (rset.next()) {
+            String champs;
+            champs = rset.getString(1); // ajouter premier champ
+
+            // Concatener les champs de la ligne separes par ,
+            for (int i = 1; i < nbColonne; i++) {
+                champs = champs + "," + rset.getString(i + 1);
+            }
+
+            // ajouter un "\n" à la ligne des champs
+            champs = champs + "\n";
+
+            // ajouter les champs de la ligne dans l'ArrayList
+            liste.add(champs);
+        }
+
+        // Retourner l'ArrayList
+        return liste;
+    }
+    
+    
     public ArrayList Requete_chambre_dans_service(String service) {
         ArrayList<String> liste = null;
 
@@ -697,5 +655,44 @@ public class Connexion {
         // Retourner l'ArrayList
         return liste;
     }
+    
+    
+public void Update_malade(String id, String nom, String prenom, int chambre, int lit, String adresse, String tel, String mutuelle, String date_arrivee) throws SQLException {
+        ArrayList<String> QueryList;
+        QueryList = new ArrayList<String>();
+        String requete, champs;
+        requete = "UPDATE malade "
+                + "SET nom='" + nom + "', prenom='" + prenom + "',adresse = '" + adresse + "', tel='" + tel + "',mutuelle='" + mutuelle + "'"
+                + "WHERE no_malade=" + id + "";
+        System.out.println("requete envoyee : " + requete);
+        stmt.executeUpdate(requete);
+        requete = "UPDATE hospitalisation "
+                + "SET date_arrivee='" + date_arrivee + "', no_chambre='" + chambre + "', no_lit='" + lit + "' "
+                + "WHERE hospitalisation.no_malade=" + id + "";
+        System.out.println("requete envoyee : " + requete);
+        stmt.executeUpdate(requete);
+    }
 
+public ArrayList ActuPage(String id, String nom, String prenom, int chambre, int lit, String adresse, String tel, String mutuelle, String date_arrivee, ArrayList<ArrayList<String>> liste) {
+        String requete;
+        ArrayList<ArrayList<String>> Query;
+        Query = new ArrayList<ArrayList<String>>();
+        try {
+            Update_malade(id, nom, prenom, chambre, lit, adresse, tel, mutuelle, date_arrivee);
+        } catch (SQLException ex) {
+            System.out.println("Echec SQL");
+            ex.printStackTrace();
+        }
+        requete = "SELECT m.no_malade, m.nom, m.prenom, h.no_chambre, h.no_lit, h.date_arrivee, m.adresse, m.tel, m.mutuelle "
+                + "FROM malade m, hospitalisation h "
+                + "WHERE (m.no_malade = " + id + " AND m.no_malade = h.no_malade)";
+        try {
+            liste = RemplirChampsRequete_Malade(requete);
+        } catch (SQLException ex) {
+            System.out.println("Echec SQL");
+            ex.printStackTrace();
+        }
+
+        return liste;
+    }
 }
