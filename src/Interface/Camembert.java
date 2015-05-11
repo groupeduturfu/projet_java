@@ -8,6 +8,7 @@ package Interface;
 import java.awt.BorderLayout;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import org.jfree.chart.ChartFactory;
@@ -21,7 +22,7 @@ import org.jfree.data.general.DefaultPieDataset;
  */
 public class Camembert {
 
-    public Camembert(JFrame f, int rea, int chg, int orl) {
+    public static JPanel cCamembert(JFrame f, int rea, int chg, int orl) {
 
         
         
@@ -36,8 +37,26 @@ public class Camembert {
 
         ChartPanel cPanel = new ChartPanel(pieChart);
 
-        f.getContentPane().add(cPanel);
-        f.setVisible(true);
+        return cPanel;
+    }
+    
+    public static JPanel cCamembert(JFrame f, ArrayList<ArrayList> liste)
+    {
+        // On récupère les 2 listes
+        ArrayList<Integer> nb = liste.get(1);
+        ArrayList<String> nom = liste.get(2);
+        
+        DefaultPieDataset pieDataset = new DefaultPieDataset();
+        for (int i =0; i<nb.size(); i++)
+        {
+            pieDataset.setValue(nom.get(i)+" : "+nb.get(i), nb.get(i));
+        }
+        
+        JFreeChart pieChart = ChartFactory.createPieChart("Nombre d'interventions par médecin",pieDataset, true, true, true);
+
+        ChartPanel cPanel = new ChartPanel(pieChart);
+
+        return cPanel;
     }
 }
 

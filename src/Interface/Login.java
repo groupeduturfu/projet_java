@@ -5,39 +5,34 @@
  */
 package Interface;
 
-import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-import java.sql.SQLException;
 import java.util.ArrayList;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
-import projet.Connexion;
 
 /**
  *
- * @author meyronneaudrey
+ * @author mathieuchebassier
  */
-public class Mdp {
-    
-    public static boolean mdp_fonctionnement(JFrame f)
+public class Login {
+    public static String mdp_tape = "";
+    public static String login_tape = "";
+    public Login(JFrame f)
     {
        JPanel p = new JPanel();
-        JLabel l = new JLabel("Entrer le mot de passe pour acceder à la partie admin :");
-        JTextField mdp = new JTextField(10);
-        String mdp_tape = "";
+        JLabel l = new JLabel("Login :");
+        JLabel m = new JLabel("Mot de Passe :");
+        JPasswordField mdp = new JPasswordField(10);
+        JTextField login= new JTextField(10);
+        
+        ArrayList<String> liste = new ArrayList();
                  
         p.add(l);
+        p.add(login);
+        p.add(m);
         p.add(mdp);
         String[] options = new String[]{"OK", "Retour"};
         int option = JOptionPane.showOptionDialog(null, p, "Mot de passe",
@@ -46,10 +41,17 @@ public class Mdp {
         if(option == 0) // Boutton OK
         {
             mdp_tape  = mdp.getText();
+            login_tape = login.getText();
+            
+            liste.add(mdp_tape);
+            liste.add(login_tape);
+            
+            if(mdp_tape.equals("") && login_tape.equals(""))
+            {
+                
+                new Login(f);
+            }
         }
-        else Accueil.getFenetre(f); // Retour
-        
-        if(mdp_tape.equals("hopital")) return true;
-        else return false; 
+        else new Choix_connexion(f); // Retour
     }
 }

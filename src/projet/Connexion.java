@@ -6,6 +6,7 @@
 package projet;
 
 import Interface.Fenetre;
+import Interface.Login;
 
 
 /*
@@ -43,8 +44,8 @@ public class Connexion {
      */
     public ArrayList<String> Liste_requetes_appartient = new ArrayList<String>();
     public ArrayList<String> Liste_requetes_directeur = new ArrayList<String>();
-    
-    private Connexion(String adresse, String password) throws SQLException, ClassNotFoundException  // "jdbc:mysql://http://localhost:8888"
+
+    private Connexion(String adresse, String password) throws SQLException, ClassNotFoundException // "jdbc:mysql://http://localhost:8888"
     {
         conn = DriverManager.getConnection(adresse, "root", password);
         stmt = conn.createStatement();
@@ -65,9 +66,9 @@ public class Connexion {
     }
 
     private Connexion() throws SQLException, ClassNotFoundException {
-        //String user = "chebassi";
-        //String login_DataBase = "chebassi-rw";
-        //String password_DataBase = "cvKTbS3k";        
+        String user = "chebassi";
+        String login_DataBase = "chebassi-rw";
+        String password_DataBase = "cvKTbS3k";
 
         // chargement driver "com.mysql.jdbc.Driver"
         Class.forName("com.mysql.jdbc.Driver");
@@ -81,13 +82,22 @@ public class Connexion {
 
             System.out.println("Connexion reussie");
 
+            // On regarde si l'utilisateur à choisi une autre BDD que chebassi
+            if (Login.login_tape.equals("") && Login.mdp_tape.equals("")) {
+              // il n'a changé les champs donc BBD par défaut
+            } else {
+                user = Login.login_tape;
+                login_DataBase = Login.login_tape + "-rw";
+                password_DataBase = Login.mdp_tape;
+            }
+
             //création d'une connexion JDBC à la base
-            conn = DriverManager.getConnection("jdbc:mysql://localhost:3305/chebassi", "chebassi-rw", "cvKTbS3k");
+            conn = DriverManager.getConnection("jdbc:mysql://localhost:3305/" + user, login_DataBase, password_DataBase);
 
             // création d'un ordre SQL (statement)
             stmt = conn.createStatement();
 
-        // ESSAI : initialisation de la liste des requetes de selection 
+            // ESSAI : initialisation de la liste des requetes de selection 
             //Remplir_Requetes_Selection();
             //Afficher_Requetes_Selection();
             // 
@@ -111,8 +121,7 @@ public class Connexion {
      * en parametre dans son ArrayList
      *
      * private void AjouterRequete(String requete) {
-     * Liste_requetes_selection.add(requete);
-    }
+     * Liste_requetes_selection.add(requete); }
      */
     public String CreerRequete_Recherche_Historique(int id, String nom,
             String prenom, String adresse, String tel, String mutuelle, String date_arrivee, String date_sortie, String nom_docteur, String code_service) {
@@ -158,7 +167,7 @@ public class Connexion {
 
             // RECHERCHER UN PATIENT
         // astuce : quand l'utilisateur ne remplit pas le champs, s'il s'agit d'un champs String on l'intialise avec un %, si c'est un int on ne peut rien faire, d'où les nombreux esle if 
-                    // si l'utilisateur connait dejà le numéro du malade recherché, on affiche toutes les infos du malade d'apres ce numéro
+        // si l'utilisateur connait dejà le numéro du malade recherché, on affiche toutes les infos du malade d'apres ce numéro
         // si d'autres infos étaient renseignées, seul le no d'identification est pris en compte
         if (id != 0) {
             //requete = "SELECT * FROM malade m WHERE no_malade = " + id + ";";
@@ -202,14 +211,12 @@ public class Connexion {
         return requete;
 
     }
-    
-    private void ajouterRequete_appartient_creer(String requete)
-    {
+
+    private void ajouterRequete_appartient_creer(String requete) {
         Liste_requetes_appartient.add(requete);
-    }  
-    
-    public String CreerRequete_employe(String nom, String prenom, String adresse, String tel, int salaire, String fonction, String d_naissance)
-    {
+    }
+
+    public String CreerRequete_employe(String nom, String prenom, String adresse, String tel, int salaire, String fonction, String d_naissance) {
         String requete = "initialisee";
         requete = "INSERT INTO employe (nom, prenom, adresse, tel, salaire, fonction, date_naissance) values ('" + nom + "', '" + prenom + "', '" + adresse + "', '" + tel + "', " + salaire + ", '" + fonction + "', '" + d_naissance + "');";
         System.out.println(requete);
@@ -287,53 +294,16 @@ public class Connexion {
     public ArrayList Requete_chambre_dispo_surveillant(String rotation, String code_service) {
         ArrayList<String> liste = null;
 
-                    try 
-                    {
+        try {
                        //System.out.println("chambres sans surveillant jour" + RemplirChampsRequete("SELECT code_service, no_chambre FROM chambre WHERE ( no_surveillant_jour = 0);"));
-                       //System.out.println("chambres sans surveillant nuit" + RemplirChampsRequete("SELECT code_service, no_chambre FROM chambre WHERE ( no_surveillant_nuit = 0);"));
-        System.out.println("" + rotation);
-        System.out.println("" + code_service);
-
-                       // on renvoie les chambres disponibles à la surveillance dans ce service
-                       if (rotation == "JOUR") 
-                       {
-                            liste  = RemplirChampsRequete("SELECT no_chambre FROM chambre WHERE (code_service LIKE '" + code_service + "' AND no_surveillant_jour = 0);");
-                       }
-                       else if (rotation == "NUIT") 
-                       {
-                            liste  = RemplirChampsRequete("SELECT no_chambre FROM chambre WHERE (code_service LIKE '" + code_service + "' AND no_surveillant_nuit = 0);");
-                       }
-                        
-                    }
-                     catch (SQLException ex)
-                    {
-                         System.out.println("Echec SQL");
-                        ex.printStackTrace();
-                    }
-                    
-                return liste;
-    }
-    
-    /*
-    public String CreerRequete_surveillant(int no_infirmier, String rotation, String code_service, int no_chambre)
-    {
-        String requete = null;
-        
-        if (rotation == "JOUR")
-        {
-            
-            requete = "UPDATE chambre SET no_surveillant_jour = " + no_infirmier + " WHERE (code_service LIKE '" + code_service + "' AND no_chambre = " + no_chambre + ");";
-            
-            try {
-            System.out.println("chambres sans surveillant jour" + RemplirChampsRequete("SELECT code_service, no_chambre FROM chambre WHERE ( no_surveillant_jour = 0);"));
-            System.out.println("chambres sans surveillant nuit" + RemplirChampsRequete("SELECT code_service, no_chambre FROM chambre WHERE ( no_surveillant_nuit = 0);"));
+            //System.out.println("chambres sans surveillant nuit" + RemplirChampsRequete("SELECT code_service, no_chambre FROM chambre WHERE ( no_surveillant_nuit = 0);"));
+            System.out.println("" + rotation);
+            System.out.println("" + code_service);
 
             // on renvoie les chambres disponibles à la surveillance dans ce service
             if (rotation == "JOUR") {
-                System.out.println("rentre dans jour");
                 liste = RemplirChampsRequete("SELECT no_chambre FROM chambre WHERE (code_service LIKE '" + code_service + "' AND no_surveillant_jour = 0);");
             } else if (rotation == "NUIT") {
-                System.out.println("rentre dans nuit");
                 liste = RemplirChampsRequete("SELECT no_chambre FROM chambre WHERE (code_service LIKE '" + code_service + "' AND no_surveillant_nuit = 0);");
             }
 
@@ -345,12 +315,39 @@ public class Connexion {
         return liste;
     }
 
-    */
+    /*
+     public String CreerRequete_surveillant(int no_infirmier, String rotation, String code_service, int no_chambre)
+     {
+     String requete = null;
+        
+     if (rotation == "JOUR")
+     {
+            
+     requete = "UPDATE chambre SET no_surveillant_jour = " + no_infirmier + " WHERE (code_service LIKE '" + code_service + "' AND no_chambre = " + no_chambre + ");";
+            
+     try {
+     System.out.println("chambres sans surveillant jour" + RemplirChampsRequete("SELECT code_service, no_chambre FROM chambre WHERE ( no_surveillant_jour = 0);"));
+     System.out.println("chambres sans surveillant nuit" + RemplirChampsRequete("SELECT code_service, no_chambre FROM chambre WHERE ( no_surveillant_nuit = 0);"));
 
-    
+     // on renvoie les chambres disponibles à la surveillance dans ce service
+     if (rotation == "JOUR") {
+     System.out.println("rentre dans jour");
+     liste = RemplirChampsRequete("SELECT no_chambre FROM chambre WHERE (code_service LIKE '" + code_service + "' AND no_surveillant_jour = 0);");
+     } else if (rotation == "NUIT") {
+     System.out.println("rentre dans nuit");
+     liste = RemplirChampsRequete("SELECT no_chambre FROM chambre WHERE (code_service LIKE '" + code_service + "' AND no_surveillant_nuit = 0);");
+     }
 
+     } catch (SQLException ex) {
+     System.out.println("Echec SQL");
+     ex.printStackTrace();
+     }
 
-        public String CreerRequete_surveillant(int no_infirmier, String rotation, String code_service, int no_chambre) {
+     return liste;
+     }
+
+     */
+    public String CreerRequete_surveillant(int no_infirmier, String rotation, String code_service, int no_chambre) {
         String requete = null;
 
         if (rotation == "JOUR") {
@@ -362,40 +359,30 @@ public class Connexion {
 
         return requete;
     }
-    
-    public void docteurs_requetes_appartient(JCheckBox jch_ORL, JCheckBox jch_REA, JCheckBox jch_CHG, int no_docteur)
-    {
+
+    public void docteurs_requetes_appartient(JCheckBox jch_ORL, JCheckBox jch_REA, JCheckBox jch_CHG, int no_docteur) {
         // on supprime toutes les requêtes restées en mémoire dans la liste
         Liste_requetes_directeur.clear();
-        
+
         // services sélectionnés
-        if (jch_ORL.isSelected())
-        {
+        if (jch_ORL.isSelected()) {
             ajouterRequete_appartient_creer("INSERT INTO appartient VALUES (" + no_docteur + ", 'ORL');");
         }
-        if (jch_REA.isSelected())
-        {
+        if (jch_REA.isSelected()) {
             ajouterRequete_appartient_creer("INSERT INTO appartient VALUES (" + no_docteur + ", 'REA');");
         }
-        if (jch_CHG.isSelected())
-        {
-            ajouterRequete_appartient_creer("INSERT INTO appartient VALUES (" + no_docteur + ", 'CHG');");     
+        if (jch_CHG.isSelected()) {
+            ajouterRequete_appartient_creer("INSERT INTO appartient VALUES (" + no_docteur + ", 'CHG');");
         }
-        
-        
-        
+
         // executer la liste de requetes
-        System.out.println("nb check boxes : " + Liste_requetes_appartient.size() );
+        System.out.println("nb check boxes : " + Liste_requetes_appartient.size());
 
         int i;
-        for (i = 0; i<Liste_requetes_appartient.size(); i++)
-        {
-            try
-            {
-               this.executeUpdate(Liste_requetes_appartient.get(i));
-            }
-            catch (SQLException ex)
-            {
+        for (i = 0; i < Liste_requetes_appartient.size(); i++) {
+            try {
+                this.executeUpdate(Liste_requetes_appartient.get(i));
+            } catch (SQLException ex) {
                 System.out.println("Echec SQL");
                 ex.printStackTrace();
             }
@@ -403,10 +390,7 @@ public class Connexion {
         }
 
     }
-    
-    
-    
-    
+
     /*
      public void CreerRequete_CreerPatient(String nom, String prenom, int chambre, int lit, String adresse, String tel, String mutuelle)
      {
@@ -428,7 +412,6 @@ public class Connexion {
         
      }
      */
-
     public void executeUpdate(String requete) throws SQLException {
         stmt.executeUpdate(requete);
     }
@@ -516,19 +499,18 @@ public class Connexion {
                 j++;
             }
 
-           
         }
-         // Retourner l'ArrayList
-            return liste;
+        // Retourner l'ArrayList
+        return liste;
     }
 
     public int nb_malade_services(String service) {
 
         int i = 0;
-        
+
         // récupération de l'ordre de la requete
         try {
-            rset = stmt.executeQuery("SELECT COUNT( * ) FROM hospitalisation, chambre WHERE hospitalisation.no_chambre=chambre.no_chambre AND chambre.code_service=" + service);
+            rset = stmt.executeQuery("SELECT COUNT( * ) FROM hospitalisation WHERE hospitalisation.code_service=" + service);
             if (rset.next()) {
                 i = rset.getInt(1);
             }
@@ -588,52 +570,66 @@ public class Connexion {
 
         return requete;
     }
-    
-    
-    public void docteurs_requetes_directeur(JCheckBox jch_Dir_ORL, JCheckBox jch_Dir_REA, JCheckBox jch_Dir_CHG, int no_docteur)
-    {
+
+    public void docteurs_requetes_directeur(JCheckBox jch_Dir_ORL, JCheckBox jch_Dir_REA, JCheckBox jch_Dir_CHG, int no_docteur) {
         // on supprime toutes les requêtes restées en mémoire dans la liste
         Liste_requetes_directeur.clear();
-        
+
         // directeurs sélectionnés
-        if (jch_Dir_ORL.isSelected())
-        {
+        if (jch_Dir_ORL.isSelected()) {
             ajouterRequete_directeur_creer("UPDATE service SET no_directeur = " + no_docteur + " WHERE code_service LIKE 'ORL';");
         }
-        if (jch_Dir_REA.isSelected())
-        {
+        if (jch_Dir_REA.isSelected()) {
             ajouterRequete_directeur_creer("UPDATE service SET no_directeur = " + no_docteur + " WHERE code_service LIKE 'REA';");
         }
-        if (jch_Dir_CHG.isSelected())
-        {
+        if (jch_Dir_CHG.isSelected()) {
             ajouterRequete_directeur_creer("UPDATE service SET no_directeur = " + no_docteur + " WHERE code_service LIKE 'CHG';");
         }
-        
-        
+
         // executer la liste de requetes
-        System.out.println("nb check boxes : " + Liste_requetes_directeur.size() );
+        System.out.println("nb check boxes : " + Liste_requetes_directeur.size());
 
         int i;
-        for (i = 0; i<Liste_requetes_directeur.size(); i++)
-        {
-            try
-            {
-               this.executeUpdate(Liste_requetes_directeur.get(i));
-            }
-            catch (SQLException ex)
-            {
+        for (i = 0; i < Liste_requetes_directeur.size(); i++) {
+            try {
+                this.executeUpdate(Liste_requetes_directeur.get(i));
+            } catch (SQLException ex) {
                 System.out.println("Echec SQL");
                 ex.printStackTrace();
             }
             System.out.println("" + Liste_requetes_directeur.get(i));
         }
-                
+
     }
-    
-    private void ajouterRequete_directeur_creer(String requete)
-    {
+
+    private void ajouterRequete_directeur_creer(String requete) {
         Liste_requetes_directeur.add(requete);
     }
 
-    
+    public ArrayList<ArrayList> reporting(String requete) throws SQLException {
+        // récupération de l'ordre de la requete
+        rset = stmt.executeQuery(requete);
+
+        // récupération du résultat de l'ordre
+        rsetMeta = rset.getMetaData();
+        // calcul du nombre de colonnes du resultat
+        int nbColonne = rsetMeta.getColumnCount();
+        // creation d'une ArrayList de String et une de int
+        ArrayList<Integer> nb = new ArrayList<Integer>();
+        ArrayList<String> nom = new ArrayList<String>();
+        ArrayList<ArrayList> liste = new ArrayList<ArrayList>();
+        // tant qu'il reste une ligne 
+        while (rset.next()) {
+            // Concatener les champs de la ligne separes par 
+            nom.add(rset.getString(1));
+            nb.add(rset.getInt(2));
+
+            liste.add(nom);
+            liste.add(nb);
+        }
+
+        // Retourner l'ArrayList
+        return liste;
+    }
+
 }
