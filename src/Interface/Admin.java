@@ -103,15 +103,6 @@ public class Admin {
           }
         });
         
-        //recherche chambre
-        chambre.addActionListener(new ActionListener()
-        {
-          public void actionPerformed(ActionEvent e)
-          { 
-            Rechercher_chambre.getFenetre(f);
-          }
-        });
-        
         //recherche service
         service.addActionListener(new ActionListener()
         {

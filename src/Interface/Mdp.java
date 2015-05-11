@@ -25,7 +25,8 @@ import javax.swing.JTextField;
 import projet.Connexion;
 
 /**
- *
+ * Petite fenetre de dialogue qui demande à l'utilisateur le mot de passe pour 
+ * accéder à la partie admin du programme
  * @author meyronneaudrey
  */
 public class Mdp {

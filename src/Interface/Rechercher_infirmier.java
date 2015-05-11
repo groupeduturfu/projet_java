@@ -16,7 +16,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 /**
- *
+ * Rechercher un infirmier travaillant à l'hopital
  * @author mathieuchebassier
  */
 public class Rechercher_infirmier {

@@ -18,7 +18,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 /**
- *
+ * Rechercher un docteur travaillant a l'hopital
  * @author mathieuchebassier
  */
 public class Rechercher_docteur {
@@ -154,6 +154,13 @@ public class Rechercher_docteur {
           
     }
     
+    
+     /**
+     * Sous programme permettant de vérifier que chaque 
+     * fenêtre n'est crée qu'une fois puis uniquement réutilisée
+     * @param f
+     * @return type de la classe
+     */
     public static Rechercher_docteur getFenetre(JFrame f) {
             
     if (fenetre == null ) fenetre = new Rechercher_docteur(f);
