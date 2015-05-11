@@ -504,6 +504,12 @@ public class Connexion {
         return liste;
     }
 
+    
+    /**
+     * Requete renvoyant le nombre de malade dans un service donné recu en parametre
+     * @param service
+     * @return int
+     */
     public int nb_malade_services(String service) {
 
         int i = 0;
@@ -521,6 +527,10 @@ public class Connexion {
         return i;
     }
 
+    /**
+     * Requete renvoyant la valeur moyenne des salaires de tous les docteurs de l'hopital
+     * @return float
+     */
     public Float moyenne_salaired() {
         Float i = null;
         try {
@@ -535,6 +545,10 @@ public class Connexion {
         return i;
     }
 
+    /**
+     * Requete renvoyant la valeur moyenne des salaires de tous les infirmiers de l'hopital
+     * @return float 
+     */
     public float moyenne_salairei() {
         float i = 0;
         try {
@@ -549,6 +563,10 @@ public class Connexion {
         return i;
     }
 
+    /**
+     * Requete renvoyant la valeur moyenne des salaires de tous les employés de l'hopital
+     * @return float
+     */
     public float moyenne_salaire() {
         float i = 0;
         try {
@@ -645,8 +663,15 @@ public class Connexion {
                     }
         return liste;
     }
-    
-    
+
+    /**
+     * Sous programme qui interroge la BDD sur le nombre d'intervention par 
+     * doteur
+     * Il renvoie une liste de médecins et leurs nombre d'interventions
+     * @param requete
+     * @return
+     * @throws SQLException 
+     */
     public ArrayList<ArrayList> reporting(String requete) throws SQLException {
         // récupération de l'ordre de la requete
         rset = stmt.executeQuery(requete);

@@ -21,7 +21,7 @@ import javax.swing.JTextField;
 import projet.Connexion;
 
 /**
- *
+ *Recherhcer un patient actuellement à l'hopital
  * @author meyronneaudrey
  */
 public class Rechercher_malade {
@@ -270,6 +270,13 @@ JTextField jtf_no_id, jtf_nom, jtf_prenom, jtf_no_chambre, jtf_no_lit, jtf_datea
          
         
     }
+    
+     /**
+     * Sous programme permettant de vérifier que chaque 
+     * fenêtre n'est crée qu'une fois puis uniquement réutilisée
+     * @param f
+     * @return type de la classe
+     */
     
     public static Rechercher_malade getFenetre(JFrame f) {
             

@@ -14,6 +14,11 @@ import javax.swing.JOptionPane;
  */
 public class Choix_employe {
     
+    /**
+     * Fenetre où l'utilisateur à choisi d'ajouter un employé dans la BDD et 
+     * on veut savoir si cet employé est un infirmier ou un docteur
+     * @param f 
+     */
     public Choix_employe(JFrame f)
     {
         Object[] options = {"Infirmier","Docteur"};

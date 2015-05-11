@@ -14,7 +14,8 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 /**
- *
+ * Cette classe est utilisée lorsque l'utilisateur souhaite choisir la BDD en 
+ * ligne sur laquelle il souhaite se connecter
  * @author mathieuchebassier
  */
 public class Login {

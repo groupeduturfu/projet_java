@@ -14,6 +14,11 @@ import projet.Connexion;
  * @author mathieuchebassier
  */
 public class Choix_enLigne {
+
+    /**
+     *
+     * @param f
+     */
     public Choix_enLigne(JFrame f)
     {
         int dialogButton = JOptionPane.YES_NO_OPTION;

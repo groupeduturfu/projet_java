@@ -14,6 +14,12 @@ import projet.Connexion;
  * @author mathieuchebassier
  */
 public class Choix_connexion {
+    
+    /**
+     * Fenetre qui laisse le choix à l'utilisateur de fonctionner avec la BDD
+     * en ligne ou bien avec sa BDD WAMP/MAMP
+     * @param f 
+     */
     public Choix_connexion(JFrame f)
     {
         int dialogButton = JOptionPane.YES_NO_OPTION;

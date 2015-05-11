@@ -20,7 +20,7 @@ import javax.swing.JTextField;
 import projet.Connexion;
 
 /**
- *
+ * Rechercher un patient parmi ceux ayant quitté l'hopital
  * @author meyronneaudrey
  */
 public class Rechercher_archives {
@@ -267,6 +267,12 @@ public class Rechercher_archives {
         
     }
     
+     /**
+     * Sous programme permettant de vérifier que chaque 
+     * fenêtre n'est crée qu'une fois puis uniquement réutilisée
+     * @param f
+     * @return type de la classe
+     */
     public static Rechercher_archives getFenetre(JFrame f) {
             
     if (fenetre == null ) fenetre = new Rechercher_archives(f);

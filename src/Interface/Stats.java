@@ -40,7 +40,8 @@ import projet.Connexion;
 
 
 /**
- *
+ * Classe correspondant au module de reporting permettant d'afficher des réponse 
+ * a des requetes de manière cohérente avec le type de requete
  * @author mathieuchebassier
  */
 public class Stats {
@@ -48,6 +49,10 @@ public class Stats {
     private static Stats fenetre = null;
     private static JPanel p1, p2, p3, p4;
 
+    /**
+     *
+     * @param f 
+     */
     private Stats(JFrame f) {
         // On initialise les boutons
         JButton valider = new JButton("Valider");
@@ -189,6 +194,12 @@ public class Stats {
         });
     }
 
+     /**
+     * Sous programme permettant de vérifier que chaque 
+     * fenêtre n'est crée qu'une fois puis uniquement réutilisée
+     * @param f
+     * @return type de la classe
+     */
     public static Stats getFenetre(JFrame f) {
 
         if (fenetre == null) {

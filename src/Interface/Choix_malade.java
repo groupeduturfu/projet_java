@@ -14,6 +14,11 @@ import javax.swing.JOptionPane;
  */
 public class Choix_malade {
 
+    /**
+     * fenetre afin de savoir si l'on chercher parmi les patient dans l'hopital
+     * ou bien parmi les patients ayant séjourné dans le passé
+     * @param f 
+     */
     public Choix_malade(JFrame f) {
         
         int dialogButton = JOptionPane.YES_NO_OPTION;
