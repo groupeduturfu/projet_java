@@ -27,18 +27,16 @@ import static javax.swing.SwingConstants.CENTER;
 public class Accueil {
     
     private static Accueil fenetre_accueil = null;
-    private static JPanel p1, p2, p3, p5, p6, p7 ,pAdmin;
+    private static JPanel p1, p2, p3, p7 ,pAdmin;
     
     private Accueil(JFrame f)
     {
-        JButton rechercher, ajouter, admin, emp_presents, lit_libre, stats;        
+        JButton rechercher, ajouter, admin, stats;        
         
         // Déclaration variables
         rechercher = new JButton("Rechercher un patient");
         ajouter = new JButton("Ajouter un patient");
         admin = new JButton("Admin");
-        emp_presents = new JButton("Employés présents");
-        lit_libre = new JButton("Rechercher un lit libre");
         stats = new JButton("Données statistiques");
         JLabel texte = new JLabel("Veuillez choisir ce que vous voulez faire");
         
@@ -47,14 +45,13 @@ public class Accueil {
         // Taille des boutons
         rechercher.setPreferredSize(new Dimension(400,30));
         ajouter.setPreferredSize(new Dimension(400,30));
-        emp_presents.setPreferredSize(new Dimension(400,30));
-        lit_libre.setPreferredSize(new Dimension(400,30));
         stats.setPreferredSize(new Dimension(400,30));
         
         pAdmin = new JPanel();
         pAdmin.setOpaque(false);
         pAdmin.setLocation(100, 100);
         pAdmin.add(admin);
+        pAdmin.setPreferredSize(new Dimension(100,100));
 
         
         p1 = new JPanel(); 
@@ -74,14 +71,6 @@ public class Accueil {
         p3 = new JPanel();
         p3.add(rechercher);
         p3.setOpaque(false);
-        
-        p5 = new JPanel();
-        p5.add(emp_presents);
-        p5.setOpaque(false);
-        
-        p6 = new JPanel();
-        p6.add(lit_libre);
-        p6.setOpaque(false);
         
         p7 = new JPanel();
         p7.add(stats);
@@ -118,15 +107,7 @@ public class Accueil {
              else JOptionPane.showMessageDialog(null, "Le mot de passe est faux, l'accès est refusé", "Erreur", JOptionPane.ERROR_MESSAGE); // Le mdp est faux, on accede pas à la partie admin
           }
         });
-        
-        //Lit Libresif (rechercher.getModel().isPressed()) System.out.println("Recherche...");
-        lit_libre.addActionListener(new ActionListener()
-        {
-          public void actionPerformed(ActionEvent e)
-          { 
-                System.out.println("Liste lits libres...");
-          }
-        });
+
         
         // Stats
         stats.addActionListener(new ActionListener()
@@ -153,8 +134,6 @@ public class Accueil {
         f.add(p1);
         f.add(p2);
         f.add(p3);
-        f.add(p5);
-        f.add(p6);
         f.add(p7);
         f.setSize(600,600);
         f.setVisible(true);

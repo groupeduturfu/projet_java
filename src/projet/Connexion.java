@@ -6,6 +6,7 @@
 package projet;
 
 import Interface.Fenetre;
+import Interface.Login;
 
 
 /*
@@ -65,9 +66,9 @@ public class Connexion {
     }
 
     private Connexion() throws SQLException, ClassNotFoundException {
-        //String user = "chebassi";
-        //String login_DataBase = "chebassi-rw";
-        //String password_DataBase = "cvKTbS3k";        
+        String user = "chebassi";
+        String login_DataBase = "chebassi-rw";
+        String password_DataBase = "cvKTbS3k";
 
         // chargement driver "com.mysql.jdbc.Driver"
         Class.forName("com.mysql.jdbc.Driver");
@@ -81,8 +82,17 @@ public class Connexion {
 
             System.out.println("Connexion reussie");
 
+            // On regarde si l'utilisateur à choisi une autre BDD que chebassi
+            if (Login.login_tape.equals("") && Login.mdp_tape.equals("")) {
+              // il n'a changé les champs donc BBD par défaut
+            } else {
+                user = Login.login_tape;
+                login_DataBase = Login.login_tape + "-rw";
+                password_DataBase = Login.mdp_tape;
+            }
+
             //création d'une connexion JDBC à la base
-            conn = DriverManager.getConnection("jdbc:mysql://localhost:3305/chebassi", "chebassi-rw", "cvKTbS3k");
+            conn = DriverManager.getConnection("jdbc:mysql://localhost:3305/" + user, login_DataBase, password_DataBase);
 
             // création d'un ordre SQL (statement)
             stmt = conn.createStatement();
@@ -500,7 +510,7 @@ public class Connexion {
 
         // récupération de l'ordre de la requete
         try {
-            rset = stmt.executeQuery("SELECT COUNT( * ) FROM hospitalisation, chambre WHERE hospitalisation.no_chambre=chambre.no_chambre AND chambre.code_service=" + service);
+            rset = stmt.executeQuery("SELECT COUNT( * ) FROM hospitalisation WHERE hospitalisation.code_service=" + service);
             if (rset.next()) {
                 i = rset.getInt(1);
             }
@@ -634,6 +644,29 @@ public class Connexion {
                         System.out.println("k : " + liste.get(k));
                     }
 
+    public ArrayList<ArrayList> reporting(String requete) throws SQLException {
+        // récupération de l'ordre de la requete
+        rset = stmt.executeQuery(requete);
+
+        // récupération du résultat de l'ordre
+        rsetMeta = rset.getMetaData();
+        // calcul du nombre de colonnes du resultat
+        int nbColonne = rsetMeta.getColumnCount();
+        // creation d'une ArrayList de String et une de int
+        ArrayList<Integer> nb = new ArrayList<Integer>();
+        ArrayList<String> nom = new ArrayList<String>();
+        ArrayList<ArrayList> liste = new ArrayList<ArrayList>();
+        // tant qu'il reste une ligne 
+        while (rset.next()) {
+            // Concatener les champs de la ligne separes par 
+            nom.add(rset.getString(1));
+            nb.add(rset.getInt(2));
+
+            liste.add(nom);
+            liste.add(nb);
+        }
+
+        // Retourner l'ArrayList
         return liste;
     }
 

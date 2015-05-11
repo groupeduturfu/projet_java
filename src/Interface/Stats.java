@@ -13,6 +13,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.io.File;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -27,6 +29,13 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.data.category.DefaultCategoryDataset;
+import org.jfree.data.xy.XYDataset;
+import org.jfree.ui.RefineryUtilities;
 import projet.Connexion;
 
 
@@ -49,6 +58,7 @@ public class Stats {
         combo.setPreferredSize(new Dimension(400, 30));
         combo.addItem("Nombre de patient par service");
         combo.addItem("Salaire moyen des employés");
+        combo.addItem("Nombre d'intervention par médecin");
 
         // On initialise les JLabels
         JLabel texte = new JLabel("Veuillez selectionner la requete à envoyer");
@@ -77,7 +87,7 @@ public class Stats {
         // Gestion des boutons
         retour.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                Admin.getFenetre(f);
+                Accueil.getFenetre(f);
             }
         });
 
@@ -89,30 +99,17 @@ public class Stats {
                     System.out.println("Nb de patients en REA : " + Connexion.getInstance().nb_malade_services("\"REA\""));
                     System.out.println("Nb de patients en ORL : " + Connexion.getInstance().nb_malade_services("\"ORL\""));
                     System.out.println("Nb de patients en CHG : " + Connexion.getInstance().nb_malade_services("\"CHG\""));
-                   
-    /*        /////////////////////
-                    JFrame frame = new JFrame();
-                    frame.setSize(400, 300);
-                    double[] values = new double[3];
-                    String[] names = new String[3];
-                    values[0] = 1;
-                    names[0] = "Item 1";
 
-                    values[1] = 2;
-                    names[1] = "Item 2";
+              //      new Camembert(f, Connexion.getInstance().nb_malade_services("\"REA\""), Connexion.getInstance().nb_malade_services("\"ORL\""), Connexion.getInstance().nb_malade_services("\"CHG\""));
+                    JPanel panel_camemb = Camembert.cCamembert(f, Connexion.getInstance().nb_malade_services("\"REA\""), Connexion.getInstance().nb_malade_services("\"ORL\""), Connexion.getInstance().nb_malade_services("\"CHG\""));;
 
-                    values[2] = 4;
-                    names[2] = "Item 3";
+                        f.setContentPane(new ImagePanel(new ImageIcon("fond66.jpg").getImage())); // Met l'image en background
+                        f.add(p1);
+                        f.add(p2);
+                        f.add(p4);
+                        f.add(panel_camemb);
 
-                    frame.getContentPane().add(new ChartPanel(values, names, "title"));
-                    WindowListener wndCloser = new WindowAdapter() {
-                        public void windowClosing(WindowEvent e) {
-                            System.exit(0);
-                        }
-                    };
-                    frame.addWindowListener(wndCloser);
-                    frame.setVisible(true);
-     */       ////////////////////////
+                        f.setVisible(true);
                     
                 } else if (combo.getSelectedItem().equals("Salaire moyen des employés")) {
                     JLabel jf_doc, jf_inf, jf_emp;
@@ -137,6 +134,7 @@ public class Stats {
                     jtf_emp.setPreferredSize(new Dimension(160, 30));
                     jtf_emp.setText(Float.toString((Connexion.getInstance().moyenne_salaire())) + " €");
 
+                    
                     // On crée les JPanels
                     p5 = new JPanel();
                     p5.add(jf_doc);
@@ -163,6 +161,29 @@ public class Stats {
 
                     f.setVisible(true);
                     f.setSize(new Dimension(600, 600));
+                }
+                else if(combo.getSelectedItem().equals("Nombre d'intervention par médecin"))
+                {
+                    ArrayList liste = null;
+                    try {
+                        // ICI !!!!!!!!!!
+                        liste = Connexion.getInstance().reporting("SELECT e.nom , COUNT(d.no_docteur) FROM hospitalisation h, docteur d , employe e WHERE (h.no_docteur= d.no_docteur) AND e.no_employe = d.no_docteur  GROUP BY e.nom");
+                    } catch (SQLException ex) {
+                        Logger.getLogger(Stats.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    if (liste != null)
+                    {
+                        JPanel panel_camemb = Camembert.cCamembert(f, liste);
+
+                        f.setContentPane(new ImagePanel(new ImageIcon("fond66.jpg").getImage())); // Met l'image en background
+                        f.add(p1);
+                        f.add(p2);
+                        f.add(p4);
+                        f.add(panel_camemb);
+
+                        f.setVisible(true);
+                    }
+                   
                 }
             }
         });

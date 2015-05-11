@@ -26,7 +26,7 @@ public class Choix_connexion {
             Connexion maconnexion = Connexion.getInstance("jdbc:mysql://localhost:8889/chebassi", "root"); // hors ligne
         }
         else { // Il clique sur en ligne
-            Connexion maconnexion = Connexion.getInstance(); // en ligne
+            new Choix_enLigne(f);
         }
         
         Accueil.getFenetre(f);

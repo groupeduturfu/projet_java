@@ -34,7 +34,7 @@ public class Mdp {
     {
        JPanel p = new JPanel();
         JLabel l = new JLabel("Entrer le mot de passe pour acceder à la partie admin :");
-        JPasswordField mdp = new JPasswordField(10);
+        JTextField mdp = new JTextField(10);
         String mdp_tape = "";
                  
         p.add(l);
