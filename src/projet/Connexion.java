@@ -283,9 +283,9 @@ public class Connexion {
         return requete;
     }
 
-    public String CreerRequete_hospitalisation(int id, int chambre, int lit, int no_docteur, String service) {
+    public String CreerRequete_hospitalisation(int id, int chambre, int lit, int no_docteur, String service, String description) {
         String requete = "initialisee";
-        requete = "INSERT INTO hospitalisation (no_malade, no_chambre, no_lit, no_docteur, code_service) values (" + id + ", " + chambre + ", " + lit + ", " + no_docteur + ",  '" + service + "');";
+        requete = "INSERT INTO hospitalisation (no_malade, no_chambre, no_lit, no_docteur, code_service, description) values (" + id + ", " + chambre + ", " + lit + ", " + no_docteur + ",  '" + service + "', '" + description + "');";
         System.out.println(requete);
 
         return requete;
@@ -643,7 +643,10 @@ public class Connexion {
                     {
                         System.out.println("k : " + liste.get(k));
                     }
-
+        return liste;
+    }
+    
+    
     public ArrayList<ArrayList> reporting(String requete) throws SQLException {
         // récupération de l'ordre de la requete
         rset = stmt.executeQuery(requete);
