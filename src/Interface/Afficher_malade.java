@@ -26,7 +26,7 @@ public class Afficher_malade {
     private static Afficher_malade fenetre;
     private static ArrayList<ArrayList<String>> liste;
     private Connexion maconnexion;
-    private static JPanel pbouton, phaut, p2, p3, p4, p5, p6, p7, p8, p9, p10;
+    private static JPanel pbouton, phaut, p2, p3, p4, p5, p6, p7, p8, p9, p10,p11;
     private static JLabel jtf_no_id, jtf_nom, jtf_prenom, jtf_no_chambre, jtf_no_lit, jtf_date_arrivee, jtf_adresse, jtf_tel, jtf_mutuelle;
     private static JComboBox combo;
     
@@ -34,6 +34,7 @@ public class Afficher_malade {
         public Afficher_malade(JFrame f, ArrayList<ArrayList<String>> liste) {
         JButton retour = new JButton("Retour");
         JButton modifier = new JButton("Modifier");
+        JButton archiver = new JButton("Archiver");
         this.liste = liste;
         maconnexion = Connexion.getInstance();
         
@@ -63,11 +64,12 @@ public class Afficher_malade {
         combo.setPreferredSize(new Dimension(200, 30));
         combo.setOpaque(false);
         // On initialise les objets
-        retour.setPreferredSize(new Dimension(200, 30));
+        retour.setPreferredSize(new Dimension(250, 30));
         retour.setOpaque(false);
-        modifier.setPreferredSize(new Dimension(200, 30));
-        retour.setOpaque(false);
-        retour.setPreferredSize(new Dimension(300, 30));
+        modifier.setPreferredSize(new Dimension(250, 30));
+        modifier.setOpaque(false);
+        archiver.setOpaque(false);
+        archiver.setPreferredSize(new Dimension(300, 30));
         
         //On initialise la liste avec les résultats correspondants à la recherche
         for (int i = 0; i < liste.size(); i++) {
@@ -128,6 +130,10 @@ public class Afficher_malade {
         pbouton.add(modifier);
         pbouton.setOpaque(false);
         pbouton.setPreferredSize(new Dimension(600, 30));
+        p11 = new JPanel();
+        p11.add(archiver);
+        p11.setOpaque(false);
+        p11.setPreferredSize(new Dimension(600, 30));
         // Ici il faut remplir les champs pour voir les données de chaque patient
         ArrayList<String> combobox_choix;
         combobox_choix = new ArrayList<String>();
@@ -156,6 +162,18 @@ public class Afficher_malade {
                 Modifier_malade.getFenetre(f,(ArrayList<String>) combo.getSelectedItem(),liste);
             }
         });
+        archiver.addActionListener(new ActionListener() {
+           public void actionPerformed(ActionEvent e){
+               try{
+                   maconnexion.Archiver(jtf_no_id.getText(),jtf_date_arrivee.getText());
+                   Accueil.getFenetre(f);
+               }
+               catch(SQLException ex){
+                   System.out.println("Echec SQL");
+                    ex.printStackTrace();
+               }
+           } 
+        });
         f.setContentPane(new ImagePanel(new ImageIcon("fond66.jpg").getImage())); // Met l'image en background
         f.add(phaut);
         f.add(p2);
@@ -168,6 +186,7 @@ public class Afficher_malade {
         f.add(p9);
         f.add(p10);
         f.add(pbouton);
+        f.add(p11);
         f.setSize(600, 600);
         f.setVisible(true);
     }
@@ -175,6 +194,7 @@ public class Afficher_malade {
     public Afficher_malade(JFrame f, ArrayList<ArrayList<String>> liste, ArrayList<String> combobox_choix) {
         JButton retour = new JButton("Retour");
         JButton modifier = new JButton("Modifier");
+        JButton archiver = new JButton("Archiver");
         this.liste = liste;
         maconnexion = Connexion.getInstance();
         
@@ -213,11 +233,11 @@ public class Afficher_malade {
         combo.setPreferredSize(new Dimension(200, 30));
         combo.setOpaque(false);
         // On initialise les objets
-        retour.setPreferredSize(new Dimension(200, 30));
+        retour.setPreferredSize(new Dimension(250, 30));
         retour.setOpaque(false);
-        modifier.setPreferredSize(new Dimension(200, 30));
-        retour.setOpaque(false);
-        retour.setPreferredSize(new Dimension(300, 30));
+        modifier.setPreferredSize(new Dimension(250, 30));
+        archiver.setOpaque(false);
+        archiver.setPreferredSize(new Dimension(300, 30));
         
         //On initialise la liste avec les résultats correspondants à la recherche
         for (int i = 0; i < liste.size(); i++) {
@@ -273,6 +293,10 @@ public class Afficher_malade {
         p10.add(jtf_mutuelle);
         p10.setOpaque(false);
         p10.setPreferredSize(new Dimension(600, 30));
+        p11 = new JPanel();
+        p11.add(archiver);
+        p11.setOpaque(false);
+        p11.setPreferredSize(new Dimension(600, 30));
         pbouton = new JPanel();
         pbouton.add(retour);
         pbouton.add(modifier);
@@ -306,6 +330,17 @@ public class Afficher_malade {
                 Modifier_malade.getFenetre(f,(ArrayList<String>) combo.getSelectedItem(),liste);
             }
         });
+        archiver.addActionListener(new ActionListener() {
+           public void actionPerformed(ActionEvent e){
+               try{
+                   maconnexion.Archiver(jtf_no_id.getText(),jtf_date_arrivee.getText());
+               }
+               catch(SQLException ex){
+                   System.out.println("Echec SQL");
+                    ex.printStackTrace();
+               }
+           } 
+        });
         f.setContentPane(new ImagePanel(new ImageIcon("fond66.jpg").getImage())); // Met l'image en background
         f.add(phaut);
         f.add(p2);
@@ -318,6 +353,7 @@ public class Afficher_malade {
         f.add(p9);
         f.add(p10);
         f.add(pbouton);
+        f.add(p11);
         f.setSize(600, 600);
         f.setVisible(true);
     }
